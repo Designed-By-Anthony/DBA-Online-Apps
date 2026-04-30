@@ -1,0 +1,3 @@
+module.exports=[95686,a=>{"use strict";var b=a.i(35248);a.s(["default",0,function({children:a}){return(0,b.jsx)("html",{lang:"en",children:(0,b.jsx)("body",{children:a})})},"metadata",0,{title:"Service Area Map Generator",description:"Generate embeddable service-area maps optimized for local SEO signals."}])},5635,a=>{a.n(a.i(95686))}];
+
+//# sourceMappingURL=apps_service-area-map-generator_app_layout_tsx_0.v3qji._.js.map

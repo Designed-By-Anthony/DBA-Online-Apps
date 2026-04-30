@@ -1,0 +1,12 @@
+{
+  "name": "dba-api",
+  "main": "src/index.ts",
+  "compatibility_date": "2025-04-30",
+  "compatibility_flags": ["nodejs_compat"],
+  "build": {
+    "command": "bun build src/index.ts --outfile dist/index.js --target bun"
+  },
+  "observability": {
+    "enabled": true
+  }
+}

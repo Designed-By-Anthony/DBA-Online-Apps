@@ -1,0 +1,6 @@
+{"timestamp":"00:00:04.225","source":"Server","level":"LOG","message":""}
+{"timestamp":"00:05:51.851","source":"Server","level":"LOG","message":"○ Compiling / ..."}
+{"timestamp":"00:06:22.991","source":"Server","level":"LOG","message":"✓ Finished writing to filesystem cache in 20.3s"}
+{"timestamp":"00:06:48.657","source":"Server","level":"LOG","message":"✓ Finished writing to filesystem cache in 10.1s"}
+{"timestamp":"00:54:04.590","source":"Server","level":"LOG","message":"✓ Finished writing to filesystem cache in 31.0s"}
+{"timestamp":"06:42:32.944","source":"Server","level":"LOG","message":"✓ Finished writing to filesystem cache in 20.2s"}

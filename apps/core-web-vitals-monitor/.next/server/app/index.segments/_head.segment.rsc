@@ -1,0 +1,5 @@
+1:"$Sreact.fragment"
+2:I[73765,["/_next/static/chunks/0ypdmyfzid9e2.js"],"ViewportBoundary"]
+3:I[73765,["/_next/static/chunks/0ypdmyfzid9e2.js"],"MetadataBoundary"]
+4:"$Sreact.suspense"
+0:{"rsc":["$","$1","h",{"children":[null,["$","$L2",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]}],["$","div",null,{"hidden":true,"children":["$","$L3",null,{"children":["$","$4",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"Core Web Vitals Monitor"}],["$","meta","1",{"name":"description","content":"Weekly Core Web Vitals snapshots with regression alerts sent straight to your inbox."}]]}]}]}],null]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"smyYZbfammSYjntVkAf8n"}

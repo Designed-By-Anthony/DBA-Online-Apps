@@ -1,0 +1,3 @@
+module.exports=[33712,a=>{"use strict";var b=a.i(35248);a.s(["default",0,function({children:a}){return(0,b.jsx)("html",{lang:"en",children:(0,b.jsx)("body",{children:a})})},"metadata",0,{title:"Cold Outreach Sequencer",description:"Personalized email sequences for web design agencies targeting local service businesses."}])},62427,a=>{a.n(a.i(33712))}];
+
+//# sourceMappingURL=apps_cold-outreach-sequencer_app_layout_tsx_0u9~.no._.js.map

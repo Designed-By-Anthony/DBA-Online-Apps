@@ -1,0 +1,3 @@
+module.exports=[67945,a=>{"use strict";var b=a.i(35248);a.s(["default",0,function({children:a}){return(0,b.jsx)("html",{lang:"en",children:(0,b.jsx)("body",{children:a})})},"metadata",0,{title:"Core Web Vitals Monitor",description:"Weekly Core Web Vitals snapshots with regression alerts sent straight to your inbox."}])},73177,a=>{a.n(a.i(67945))}];
+
+//# sourceMappingURL=apps_core-web-vitals-monitor_app_layout_tsx_01ykqms._.js.map

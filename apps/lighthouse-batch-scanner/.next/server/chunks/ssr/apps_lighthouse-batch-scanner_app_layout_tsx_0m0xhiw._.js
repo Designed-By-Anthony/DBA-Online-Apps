@@ -1,0 +1,3 @@
+module.exports=[57365,a=>{"use strict";var b=a.i(35248);a.s(["default",0,function({children:a}){return(0,b.jsx)("html",{lang:"en",children:(0,b.jsx)("body",{children:a})})},"metadata",0,{title:"Lighthouse Batch Scanner",description:"Audit multiple URLs at once and export a combined PDF report for client presentations."}])},51440,a=>{a.n(a.i(57365))}];
+
+//# sourceMappingURL=apps_lighthouse-batch-scanner_app_layout_tsx_0m0xhiw._.js.map

@@ -1,0 +1,12 @@
+var R=require("../../chunks/ssr/[turbopack]_runtime.js")("server/app/_not-found/page.js")
+R.c("server/chunks/ssr/[root-of-the-server]__0ak1_rc._.js")
+R.c("server/chunks/ssr/12ct_next_dist_esm_build_templates_app-page_069k7k3.js")
+R.c("server/chunks/ssr/[root-of-the-server]__0ce_9kq._.js")
+R.c("server/chunks/ssr/[root-of-the-server]__0txlg_0._.js")
+R.c("server/chunks/ssr/apps_lighthouse-batch-scanner_app_layout_tsx_0m0xhiw._.js")
+R.c("server/chunks/ssr/12ct_next_dist_client_components_05t66_o._.js")
+R.c("server/chunks/ssr/12ct_next_dist_client_components_builtin_forbidden_09sz~zq.js")
+R.c("server/chunks/ssr/12ct_next_dist_client_components_builtin_unauthorized_0dmbir-.js")
+R.c("server/chunks/ssr/0kmj_ghthouse-batch-scanner__next-internal_server_app__not-found_page_actions_0butzs9.js")
+R.m(66061)
+module.exports=R.m(66061).exports
