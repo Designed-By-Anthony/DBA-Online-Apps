@@ -1,3 +1,0 @@
-module.exports=[68898,a=>{"use strict";var b=a.i(35248);a.s(["default",0,function({children:a}){return(0,b.jsx)("html",{lang:"en",children:(0,b.jsx)("body",{children:a})})},"metadata",0,{title:"Lead Form Builder",description:"Drag-and-drop smart forms with reCAPTCHA, Zapier hooks, and CRM-ready JSON output."}])},96207,a=>{a.n(a.i(68898))}];
-
-//# sourceMappingURL=apps_lead-form-builder_app_layout_tsx_0w~vreu._.js.map

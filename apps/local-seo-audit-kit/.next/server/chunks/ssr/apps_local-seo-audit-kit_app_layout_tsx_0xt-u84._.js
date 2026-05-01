@@ -1,3 +1,0 @@
-module.exports=[54671,a=>{"use strict";var b=a.i(35248);a.s(["default",0,function({children:a}){return(0,b.jsx)("html",{lang:"en",children:(0,b.jsx)("body",{children:a})})},"metadata",0,{title:"Local SEO Audit Kit",description:"Google Business Profile checks, citation consistency reporting, and schema validation in one workflow."}])},5852,a=>{a.n(a.i(54671))}];
-
-//# sourceMappingURL=apps_local-seo-audit-kit_app_layout_tsx_0xt-u84._.js.map

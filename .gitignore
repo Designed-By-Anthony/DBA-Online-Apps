@@ -1,8 +1,28 @@
-node_modules
-.next
-dist
-out
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Turborepo
+.turbo/
+**/.turbo/
+
+# Next.js
+.next/
+**/.next/
+out/
+**/out/
+
+# Build output
+dist/
+**/dist/
+
+# Cloudflare / Wrangler local state
+.wrangler/
+**/.wrangler/
+
+# Local env and OS noise
 .env
+.env.*
+!.env.example
 *.log
 .DS_Store
-.turbo
