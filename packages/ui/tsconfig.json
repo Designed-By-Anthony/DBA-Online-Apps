@@ -1,5 +1,5 @@
 {
-  "extends": "../../my-turborepo/packages/typescript-config/react-library.json",
+  "extends": "@repo/typescript-config/react-library.json",
   "compilerOptions": {
     "outDir": "./dist",
     "jsx": "react-jsx"

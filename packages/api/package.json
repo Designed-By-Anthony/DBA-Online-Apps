@@ -16,9 +16,10 @@
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20250320.0",
-    "@repo/eslint-config": "*",
-    "@repo/typescript-config": "*",
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
     "eslint": "^9.39.1",
+    "globals": "^16.5.0",
     "typescript": "5.9.2",
     "wrangler": "^4.0.0"
   }
