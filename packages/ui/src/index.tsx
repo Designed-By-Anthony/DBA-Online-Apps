@@ -173,7 +173,6 @@ export function ScoreRing({ score, size = 'md' }: ScoreRingProps) {
   };
   
   const px = sizeMap[size];
-  const innerPx = px * 0.8;
   
   return (
     <div 

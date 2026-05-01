@@ -21,6 +21,8 @@ const lighthouseRoutes = new Elysia({ prefix: "/lighthouse" })
     return {
       jobId: crypto.randomUUID(),
       status: "pending",
+      device,
+      categories,
       totalUrls: urls.length,
       estimatedTime: urls.length * 30,
     };
@@ -52,6 +54,7 @@ const seoAuditRoutes = new Elysia({ prefix: "/seo-audit" })
     return {
       auditId: crypto.randomUUID(),
       businessName,
+      location,
       gmbProfile: {
         name: businessName,
         rating: null,
@@ -65,6 +68,9 @@ const seoAuditRoutes = new Elysia({ prefix: "/seo-audit" })
     // TODO: Implement citation checking across major directories
     return {
       auditId: crypto.randomUUID(),
+      businessName,
+      phone,
+      address,
       totalCitations: 0,
       consistent: 0,
       inconsistent: 0,
@@ -269,4 +275,3 @@ export type App = typeof app;
 // Log when starting (wrangler dev will show this)
 console.log("🚀 DBA API starting...");
 console.log("📡 Endpoints: /health, /lighthouse/*, /seo-audit/*, /forms/*, /maps/*, /outreach/*, /cwv/*");
-
