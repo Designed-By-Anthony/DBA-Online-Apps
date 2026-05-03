@@ -7,8 +7,8 @@ import { Workspace } from './Workspace';
 export function GatedWorkspace() {
   return (
     <DemoGate
-      appName="Lead Form Builder"
-      tagline="Drop it on your website, get leads emailed or sent wherever you want."
+      appName="Contact Form Builder"
+      tagline="Create a form in minutes and start getting leads from your website."
       demoContent={<DemoResults />}
     >
       <Workspace />

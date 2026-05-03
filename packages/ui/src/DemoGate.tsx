@@ -99,7 +99,7 @@ export function DemoGate({ appName, tagline, demoContent, children }: DemoGatePr
             href={PURCHASE_URL}
             style={{ color: '#60a5fa', textDecoration: 'none', fontWeight: 500 }}
           >
-            Get full access &rarr;
+            Unlock full access &rarr;
           </a>
         </span>
       </div>
@@ -181,10 +181,10 @@ export function DemoGate({ appName, tagline, demoContent, children }: DemoGatePr
               cursor: 'pointer',
             }}
           >
-            See How It Works
+            Try the Demo
           </button>
           <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--muted, #5d6e80)' }}>
-            No sign-up required &middot; 30-second preview
+            Free &middot; No sign-up &middot; 30-second preview
           </p>
         </div>
       ) : null}
@@ -271,10 +271,10 @@ export function DemoGate({ appName, tagline, demoContent, children }: DemoGatePr
                   color: 'var(--foreground, #1a2a40)',
                 }}
               >
-                Ready for the real thing?
+                Like what you see?
               </h2>
               <p style={{ margin: 0, fontSize: '0.95rem', color: 'var(--muted, #5d6e80)' }}>
-                Unlock {appName} with live data, exports, and integrations.
+                Get unlimited access to {appName} with your own data and exports.
               </p>
               <a
                 href={PURCHASE_URL}
@@ -292,7 +292,7 @@ export function DemoGate({ appName, tagline, demoContent, children }: DemoGatePr
                   cursor: 'pointer',
                 }}
               >
-                View Plans &amp; Pricing
+                Unlock Full Access
               </a>
               <button
                 type="button"

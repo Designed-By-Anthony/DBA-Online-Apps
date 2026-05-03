@@ -7,8 +7,8 @@ import { Workspace } from './Workspace';
 export function GatedWorkspace() {
   return (
     <DemoGate
-      appName="Core Web Vitals Monitor"
-      tagline="The same way Google grades it for real users on mobile."
+      appName="Website Speed Test"
+      tagline="See the same speed score Google uses to rank your site. Takes 30 seconds."
       demoContent={<DemoResults />}
     >
       <Workspace />

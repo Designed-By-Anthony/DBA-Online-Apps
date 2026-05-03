@@ -14,7 +14,7 @@ export default function Home() {
           DBA
         </a>
         <span className="dba-topbar-sep">/</span>
-        <span className="dba-topbar-name">Service Area Map Generator</span>
+        <span className="dba-topbar-name">Service Area Map</span>
       </div>
 
       <main
@@ -23,10 +23,11 @@ export default function Home() {
       >
         <section className="hero">
           <div>
-            <p className="eyebrow">Local SEO Utility</p>
-            <h1>Show customers and Google exactly where you work.</h1>
+            <p className="eyebrow">Free service area map tool</p>
+            <h1>Show Customers Exactly Where You Work</h1>
             <p className="summary">
-              Generate a map embed, schema block, and service city list in seconds.
+              Enter the towns you serve and get an embeddable map for your website. Helps you show
+              up in local search.
             </p>
           </div>
         </section>

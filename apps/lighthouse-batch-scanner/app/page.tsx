@@ -14,7 +14,7 @@ export default function Home() {
           DBA
         </a>
         <span className="dba-topbar-sep">/</span>
-        <span className="dba-topbar-name">Lighthouse Batch Scanner</span>
+        <span className="dba-topbar-name">Website Speed Grader</span>
       </div>
 
       <main
@@ -23,9 +23,12 @@ export default function Home() {
       >
         <section className="hero">
           <div>
-            <p className="eyebrow">Batch Website Grading</p>
-            <h1>Grade your website&apos;s speed, SEO, and accessibility.</h1>
-            <p className="summary">Scan up to five URLs at once using Google PageSpeed Insights.</p>
+            <p className="eyebrow">Free website grading tool</p>
+            <h1>Grade Your Website&apos;s Speed, SEO, and Accessibility</h1>
+            <p className="summary">
+              Scan up to five pages at once and get a plain-English report card. See what to fix
+              first.
+            </p>
           </div>
         </section>
 
