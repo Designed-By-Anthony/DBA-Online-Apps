@@ -1,10 +1,9 @@
-import type { Metadata } from "next";
-import "./globals.css";
+import type { Metadata } from 'next';
+import './globals.css';
 
 export const metadata: Metadata = {
-  title: "Cold Outreach Sequencer",
-  description:
-    "Personalized email sequences for web design agencies targeting local service businesses.",
+  title: 'Cold Outreach Sequencer - DBA',
+  description: 'Write personalized follow-up emails for every prospect without a CRM.',
 };
 
 export default function RootLayout({

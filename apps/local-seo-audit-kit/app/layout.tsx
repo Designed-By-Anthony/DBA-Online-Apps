@@ -1,10 +1,9 @@
-import type { Metadata } from "next";
-import "./globals.css";
+import type { Metadata } from 'next';
+import './globals.css';
 
 export const metadata: Metadata = {
-  title: "Local SEO Audit Kit",
-  description:
-    "Google Business Profile checks, citation consistency reporting, and schema validation in one workflow.",
+  title: 'Local SEO Audit - DBA',
+  description: 'See how your business looks online and what to fix for local search.',
 };
 
 export default function RootLayout({

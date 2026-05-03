@@ -8,7 +8,7 @@
     "dev": "wrangler dev",
     "build": "bun build src/index.ts --outdir dist --target bun",
     "deploy": "wrangler deploy",
-    "lint": "eslint --max-warnings 0",
+    "lint": "biome check .",
     "check-types": "tsc --noEmit"
   },
   "dependencies": {
@@ -16,10 +16,7 @@
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20250320.0",
-    "@repo/eslint-config": "workspace:*",
-    "@repo/typescript-config": "workspace:*",
-    "eslint": "^9.39.1",
-    "globals": "^16.5.0",
+    "@dba/typescript-config": "workspace:*",
     "typescript": "5.9.2",
     "wrangler": "^4.0.0"
   }

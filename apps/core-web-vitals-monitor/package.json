@@ -7,9 +7,9 @@
   "scripts": {
     "dev": "next dev --port 3206",
     "build": "next build",
-    "pages:build": "bunx @cloudflare/next-on-pages",
-    "pages:deploy": "bunx wrangler pages deploy dist",
-    "lint": "eslint --max-warnings 0",
+    "pages:build": "next build",
+    "pages:deploy": "bunx wrangler deploy",
+    "lint": "biome check .",
     "check-types": "next typegen && tsc --noEmit"
   },
   "dependencies": {
@@ -19,12 +19,10 @@
   },
   "devDependencies": {
     "@cloudflare/next-on-pages": "^1.13.12",
-    "@repo/eslint-config": "workspace:*",
-    "@repo/typescript-config": "workspace:*",
+    "@dba/typescript-config": "workspace:*",
     "@types/node": "^22.15.3",
     "@types/react": "19.2.2",
     "@types/react-dom": "19.2.2",
-    "eslint": "^9.39.1",
     "typescript": "5.9.2",
     "wrangler": "^4.0.0"
   }

@@ -1,0 +1,8 @@
+{
+  "name": "dba-service-area-map",
+  "assets": { "directory": "./dist" },
+  "compatibility_date": "2025-01-01",
+  "routes": [
+    { "pattern": "service-area.designedbyanthony.online", "custom_domain": true }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "name": "@dba/config-tailwind",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "bun@1.3.13",
+  "exports": {
+    ".": "./tailwind.config.ts"
+  },
+  "devDependencies": {
+    "tailwindcss": "^4.2.4"
+  }
+}

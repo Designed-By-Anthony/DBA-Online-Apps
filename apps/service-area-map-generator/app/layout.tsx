@@ -1,10 +1,9 @@
-import type { Metadata } from "next";
-import "./globals.css";
+import type { Metadata } from 'next';
+import './globals.css';
 
 export const metadata: Metadata = {
-  title: "Service Area Map Generator",
-  description:
-    "Generate embeddable service-area maps optimized for local SEO signals.",
+  title: 'Service Area Map Generator - DBA',
+  description: 'Show customers and Google exactly where you work.',
 };
 
 export default function RootLayout({

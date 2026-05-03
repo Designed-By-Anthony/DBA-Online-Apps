@@ -4,8 +4,8 @@ This project is configured for deployment on Cloudflare.
 
 ## Architecture
 
-- **Frontend**: Next.js apps deployed to Cloudflare Pages (static export)
-- **Backend**: ElysiaJS API running on Cloudflare Workers
+- **Frontend**: Next.js apps deployed to Cloudflare Pages using Cloudflare Workers.
+- **Backend**: ElysiaJS API running on Cloudflare Workers.
 
 ## Prerequisites
 
@@ -48,22 +48,33 @@ cd packages/api
 bun run deploy
 ```
 
+The API worker custom domain is declared in [packages/api/wrangler.jsonc](/Users/anthonyjones/Web%20Design/DBA-Online-Apps/packages/api/wrangler.jsonc) and is provisioned by Wrangler during deploy:
+
+```json
+"routes": [
+  { "pattern": "api.designedbyanthony.online", "custom_domain": true }
+]
+```
+
 ### Deploy Individual Apps
 
 ```bash
 cd apps/<app-name>
-bun run build
+bun run pages:build
 bun run pages:deploy
 ```
 
-### Deploy All (via Turbo)
+### Deploy All Apps
 
 ```bash
-# Build all
-bun run build
+bun run pages:build
+bun run pages:deploy
+```
 
-# Deploy all apps
-bun run turbo run pages:deploy
+### Deploy Everything
+
+```bash
+bun run deploy
 ```
 
 ## Environment Variables
@@ -72,7 +83,7 @@ Create a `.env` file in each app directory as needed:
 
 ```
 # apps/<app-name>/.env
-NEXT_PUBLIC_API_URL=https://api.dba.online
+NEXT_PUBLIC_API_URL=https://api.designedbyanthony.online
 ```
 
 ## GitHub Actions

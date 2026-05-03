@@ -1,0 +1,9 @@
+Contact: mailto:anthony@designedbyanthony.online
+Expires: 2027-01-01T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://designedbyanthony.online/.well-known/security.txt
+Policy: https://designedbyanthony.online/.well-known/security.txt
+
+# Designed by Anthony — designedbyanthony.online
+# Responsible disclosure: report security issues directly to the contact above.
+# This is a solo-operated project. Response time target: 5 business days.

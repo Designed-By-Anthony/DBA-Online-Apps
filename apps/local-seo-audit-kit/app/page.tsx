@@ -1,76 +1,194 @@
-import type { CSSProperties } from "react";
+'use client';
 
-const product = {
-  name: "Local SEO Audit Kit",
-  status: "Coming Soon",
-  eyebrow: "Local visibility workflow",
-  description:
-    "Google Business Profile checks, citation consistency reporting, and schema validation in one workflow.",
-  accent: "#0f766e",
-  accentSoft: "#ccfbf1",
-  metrics: [
-    ["Profile checks", "GBP coverage"],
-    ["Citation scan", "NAP consistency"],
-    ["Schema review", "LocalBusiness"],
-  ],
-  workflow: ["Enter business details", "Compare citations", "Validate schema"],
-  outputs: ["Local SEO score", "Citation mismatch list", "Schema fixes"],
-};
+import type { CSSProperties } from 'react';
+import { useMemo, useState } from 'react';
+
+type Check = { label: string; pass: boolean; recommendation: string };
+
+function scoreClass(score: number): 'good' | 'ok' | 'poor' {
+  if (score >= 70) return 'good';
+  if (score >= 40) return 'ok';
+  return 'poor';
+}
 
 export default function Home() {
+  const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [address, setAddress] = useState('');
+  const [website, setWebsite] = useState('');
+  const [hasGbp, setHasGbp] = useState(false);
+  const [consistentAddress, setConsistentAddress] = useState(false);
+  const [hasReviews, setHasReviews] = useState(false);
+  const [audited, setAudited] = useState(false);
+
+  const checks = useMemo<Check[]>(
+    () => [
+      {
+        label: 'Business name is filled in',
+        pass: name.trim().length > 0,
+        recommendation: 'Add your exact business name as customers search for it.',
+      },
+      {
+        label: 'Phone number is filled in',
+        pass: phone.trim().length > 0,
+        recommendation: 'Add a primary phone number to improve trust and conversion.',
+      },
+      {
+        label: 'Address is filled in',
+        pass: address.trim().length > 0,
+        recommendation: 'Add your service address or office location.',
+      },
+      {
+        label: 'Website URL is filled in',
+        pass: website.trim().length > 0,
+        recommendation: 'Add your website URL so Google can connect listings to your site.',
+      },
+      {
+        label: 'Google Business Profile is active',
+        pass: hasGbp,
+        recommendation: 'Set up or claim your Google Business Profile listing.',
+      },
+      {
+        label: 'Address is listed consistently online',
+        pass: consistentAddress,
+        recommendation: 'Match your business name, address, and phone across all directories.',
+      },
+      {
+        label: 'You have at least 5 Google reviews',
+        pass: hasReviews,
+        recommendation: 'Request reviews from recent customers to build authority.',
+      },
+    ],
+    [address, consistentAddress, hasGbp, hasReviews, name, phone, website],
+  );
+
+  const passed = checks.filter((item) => item.pass).length;
+  const score = Math.round((passed / checks.length) * 100);
+  const scoreState = scoreClass(score);
+
+  const recommendations = checks.filter((item) => !item.pass).map((item) => item.recommendation);
+
   return (
-    <main
-      className="product-shell"
-      style={
-        {
-          "--accent": product.accent,
-          "--accent-soft": product.accentSoft,
-        } as CSSProperties
-      }
-    >
-      <section className="hero">
-        <div>
-          <p className="eyebrow">{product.eyebrow}</p>
-          <h1>{product.name}</h1>
-          <p className="summary">{product.description}</p>
-        </div>
-        <span className="status">{product.status}</span>
-      </section>
+    <>
+      <div className="dba-topbar">
+        <a className="dba-topbar-brand" href="https://designedbyanthony.com" target="_blank" rel="noreferrer">
+          DBA
+        </a>
+        <span className="dba-topbar-sep">/</span>
+        <span className="dba-topbar-name">Local SEO Audit Kit</span>
+      </div>
 
-      <section className="metrics" aria-label="Product snapshot">
-        {product.metrics.map(([label, value]) => (
-          <article className="metric" key={label}>
-            <p>{label}</p>
-            <strong>{value}</strong>
+      <main
+        className="product-shell"
+        style={{ '--accent': '#0369a1', '--accent-soft': '#e0f2fe' } as CSSProperties}
+      >
+        <section className="hero">
+          <div>
+            <p className="eyebrow">Local Search Checklist</p>
+            <h1>See how your business looks to Google.</h1>
+            <p className="summary">A quick checklist for local visibility and trust.</p>
+          </div>
+          <span className="status">Simple Audit</span>
+        </section>
+
+        <section className="workspace">
+          <article className="panel">
+            <div className="panel-heading">
+              <p>Business Details</p>
+              <span>7 checks</span>
+            </div>
+
+            <div className="tool-form">
+              <label className="field">
+                Business Name
+                <input className="text-input" value={name} onChange={(e) => setName(e.target.value)} />
+              </label>
+              <label className="field">
+                Phone
+                <input className="text-input" value={phone} onChange={(e) => setPhone(e.target.value)} />
+              </label>
+              <label className="field">
+                Address
+                <input className="text-input" value={address} onChange={(e) => setAddress(e.target.value)} />
+              </label>
+              <label className="field">
+                Website
+                <input className="text-input" value={website} onChange={(e) => setWebsite(e.target.value)} placeholder="https://example.com" />
+              </label>
+
+              <label className="checkbox-row">
+                <input type="checkbox" checked={hasGbp} onChange={(e) => setHasGbp(e.target.checked)} />
+                I have a Google Business Profile
+              </label>
+              <label className="checkbox-row">
+                <input type="checkbox" checked={consistentAddress} onChange={(e) => setConsistentAddress(e.target.checked)} />
+                My address is listed consistently online
+              </label>
+              <label className="checkbox-row">
+                <input type="checkbox" checked={hasReviews} onChange={(e) => setHasReviews(e.target.checked)} />
+                I have 5+ Google reviews
+              </label>
+
+              <div className="action-row">
+                <button type="button" className="primary-button" onClick={() => setAudited(true)}>
+                  Run Audit
+                </button>
+              </div>
+            </div>
           </article>
-        ))}
-      </section>
 
-      <section className="workspace" aria-label="Product workflow">
-        <article className="panel">
-          <div className="panel-heading">
-            <p>Workflow</p>
-            <span>v0.1</span>
-          </div>
-          <ol className="steps">
-            {product.workflow.map((step) => (
-              <li key={step}>{step}</li>
-            ))}
-          </ol>
-        </article>
+          <article className="panel output-panel">
+            <div className="panel-heading">
+              <p>Audit Result</p>
+              <span>{audited ? `${score}/100` : 'Waiting for audit'}</span>
+            </div>
 
-        <article className="panel output-panel">
-          <div className="panel-heading">
-            <p>Output</p>
-            <span>Preview</span>
-          </div>
-          <div className="output-list">
-            {product.outputs.map((output) => (
-              <span key={output}>{output}</span>
-            ))}
-          </div>
-        </article>
-      </section>
-    </main>
+            {audited ? (
+              <div className="result-stack">
+                <div className={`score-circle score-${scoreState}`}>
+                  {score}
+                  <small>SCORE</small>
+                </div>
+
+                <div>
+                  {checks.map((item) => (
+                    <div className="check-row-result" key={item.label}>
+                      <span className="check-icon">{item.pass ? '✅' : '❌'}</span>
+                      <span>{item.label}</span>
+                    </div>
+                  ))}
+                </div>
+
+                <div>
+                  <strong>Recommendations</strong>
+                  {recommendations.length === 0 ? (
+                    <p className="muted-note">Everything checks out. Keep collecting reviews every week.</p>
+                  ) : (
+                    <ul className="list">
+                      {recommendations.map((item) => (
+                        <li key={item}>{item}</li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              </div>
+            ) : (
+              <p className="muted-note">Fill in your details and click Run Audit.</p>
+            )}
+          </article>
+        </section>
+      </main>
+
+      <footer className="dba-footer">
+        <div className="dba-footer-inner">
+          <p>
+            <strong>Designed by Anthony</strong> tools built for real client work.
+          </p>
+          <a className="dba-footer-link" href="https://designedbyanthony.online" target="_blank" rel="noreferrer">
+            designedbyanthony.online
+          </a>
+        </div>
+      </footer>
+    </>
   );
 }

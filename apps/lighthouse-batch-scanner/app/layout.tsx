@@ -1,10 +1,9 @@
-import type { Metadata } from "next";
-import "./globals.css";
+import type { Metadata } from 'next';
+import './globals.css';
 
 export const metadata: Metadata = {
-  title: "Lighthouse Batch Scanner",
-  description:
-    "Audit multiple URLs at once and export a combined PDF report for client presentations.",
+  title: 'Lighthouse Batch Scanner - DBA',
+  description: 'Grade your website\'s speed, SEO, and accessibility in seconds.',
 };
 
 export default function RootLayout({

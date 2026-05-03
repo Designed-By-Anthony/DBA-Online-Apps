@@ -1,0 +1,36 @@
+# Designed by Anthony
+
+> Seven web tools for contractors and local service businesses in New York State.
+> Built and maintained by one person — Anthony Jones — based in Rome, NY.
+
+Designed by Anthony (designedbyanthony.online) is a one-person digital
+infrastructure studio. The tools listed below are self-contained web apps that
+solve specific operational problems for small service businesses: job
+estimating, lead capture, local SEO, site speed monitoring, outreach
+automation, service area mapping, and batch performance auditing.
+
+All tools are subscription-based (no contracts, cancel any time). Support goes
+directly to the builder, not a ticket queue.
+
+## Tools
+
+- Construction Calculator (https://calculator.designedbyanthony.online): Material estimating for concrete, framing, roofing, and more. Accurate job quotes in seconds.
+- Lead Form Builder (https://lead-form.designedbyanthony.online): Build embeddable contact forms that deliver leads to email or CRM. No developer needed.
+- Site Speed Monitor (https://web-vitals.designedbyanthony.online): Weekly Core Web Vitals scans with trend history and regression alerts.
+- SEO Audit Kit (https://seo-audit.designedbyanthony.online): Local SEO checklist graded against Google's ranking signals with a prioritized fix list.
+- Cold Outreach Sequencer (https://outreach.designedbyanthony.online): Upload prospect lists and generate personalized multi-step email sequences.
+- Service Area Map Generator (https://service-area.designedbyanthony.online): Embeddable service-area maps with SEO-structured location data and embed code.
+- Lighthouse Batch Scanner (https://lighthouse.designedbyanthony.online): Batch Lighthouse audits across multiple URLs — performance, accessibility, and SEO in one run.
+
+## Store
+
+- Tools store and pSEO landing pages: https://designedbyanthony.online
+
+## Contact
+
+- Email: anthony@designedbyanthony.online
+- Location: Rome, NY, United States
+
+## Sitemap
+
+- https://designedbyanthony.online/sitemap.xml

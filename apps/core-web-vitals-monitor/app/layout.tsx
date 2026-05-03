@@ -1,10 +1,9 @@
-import type { Metadata } from "next";
-import "./globals.css";
+import type { Metadata } from 'next';
+import './globals.css';
 
 export const metadata: Metadata = {
-  title: "Core Web Vitals Monitor",
-  description:
-    "Weekly Core Web Vitals snapshots with regression alerts sent straight to your inbox.",
+  title: 'Web Vitals Checker - DBA',
+  description: 'Test how fast your website loads - the same way Google grades it.',
 };
 
 export default function RootLayout({

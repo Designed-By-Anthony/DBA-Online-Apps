@@ -16,6 +16,7 @@ export {
   Globe,
   LayoutGrid,
   Loader2,
+  type LucideIcon,
   Mail,
   MapPin,
   Menu,
@@ -29,8 +30,9 @@ export {
   Users,
   X,
   Zap,
-  type LucideIcon,
 } from 'lucide-react';
+export type { DesignTokens } from './tokens.js';
+export { designTokens } from './tokens.js';
 
 // Types for component props
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -69,12 +71,12 @@ interface MetricCardProps {
 }
 
 // Simple component implementations
-export function Button({ 
-  variant = 'secondary', 
-  size = 'md', 
-  children, 
+export function Button({
+  variant = 'secondary',
+  size = 'md',
+  children,
   className = '',
-  ...props 
+  ...props
 }: ButtonProps) {
   const baseClasses = 'btn';
   const variantClasses = {
@@ -88,11 +90,11 @@ export function Button({
     md: '',
     lg: '',
   };
-  
+
   const classes = [baseClasses, variantClasses[variant], sizeClasses[size], className]
     .filter(Boolean)
     .join(' ');
-    
+
   return (
     <button className={classes} {...props}>
       {children}
@@ -101,14 +103,18 @@ export function Button({
 }
 
 export function Card({ children, className = '', title, action }: CardProps) {
+  const hasTitle = title !== undefined && title.length > 0;
+  const hasAction = action !== undefined && action !== null;
+  const hasHeader = hasTitle || hasAction;
+
   return (
     <div className={`card ${className}`}>
-      {(title || action) && (
+      {hasHeader ? (
         <div className="card-header">
-          {title && <h3 className="card-title">{title}</h3>}
+          {hasTitle ? <h3 className="card-title">{title}</h3> : null}
           {action}
         </div>
-      )}
+      ) : null}
       {children}
     </div>
   );
@@ -122,39 +128,47 @@ export function Badge({ children, variant = 'default' }: BadgeProps) {
     error: 'badge-error',
     info: 'badge-info',
   };
-  
-  return (
-    <span className={`badge ${variantClasses[variant]}`}>
-      {children}
-    </span>
-  );
+
+  return <span className={`badge ${variantClasses[variant]}`}>{children}</span>;
 }
 
 export function Input({ label, error, className = '', ...props }: InputProps) {
   return (
     <div className={className}>
-      {label && (
-        <label style={{ 
-          display: 'block', 
-          fontSize: '0.875rem', 
-          fontWeight: 500, 
-          marginBottom: '0.5rem',
-          color: 'var(--color-text)'
-        }}>
-          {label}
+      {label !== undefined && label.length > 0 ? (
+        <label
+          style={{
+            display: 'block',
+          }}
+        >
+          <span
+            style={{
+              display: 'block',
+              fontSize: '0.875rem',
+              fontWeight: 500,
+              marginBottom: '0.5rem',
+              color: 'var(--color-text)',
+            }}
+          >
+            {label}
+          </span>
+          <input className="input" {...props} />
         </label>
+      ) : (
+        <input className="input" {...props} />
       )}
-      <input className="input" {...props} />
-      {error && (
-        <span style={{ 
-          display: 'block', 
-          fontSize: '0.75rem', 
-          color: 'var(--accent-error)',
-          marginTop: '0.5rem'
-        }}>
+      {error !== undefined && error.length > 0 ? (
+        <span
+          style={{
+            display: 'block',
+            fontSize: '0.75rem',
+            color: 'var(--accent-error)',
+            marginTop: '0.5rem',
+          }}
+        >
           {error}
         </span>
-      )}
+      ) : null}
     </div>
   );
 }
@@ -165,20 +179,20 @@ export function ScoreRing({ score, size = 'md' }: ScoreRingProps) {
     if (s >= 50) return 'var(--accent-warning)';
     return 'var(--accent-error)';
   };
-  
+
   const sizeMap = {
     sm: 48,
     md: 80,
     lg: 120,
   };
-  
+
   const px = sizeMap[size];
-  
+
   return (
-    <div 
+    <div
       className="score-ring"
-      style={{ 
-        width: px, 
+      style={{
+        width: px,
         height: px,
         ['--score-color' as string]: getColor(score),
         ['--score-value' as string]: score,
@@ -195,109 +209,104 @@ export function MetricCard({ label, value, trend, trendValue }: MetricCardProps)
     down: 'var(--accent-error)',
     neutral: 'var(--color-text-muted)',
   };
-  
+  const hasTrend = trend !== undefined && trendValue !== undefined && trendValue.length > 0;
+
   return (
     <div className="metric-card">
       <div className="metric-label">{label}</div>
       <div className="metric-value">{value}</div>
-      {trend && trendValue && (
-        <div style={{ 
-          fontSize: '0.75rem', 
-          color: trendColors[trend],
-          marginTop: '0.25rem'
-        }}>
+      {hasTrend ? (
+        <div
+          style={{
+            fontSize: '0.75rem',
+            color: trendColors[trend],
+            marginTop: '0.25rem',
+          }}
+        >
           {trend === 'up' ? '↑' : trend === 'down' ? '↓' : '→'} {trendValue}
         </div>
-      )}
+      ) : null}
     </div>
   );
 }
 
-export function AppShell({ 
-  children, 
+export function AppShell({
+  children,
   title,
   actions,
-}: { 
+}: {
   children: ReactNode;
   title: string;
   actions?: ReactNode;
 }) {
+  const hasActions = actions !== undefined && actions !== null;
+
   return (
     <div className="app-shell">
       <header className="app-header">
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
           <h1>{title}</h1>
         </div>
-        {actions && (
-          <div style={{ display: 'flex', gap: '0.5rem' }}>
-            {actions}
-          </div>
-        )}
+        {hasActions ? <div style={{ display: 'flex', gap: '0.5rem' }}>{actions}</div> : null}
       </header>
-      <main className="app-main">
-        {children}
-      </main>
+      <main className="app-main">{children}</main>
     </div>
   );
 }
 
-export function EmptyState({ 
-  icon: Icon, 
-  title, 
+export function EmptyState({
+  icon: Icon,
+  title,
   description,
   action,
-}: { 
+}: {
   icon: React.ComponentType<{ className?: string }>;
   title: string;
   description?: string;
   action?: ReactNode;
 }) {
+  const hasDescription = description !== undefined && description.length > 0;
+  const hasAction = action !== undefined && action !== null;
+
   return (
     <div className="empty-state">
       <Icon className="empty-state-icon" />
       <h3 style={{ margin: '0 0 0.5rem', fontWeight: 600 }}>{title}</h3>
-      {description && (
-        <p style={{ margin: 0, maxWidth: 400 }}>{description}</p>
-      )}
-      {action && (
-        <div style={{ marginTop: '1.5rem' }}>{action}</div>
-      )}
+      {hasDescription ? <p style={{ margin: 0, maxWidth: 400 }}>{description}</p> : null}
+      {hasAction ? <div style={{ marginTop: '1.5rem' }}>{action}</div> : null}
     </div>
   );
 }
 
-export function ProgressBar({ 
-  value, 
+export function ProgressBar({
+  value,
   max = 100,
   color = 'var(--accent-primary)',
-}: { 
+}: {
   value: number;
   max?: number;
   color?: string;
 }) {
   const percentage = Math.min(100, Math.max(0, (value / max) * 100));
-  
+
   return (
     <div className="progress-bar">
-      <div 
-        className="progress-bar-fill" 
-        style={{ width: `${percentage}%`, background: color }}
-      />
+      <div className="progress-bar-fill" style={{ width: `${percentage}%`, background: color }} />
     </div>
   );
 }
 
-export function StatusBadge({ status }: { status: 'pending' | 'running' | 'completed' | 'failed' }) {
+export function StatusBadge({
+  status,
+}: {
+  status: 'pending' | 'running' | 'completed' | 'failed';
+}) {
   const labels = {
     pending: 'Pending',
     running: 'Running',
     completed: 'Completed',
     failed: 'Failed',
   };
-  
-  return (
-    <span className={`status status-${status}`}>
-      {labels[status]}
-    </span>
-  );
+
+  return <span className={`status status-${status}`}>{labels[status]}</span>;
 }

@@ -1,0 +1,8 @@
+{
+  "name": "dba-lighthouse",
+  "assets": { "directory": "./dist" },
+  "compatibility_date": "2025-01-01",
+  "routes": [
+    { "pattern": "lighthouse.designedbyanthony.online", "custom_domain": true }
+  ]
+}

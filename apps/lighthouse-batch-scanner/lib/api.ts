@@ -1,11 +1,11 @@
 /**
  * Decoupled API Client
- * 
+ *
  * All 6 apps communicate with the ElysiaJS backend via HTTP.
  * No direct coupling - frontend is pure static, backend is API-only.
  */
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8787";
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8787';
 
 /**
  * Generic fetch wrapper with error handling
@@ -13,11 +13,11 @@ const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8787";
 async function fetchApi<T>(path: string, options?: RequestInit): Promise<T> {
   const url = `${API_BASE}${path}`;
   console.log(`[API] ${options?.method || 'GET'} ${url}`);
-  
+
   try {
     const response = await fetch(url, {
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       ...options,
     });
@@ -40,20 +40,20 @@ async function fetchApi<T>(path: string, options?: RequestInit): Promise<T> {
 
 export interface AuditRequest {
   urls: string[];
-  device?: "desktop" | "mobile";
+  device?: 'desktop' | 'mobile';
   categories?: string[];
 }
 
 export interface AuditResponse {
   jobId: string;
-  status: "pending" | "in-progress" | "completed";
+  status: 'pending' | 'in-progress' | 'completed';
   totalUrls: number;
   estimatedTime: number;
 }
 
 export function startAudit(data: AuditRequest): Promise<AuditResponse> {
-  return fetchApi("/lighthouse/audit", {
-    method: "POST",
+  return fetchApi('/lighthouse/audit', {
+    method: 'POST',
     body: JSON.stringify(data),
   });
 }
@@ -82,22 +82,22 @@ export interface CitationAuditRequest {
 }
 
 export function auditGMB(data: GMBAuditRequest) {
-  return fetchApi("/seo-audit/gmb", {
-    method: "POST",
+  return fetchApi('/seo-audit/gmb', {
+    method: 'POST',
     body: JSON.stringify(data),
   });
 }
 
 export function auditCitations(data: CitationAuditRequest) {
-  return fetchApi("/seo-audit/citations", {
-    method: "POST",
+  return fetchApi('/seo-audit/citations', {
+    method: 'POST',
     body: JSON.stringify(data),
   });
 }
 
 export function validateSchema(url: string) {
-  return fetchApi("/seo-audit/schema", {
-    method: "POST",
+  return fetchApi('/seo-audit/schema', {
+    method: 'POST',
     body: JSON.stringify({ url }),
   });
 }
@@ -107,12 +107,12 @@ export function validateSchema(url: string) {
 // ============================================================
 
 export function listForms() {
-  return fetchApi("/forms");
+  return fetchApi('/forms');
 }
 
 export function createForm(data: unknown) {
-  return fetchApi("/forms", {
-    method: "POST",
+  return fetchApi('/forms', {
+    method: 'POST',
     body: JSON.stringify(data),
   });
 }
@@ -123,7 +123,7 @@ export function getForm(formId: string) {
 
 export function submitForm(formId: string, data: unknown) {
   return fetchApi(`/forms/${formId}/submit`, {
-    method: "POST",
+    method: 'POST',
     body: JSON.stringify(data),
   });
 }
@@ -137,8 +137,8 @@ export function getFormSubmissions(formId: string) {
 // ============================================================
 
 export function createMap(data: unknown) {
-  return fetchApi("/maps", {
-    method: "POST",
+  return fetchApi('/maps', {
+    method: 'POST',
     body: JSON.stringify(data),
   });
 }
@@ -152,12 +152,12 @@ export function getMap(mapId: string) {
 // ============================================================
 
 export function listSequences() {
-  return fetchApi("/outreach/sequences");
+  return fetchApi('/outreach/sequences');
 }
 
 export function createSequence(data: unknown) {
-  return fetchApi("/outreach/sequences", {
-    method: "POST",
+  return fetchApi('/outreach/sequences', {
+    method: 'POST',
     body: JSON.stringify(data),
   });
 }
@@ -168,14 +168,14 @@ export function getSequence(id: string) {
 
 export function importProspects(id: string, prospects: unknown[]) {
   return fetchApi(`/outreach/sequences/${id}/prospects`, {
-    method: "POST",
+    method: 'POST',
     body: JSON.stringify({ prospects }),
   });
 }
 
 export function activateSequence(id: string) {
   return fetchApi(`/outreach/sequences/${id}/activate`, {
-    method: "POST",
+    method: 'POST',
   });
 }
 
@@ -184,19 +184,19 @@ export function activateSequence(id: string) {
 // ============================================================
 
 export function takeSnapshot(url: string) {
-  return fetchApi("/cwv/snapshot", {
-    method: "POST",
+  return fetchApi('/cwv/snapshot', {
+    method: 'POST',
     body: JSON.stringify({ url }),
   });
 }
 
 export function listMonitors() {
-  return fetchApi("/cwv/monitors");
+  return fetchApi('/cwv/monitors');
 }
 
 export function createMonitor(data: unknown) {
-  return fetchApi("/cwv/monitors", {
-    method: "POST",
+  return fetchApi('/cwv/monitors', {
+    method: 'POST',
     body: JSON.stringify(data),
   });
 }
@@ -211,7 +211,7 @@ export function getMonitorAlerts(id: string) {
 
 export function checkMonitor(id: string) {
   return fetchApi(`/cwv/monitors/${id}/check`, {
-    method: "POST",
+    method: 'POST',
   });
 }
 
@@ -220,9 +220,9 @@ export function checkMonitor(id: string) {
 // ============================================================
 
 export function getHealth() {
-  return fetchApi("/health");
+  return fetchApi('/health');
 }
 
 export function getApiInfo() {
-  return fetchApi("/");
+  return fetchApi('/');
 }

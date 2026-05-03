@@ -1,10 +1,9 @@
-import type { Metadata } from "next";
-import "./globals.css";
+import type { Metadata } from 'next';
+import './globals.css';
 
 export const metadata: Metadata = {
-  title: "Lead Form Builder",
-  description:
-    "Drag-and-drop smart forms with reCAPTCHA, Zapier hooks, and CRM-ready JSON output.",
+  title: 'Lead Form Builder - DBA',
+  description: 'Build a contact form in minutes and drop it on your website.',
 };
 
 export default function RootLayout({
