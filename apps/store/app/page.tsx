@@ -1,9 +1,4 @@
-import {
-  TOOL_SLUGS,
-  TOOL_LABELS,
-  TOOL_TAGLINES,
-  TOOL_PRICES,
-} from '../lib/pseo';
+import { TOOL_LABELS, TOOL_PRICES, TOOL_SLUGS, TOOL_TAGLINES } from '../lib/pseo';
 
 export default function StorePage() {
   const year = new Date().getFullYear();
@@ -13,10 +8,7 @@ export default function StorePage() {
         <span className="topbar-brand">
           Designed by <span>Anthony</span>
         </span>
-        <a
-          href="mailto:anthony@designedbyanthony.online"
-          className="topbar-link"
-        >
+        <a href="mailto:anthony@designedbyanthony.online" className="topbar-link">
           Get in touch
         </a>
       </header>
@@ -29,17 +21,14 @@ export default function StorePage() {
           <em>Not a spreadsheet.</em>
         </h1>
         <p className="hero-sub">
-          Job estimating, lead capture, SEO audits, and site speed monitoring —
-          built for contractors and local service pros in New York State.
+          Job estimating, lead capture, SEO audits, and site speed monitoring — built for
+          contractors and local service pros in New York State.
         </p>
         <div className="hero-cta-group">
           <a href="#tools" className="btn-primary">
             Browse all tools →
           </a>
-          <a
-            href="mailto:anthony@designedbyanthony.online"
-            className="btn-ghost"
-          >
+          <a href="mailto:anthony@designedbyanthony.online" className="btn-ghost">
             Talk to Anthony
           </a>
         </div>
@@ -64,13 +53,10 @@ export default function StorePage() {
       <div className="strip">
         <h2>One builder. Seven tools. No agency markup.</h2>
         <p>
-          Every tool is designed, built, and supported by Anthony — one person
-          based in Rome, NY who picks up the phone.
+          Every tool is designed, built, and supported by Anthony — one person based in Rome, NY who
+          picks up the phone.
         </p>
-        <a
-          href="mailto:anthony@designedbyanthony.online"
-          className="btn-primary"
-        >
+        <a href="mailto:anthony@designedbyanthony.online" className="btn-primary">
           Get in touch →
         </a>
       </div>
@@ -78,14 +64,10 @@ export default function StorePage() {
       <section className="strip" style={{ background: 'var(--surface-2, #111)' }}>
         <h2>Need a custom build?</h2>
         <p>
-          These tools are built by Anthony Jones — a full-stack web architect based in Rome, NY.
-          For bespoke websites, design systems, and infrastructure work, visit the main studio.
+          These tools are built by Anthony Jones — a full-stack web architect based in Rome, NY. For
+          bespoke websites, design systems, and infrastructure work, visit the main studio.
         </p>
-        <a
-          href="https://designedbyanthony.com"
-          className="btn-primary"
-          rel="noopener"
-        >
+        <a href="https://designedbyanthony.com" className="btn-primary" rel="noopener">
           designedbyanthony.com →
         </a>
       </section>
@@ -104,9 +86,7 @@ export default function StorePage() {
               <a href="mailto:anthony@designedbyanthony.online">Contact</a>
             </li>
           </ul>
-          <p className="footer-copy">
-            © {year} Designed by Anthony · Rome, NY
-          </p>
+          <p className="footer-copy">© {year} Designed by Anthony · Rome, NY</p>
         </div>
       </footer>
     </>

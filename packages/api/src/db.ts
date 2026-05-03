@@ -11,10 +11,7 @@ import type {
 
 // ── Auth / Users ─────────────────────────────────────────────────────────────
 
-export async function getUserByApiKey(
-  db: D1Database,
-  apiKey: string,
-): Promise<DbUser | null> {
+export async function getUserByApiKey(db: D1Database, apiKey: string): Promise<DbUser | null> {
   const result = await db
     .prepare('SELECT * FROM users WHERE api_key = ? LIMIT 1')
     .bind(apiKey)
@@ -22,10 +19,7 @@ export async function getUserByApiKey(
   return result ?? null;
 }
 
-export async function createUser(
-  db: D1Database,
-  user: Omit<DbUser, 'created_at'>,
-): Promise<void> {
+export async function createUser(db: D1Database, user: Omit<DbUser, 'created_at'>): Promise<void> {
   await db
     .prepare(
       'INSERT INTO users (id, email, plan, api_key, stripe_customer_id, created_at) VALUES (?, ?, ?, ?, ?, ?)',
@@ -88,7 +82,9 @@ export async function getLighthouseJob(
 export async function updateLighthouseJob(
   db: D1Database,
   jobId: string,
-  update: Partial<Pick<DbLighthouseJob, 'status' | 'results' | 'pdf_key' | 'error' | 'completed_at'>>,
+  update: Partial<
+    Pick<DbLighthouseJob, 'status' | 'results' | 'pdf_key' | 'error' | 'completed_at'>
+  >,
 ): Promise<void> {
   const fields = Object.keys(update) as (keyof typeof update)[];
   const setClauses = fields.map((f) => `${f} = ?`).join(', ');
@@ -264,15 +260,14 @@ export async function createCwvMonitor(
   monitor: Pick<DbCwvMonitor, 'id' | 'user_id' | 'url'>,
 ): Promise<void> {
   await db
-    .prepare('INSERT INTO cwv_monitors (id, user_id, url, snapshots, created_at) VALUES (?, ?, ?, ?, ?)')
+    .prepare(
+      'INSERT INTO cwv_monitors (id, user_id, url, snapshots, created_at) VALUES (?, ?, ?, ?, ?)',
+    )
     .bind(monitor.id, monitor.user_id, monitor.url, '[]', new Date().toISOString())
     .run();
 }
 
-export async function getCwvMonitor(
-  db: D1Database,
-  id: string,
-): Promise<DbCwvMonitor | null> {
+export async function getCwvMonitor(db: D1Database, id: string): Promise<DbCwvMonitor | null> {
   const result = await db
     .prepare('SELECT * FROM cwv_monitors WHERE id = ? LIMIT 1')
     .bind(id)

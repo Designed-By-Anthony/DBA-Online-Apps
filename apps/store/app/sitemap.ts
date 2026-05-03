@@ -1,7 +1,8 @@
 import type { MetadataRoute } from 'next';
 
 export const dynamic = 'force-static';
-import { TOOL_SLUGS, listAllToolPaths } from '../lib/pseo';
+
+import { listAllToolPaths, TOOL_SLUGS } from '../lib/pseo';
 
 const BASE = 'https://designedbyanthony.online';
 

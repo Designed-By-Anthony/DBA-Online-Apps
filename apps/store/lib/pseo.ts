@@ -90,16 +90,11 @@ export const TOOL_PRICES: Record<ToolSlug, string> = {
 export const TOOL_TAGLINES: Record<ToolSlug, string> = {
   'construction-calculator':
     'Accurate job estimates in seconds — concrete, framing, roofing, and more.',
-  'lead-form-builder':
-    'Build smart contact forms that send leads straight to your inbox or CRM.',
-  'site-speed-monitor':
-    'Know the moment your site slows down, before your customers notice.',
-  'seo-audit':
-    'See exactly why Google ranks your competitors above you and how to fix it.',
-  'cold-outreach':
-    'Send personalized follow-up sequences to prospects without the manual work.',
-  'service-area-map':
-    'Show Google and your customers the exact towns you serve.',
+  'lead-form-builder': 'Build smart contact forms that send leads straight to your inbox or CRM.',
+  'site-speed-monitor': 'Know the moment your site slows down, before your customers notice.',
+  'seo-audit': 'See exactly why Google ranks your competitors above you and how to fix it.',
+  'cold-outreach': 'Send personalized follow-up sequences to prospects without the manual work.',
+  'service-area-map': 'Show Google and your customers the exact towns you serve.',
   'lighthouse-scanner':
     'Grade every page on your site for speed, SEO, and accessibility in one run.',
 };

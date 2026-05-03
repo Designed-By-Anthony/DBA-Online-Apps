@@ -11,7 +11,7 @@ async function apiFetch<T>(path: string, options?: RequestInit & { token?: strin
     'Content-Type': 'application/json',
     ...(rest.headers as Record<string, string> | undefined),
   };
-  if (token) headers['Authorization'] = `Bearer ${token}`;
+  if (token) headers.Authorization = `Bearer ${token}`;
   const res = await fetch(`${API_BASE}${path}`, { ...rest, headers });
   if (!res.ok) throw new Error(`API ${res.status}: ${res.statusText}`);
   return res.json() as Promise<T>;

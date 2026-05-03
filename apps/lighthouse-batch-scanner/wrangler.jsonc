@@ -2,7 +2,5 @@
   "name": "dba-lighthouse",
   "assets": { "directory": "./dist" },
   "compatibility_date": "2025-04-30",
-  "routes": [
-    { "pattern": "lighthouse.designedbyanthony.online", "custom_domain": true }
-  ]
+  "routes": [{ "pattern": "lighthouse.designedbyanthony.online", "custom_domain": true }]
 }

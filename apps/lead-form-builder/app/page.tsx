@@ -120,7 +120,12 @@ ${fieldsMarkup}
   return (
     <>
       <div className="dba-topbar">
-        <a className="dba-topbar-brand" href="https://designedbyanthony.com" target="_blank" rel="noreferrer">
+        <a
+          className="dba-topbar-brand"
+          href="https://designedbyanthony.com"
+          target="_blank"
+          rel="noreferrer"
+        >
           DBA
         </a>
         <span className="dba-topbar-sep">/</span>
@@ -152,7 +157,11 @@ ${fieldsMarkup}
             <div className="tool-form">
               <label className="field">
                 Form Name
-                <input className="text-input" value={formName} onChange={(e) => setFormName(e.target.value)} />
+                <input
+                  className="text-input"
+                  value={formName}
+                  onChange={(e) => setFormName(e.target.value)}
+                />
               </label>
 
               <label className="field">
@@ -178,7 +187,11 @@ ${fieldsMarkup}
 
                 <label className="field">
                   Type
-                  <select className="text-input" value={fieldType} onChange={(e) => setFieldType(e.target.value as FieldType)}>
+                  <select
+                    className="text-input"
+                    value={fieldType}
+                    onChange={(e) => setFieldType(e.target.value as FieldType)}
+                  >
                     {FIELD_OPTIONS.map((option) => (
                       <option key={option} value={option}>
                         {option}
@@ -188,7 +201,11 @@ ${fieldsMarkup}
                 </label>
 
                 <label className="checkbox-row" style={{ marginTop: 26 }}>
-                  <input type="checkbox" checked={required} onChange={(e) => setRequired(e.target.checked)} />
+                  <input
+                    type="checkbox"
+                    checked={required}
+                    onChange={(e) => setRequired(e.target.checked)}
+                  />
                   Required
                 </label>
               </div>
@@ -205,7 +222,11 @@ ${fieldsMarkup}
                     <span>
                       {field.label} · {field.type} · {field.required ? 'required' : 'optional'}
                     </span>
-                    <button type="button" className="link-button" onClick={() => removeField(field.id)}>
+                    <button
+                      type="button"
+                      className="link-button"
+                      onClick={() => removeField(field.id)}
+                    >
                       Remove
                     </button>
                   </li>
@@ -217,7 +238,11 @@ ${fieldsMarkup}
           <article className="panel output-panel">
             <div className="panel-heading">
               <p>Embed Code</p>
-              <button type="button" className={`copy-button${copied ? ' copied' : ''}`} onClick={copyEmbed}>
+              <button
+                type="button"
+                className={`copy-button${copied ? ' copied' : ''}`}
+                onClick={copyEmbed}
+              >
                 {copied ? 'Copied' : 'Copy'}
               </button>
             </div>
@@ -233,7 +258,12 @@ ${fieldsMarkup}
           <p>
             <strong>Designed by Anthony</strong> tools built for real client work.
           </p>
-          <a className="dba-footer-link" href="https://designedbyanthony.online" target="_blank" rel="noreferrer">
+          <a
+            className="dba-footer-link"
+            href="https://designedbyanthony.online"
+            target="_blank"
+            rel="noreferrer"
+          >
             designedbyanthony.online
           </a>
         </div>

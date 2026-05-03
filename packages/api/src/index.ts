@@ -9,9 +9,9 @@ import {
   createServiceMap,
   getCwvMonitor,
   getFormSubmissions,
-  getLighthouseJob,
   getLeadForm,
   getLeadFormsByUser,
+  getLighthouseJob,
   getOutreachSequence,
   getServiceMap,
   resolveAuth,
@@ -31,18 +31,20 @@ function buildResolveOrigin(allowedOrigins: string) {
   const origins = allowedOrigins.split(',').map((s) => s.trim());
   return (origin: string | null): string => {
     if (!origin) return origins[0] ?? '*';
-    return origins.includes(origin) ? origin : origins[0] ?? '*';
+    return origins.includes(origin) ? origin : (origins[0] ?? '*');
   };
 }
 
 // ── Embed HTML builder ────────────────────────────────────────────────────────
 
 function buildEmbedHtml(
-  mapId: string,
+  _mapId: string,
   businessName: string,
   areas: Array<{ city: string; radiusMiles: number }>,
 ): string {
-  const areaList = areas.map((a) => `<li>${a.city} (${a.radiusMiles} mi radius)</li>`).join('\n      ');
+  const areaList = areas
+    .map((a) => `<li>${a.city} (${a.radiusMiles} mi radius)</li>`)
+    .join('\n      ');
   const query = encodeURIComponent(`${businessName} service area`);
   return `<!DOCTYPE html>
 <html lang="en">
@@ -97,7 +99,7 @@ function buildApp(env: Env) {
       .onBeforeHandle(({ set, request }) => {
         const origin = request.headers.get('origin');
         set.headers['Access-Control-Allow-Origin'] = resolveOrigin(origin);
-        set.headers['Vary'] = 'Origin';
+        set.headers.Vary = 'Origin';
         set.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS';
         set.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization';
         set.headers['Access-Control-Allow-Credentials'] = 'true';
@@ -109,7 +111,7 @@ function buildApp(env: Env) {
           status: 204,
           headers: {
             'Access-Control-Allow-Origin': resolveOrigin(origin),
-            'Vary': 'Origin',
+            Vary: 'Origin',
             'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
             'Access-Control-Allow-Headers': 'Content-Type, Authorization',
             'Access-Control-Allow-Credentials': 'true',
@@ -179,7 +181,14 @@ function buildApp(env: Env) {
               categories: JSON.stringify(categories),
             });
 
-            return { jobId, status: 'pending', device, categories, totalUrls: urls.length, estimatedTime: urls.length * 30 };
+            return {
+              jobId,
+              status: 'pending',
+              device,
+              categories,
+              totalUrls: urls.length,
+              estimatedTime: urls.length * 30,
+            };
           })
           .get('/audit/:jobId', async ({ db, params: { jobId } }) => {
             const job = await getLighthouseJob(db, jobId);
@@ -218,21 +227,48 @@ function buildApp(env: Env) {
               results: unknown;
             };
             const auditId = crypto.randomUUID();
-            await createSeoAudit(db, { id: auditId, user_id: userId, business_name: businessName, location });
+            await createSeoAudit(db, {
+              id: auditId,
+              user_id: userId,
+              business_name: businessName,
+              location,
+            });
             await saveSeoAuditResults(db, auditId, results);
             return { auditId, saved: true };
           })
           .post('/gmb', async ({ body }) => {
             const { businessName, location } = body as { businessName: string; location: string };
-            return { auditId: crypto.randomUUID(), businessName, location, gmbFound: false, profileCompleteness: 0, score: 0 };
+            return {
+              auditId: crypto.randomUUID(),
+              businessName,
+              location,
+              gmbFound: false,
+              profileCompleteness: 0,
+              score: 0,
+            };
           })
           .post('/citations', async ({ body }) => {
-            const { businessName, phone, address } = body as { businessName: string; phone: string; address: string };
-            return { auditId: crypto.randomUUID(), businessName, phone, address, citationsFound: 0, consistencyScore: 0, sources: [] };
+            const { businessName, phone, address } = body as {
+              businessName: string;
+              phone: string;
+              address: string;
+            };
+            return {
+              auditId: crypto.randomUUID(),
+              businessName,
+              phone,
+              address,
+              citationsFound: 0,
+              consistencyScore: 0,
+              sources: [],
+            };
           })
           .post('/schema', async ({ body }) => {
             const { url } = body as { url: string };
-            return { url, validations: [{ type: 'LocalBusiness', valid: false, errors: ['Not implemented'] }] };
+            return {
+              url,
+              validations: [{ type: 'LocalBusiness', valid: false, errors: ['Not implemented'] }],
+            };
           }),
       )
 
@@ -249,22 +285,41 @@ function buildApp(env: Env) {
           })
           .post('/', async ({ db, request, body }) => {
             const { userId } = await resolveAuth(db, request);
-            if (!userId) return new Response(JSON.stringify({ error: 'Authentication required' }), { status: 401, headers: { 'Content-Type': 'application/json' } });
+            if (!userId)
+              return new Response(JSON.stringify({ error: 'Authentication required' }), {
+                status: 401,
+                headers: { 'Content-Type': 'application/json' },
+              });
             const { name, fields } = body as { name: string; fields: unknown[] };
             const formId = crypto.randomUUID();
-            await createLeadForm(db, { id: formId, user_id: userId, name, fields: JSON.stringify(fields) });
+            await createLeadForm(db, {
+              id: formId,
+              user_id: userId,
+              name,
+              fields: JSON.stringify(fields),
+            });
             return { id: formId, name, fields, createdAt: new Date().toISOString() };
           })
           .get('/:formId', async ({ db, params: { formId } }) => {
             const form = await getLeadForm(db, formId);
             if (!form) return new Response('Not found', { status: 404 });
-            return { id: form.id, name: form.name, fields: JSON.parse(form.fields), submissions: 0 };
+            return {
+              id: form.id,
+              name: form.name,
+              fields: JSON.parse(form.fields),
+              submissions: 0,
+            };
           })
           .post('/:formId/submit', async ({ db, params: { formId }, request, body }) => {
             const form = await getLeadForm(db, formId);
             if (!form) return new Response('Not found', { status: 404 });
             const submissionId = crypto.randomUUID();
-            await saveFormSubmission(db, { id: submissionId, form_id: formId, data: JSON.stringify(body), ip: request.headers.get('cf-connecting-ip') });
+            await saveFormSubmission(db, {
+              id: submissionId,
+              form_id: formId,
+              data: JSON.stringify(body),
+              ip: request.headers.get('cf-connecting-ip'),
+            });
             return { submissionId, formId, submittedAt: new Date().toISOString() };
           })
           .get('/:formId/submissions', async ({ db, params: { formId } }) => {
@@ -280,23 +335,44 @@ function buildApp(env: Env) {
         app
           .post('/', async ({ db, storage, request, body }) => {
             const { userId } = await resolveAuth(db, request);
-            const { businessName, areas } = body as { businessName: string; areas: Array<{ city: string; radiusMiles: number }> };
+            const { businessName, areas } = body as {
+              businessName: string;
+              areas: Array<{ city: string; radiusMiles: number }>;
+            };
             const mapId = crypto.randomUUID();
-            await createServiceMap(db, { id: mapId, user_id: userId, business_name: businessName, areas: JSON.stringify(areas) });
+            await createServiceMap(db, {
+              id: mapId,
+              user_id: userId,
+              business_name: businessName,
+              areas: JSON.stringify(areas),
+            });
             const embedHtml = buildEmbedHtml(mapId, businessName, areas);
             const key = await uploadEmbed(storage, mapId, embedHtml);
             await setServiceMapEmbedKey(db, mapId, key);
-            return { mapId, businessName, areas, embedUrl: publicUrl(key, apiBase), createdAt: new Date().toISOString() };
+            return {
+              mapId,
+              businessName,
+              areas,
+              embedUrl: publicUrl(key, apiBase),
+              createdAt: new Date().toISOString(),
+            };
           })
           .get('/:mapId', async ({ db, params: { mapId } }) => {
             const map = await getServiceMap(db, mapId);
             if (!map) return new Response('Not found', { status: 404 });
-            return { id: map.id, businessName: map.business_name, areas: JSON.parse(map.areas), embedUrl: map.embed_key ? publicUrl(map.embed_key, apiBase) : null };
+            return {
+              id: map.id,
+              businessName: map.business_name,
+              areas: JSON.parse(map.areas),
+              embedUrl: map.embed_key ? publicUrl(map.embed_key, apiBase) : null,
+            };
           })
           .get('/:mapId/embed', async ({ storage, params: { mapId } }) => {
             const obj = await getObject(storage, `embeds/${mapId}/embed.html`);
             if (!obj) return new Response('<h1>Map not found</h1>', { status: 404 });
-            return new Response(obj.body, { headers: { 'Content-Type': 'text/html; charset=utf-8' } });
+            return new Response(obj.body, {
+              headers: { 'Content-Type': 'text/html; charset=utf-8' },
+            });
           }),
       )
 
@@ -307,16 +383,31 @@ function buildApp(env: Env) {
         app
           .post('/sequences', async ({ db, request, body }) => {
             const { userId } = await resolveAuth(db, request);
-            if (!userId) return new Response(JSON.stringify({ error: 'Authentication required' }), { status: 401, headers: { 'Content-Type': 'application/json' } });
+            if (!userId)
+              return new Response(JSON.stringify({ error: 'Authentication required' }), {
+                status: 401,
+                headers: { 'Content-Type': 'application/json' },
+              });
             const { name, steps } = body as { name: string; steps: unknown[] };
             const id = crypto.randomUUID();
-            await createOutreachSequence(db, { id, user_id: userId, name, steps: JSON.stringify(steps) });
+            await createOutreachSequence(db, {
+              id,
+              user_id: userId,
+              name,
+              steps: JSON.stringify(steps),
+            });
             return { id, name, steps, status: 'draft', createdAt: new Date().toISOString() };
           })
           .get('/sequences/:id', async ({ db, params: { id } }) => {
             const seq = await getOutreachSequence(db, id);
             if (!seq) return new Response('Not found', { status: 404 });
-            return { id: seq.id, name: seq.name, steps: JSON.parse(seq.steps), prospects: JSON.parse(seq.prospects), status: seq.status };
+            return {
+              id: seq.id,
+              name: seq.name,
+              steps: JSON.parse(seq.steps),
+              prospects: JSON.parse(seq.prospects),
+              status: seq.status,
+            };
           })
           .post('/sequences/:id/prospects', async ({ db, params: { id }, body }) => {
             const { prospects } = body as { prospects: unknown[] };
@@ -347,7 +438,11 @@ function buildApp(env: Env) {
             return { monitorId: id, url: monitor.url, snapshots: JSON.parse(monitor.snapshots) };
           })
           .post('/monitors/:id/snapshot', async ({ db, params: { id }, body }) => {
-            const snapshot = { ...(body as object), id: crypto.randomUUID(), collectedAt: new Date().toISOString() };
+            const snapshot = {
+              ...(body as object),
+              id: crypto.randomUUID(),
+              collectedAt: new Date().toISOString(),
+            };
             await appendCwvSnapshot(db, id, snapshot);
             return { monitorId: id, snapshot };
           }),
@@ -366,4 +461,3 @@ export default {
     return;
   },
 };
-

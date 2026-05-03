@@ -1,29 +1,23 @@
 // ─── Calculator Types ─────────────────────────────────────────────────────────
 
 export type CalculatorId =
-  | "concrete"
-  | "framing"
-  | "roofing"
-  | "roofingSquares"
-  | "roofPitch"
-  | "rafters"
-  | "flooring"
-  | "insulation"
-  | "sprayfoam"
-  | "cellulose"
-  | "siding"
-  | "paint"
-  | "labor"
-  | "budget"
-  | "unitConverter";
+  | 'concrete'
+  | 'framing'
+  | 'roofing'
+  | 'roofingSquares'
+  | 'roofPitch'
+  | 'rafters'
+  | 'flooring'
+  | 'insulation'
+  | 'sprayfoam'
+  | 'cellulose'
+  | 'siding'
+  | 'paint'
+  | 'labor'
+  | 'budget'
+  | 'unitConverter';
 
-export type CategoryId =
-  | "concrete"
-  | "framing"
-  | "roofing"
-  | "insulation"
-  | "finishes"
-  | "labor";
+export type CategoryId = 'concrete' | 'framing' | 'roofing' | 'insulation' | 'finishes' | 'labor';
 
 export interface CalculationResult {
   label: string;
@@ -149,10 +143,4 @@ export interface PDFEstimateData {
 
 // ─── View Types ───────────────────────────────────────────────────────────────
 
-export type AppView =
-  | "calculator"
-  | "blog"
-  | "faq"
-  | "about"
-  | "help"
-  | "privacy";
+export type AppView = 'calculator' | 'blog' | 'faq' | 'about' | 'help' | 'privacy';
