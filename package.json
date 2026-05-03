@@ -18,13 +18,16 @@
     "deploy": "bun run build && bun run check-types && bun run deploy:api"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.4.13",
+    "@biomejs/biome": "^2.4.14",
     "@dba/config-biome": "workspace:*",
-    "turbo": "^2.9.6",
-    "typescript": "5.9.2"
+    "turbo": "^2.9.8",
+    "typescript": "^6.0.3"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=22"
+  },
+  "volta": {
+    "node": "22.22.2"
   },
   "workspaces": [
     "apps/*",

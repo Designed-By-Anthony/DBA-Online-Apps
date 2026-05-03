@@ -184,7 +184,7 @@ function buildApp(env: Env) {
             const jobId = crypto.randomUUID();
             await createLighthouseJob(db, {
               id: jobId,
-              user_id: auth.userId,
+              user_id: auth.userId as string,
               urls: JSON.stringify(urls),
               device,
               categories: JSON.stringify(categories),
@@ -240,7 +240,7 @@ function buildApp(env: Env) {
             const auditId = crypto.randomUUID();
             await createSeoAudit(db, {
               id: auditId,
-              user_id: auth.userId,
+              user_id: auth.userId as string,
               business_name: businessName,
               location,
             });
@@ -303,7 +303,7 @@ function buildApp(env: Env) {
             const formId = crypto.randomUUID();
             await createLeadForm(db, {
               id: formId,
-              user_id: auth.userId,
+              user_id: auth.userId as string,
               name,
               fields: JSON.stringify(fields),
             });
@@ -353,7 +353,7 @@ function buildApp(env: Env) {
             const mapId = crypto.randomUUID();
             await createServiceMap(db, {
               id: mapId,
-              user_id: auth.userId,
+              user_id: auth.userId as string,
               business_name: businessName,
               areas: JSON.stringify(areas),
             });
@@ -400,7 +400,7 @@ function buildApp(env: Env) {
             const id = crypto.randomUUID();
             await createOutreachSequence(db, {
               id,
-              user_id: auth.userId,
+              user_id: auth.userId as string,
               name,
               steps: JSON.stringify(steps),
             });
@@ -439,7 +439,7 @@ function buildApp(env: Env) {
             if (gate) return gate;
             const { url } = body as { url: string };
             const id = crypto.randomUUID();
-            await createCwvMonitor(db, { id, user_id: auth.userId, url });
+            await createCwvMonitor(db, { id, user_id: auth.userId as string, url });
             return { id, url, createdAt: new Date().toISOString() };
           })
           .get('/monitors/:id/snapshots', async ({ db, params: { id } }) => {

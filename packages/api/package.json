@@ -12,12 +12,12 @@
     "check-types": "tsc --noEmit"
   },
   "dependencies": {
-    "elysia": "^1.2.0"
+    "elysia": "^1.4.28"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20250320.0",
+    "@cloudflare/workers-types": "^4.20260503.1",
     "@dba/typescript-config": "workspace:*",
-    "typescript": "5.9.2",
-    "wrangler": "^4.0.0"
+    "typescript": "^6.0.3",
+    "wrangler": "^4.87.0"
   }
 }
