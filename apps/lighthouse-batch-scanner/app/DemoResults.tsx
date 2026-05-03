@@ -26,59 +26,43 @@ function scoreClass(score: number): string {
 
 export function DemoResults() {
   return (
-    <main
-      className="product-shell"
-      style={{ '--accent': '#0369a1', '--accent-soft': '#e0f2fe' } as React.CSSProperties}
-    >
-      <section className="hero">
-        <div>
-          <p className="eyebrow">Demo — Batch Website Grading</p>
-          <h1>Sample scan of 3 URLs</h1>
-          <p className="summary">
-            Below is what a real scan looks like using Google PageSpeed Insights.
-          </p>
+    <section className="workspace">
+      <article className="panel output-panel" style={{ gridColumn: '1 / -1' }}>
+        <div className="panel-heading">
+          <p>Scan Results</p>
+          <span>3 completed</span>
         </div>
-        <span className="status">Demo Data</span>
-      </section>
-
-      <section className="workspace">
-        <article className="panel output-panel" style={{ gridColumn: '1 / -1' }}>
-          <div className="panel-heading">
-            <p>Scan Results</p>
-            <span>3 completed</span>
-          </div>
-          <table className="audit-table">
-            <thead>
-              <tr>
-                <th>URL</th>
-                <th>Performance</th>
-                <th>Accessibility</th>
-                <th>Best Practices</th>
-                <th>SEO</th>
+        <table className="audit-table">
+          <thead>
+            <tr>
+              <th>URL</th>
+              <th>Performance</th>
+              <th>Accessibility</th>
+              <th>Best Practices</th>
+              <th>SEO</th>
+            </tr>
+          </thead>
+          <tbody>
+            {DEMO_ROWS.map((row) => (
+              <tr key={row.url}>
+                <td className="url-cell">{row.url}</td>
+                <td>
+                  <span className={scoreClass(row.performance)}>{row.performance}</span>
+                </td>
+                <td>
+                  <span className={scoreClass(row.accessibility)}>{row.accessibility}</span>
+                </td>
+                <td>
+                  <span className={scoreClass(row.bestPractices)}>{row.bestPractices}</span>
+                </td>
+                <td>
+                  <span className={scoreClass(row.seo)}>{row.seo}</span>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {DEMO_ROWS.map((row) => (
-                <tr key={row.url}>
-                  <td className="url-cell">{row.url}</td>
-                  <td>
-                    <span className={scoreClass(row.performance)}>{row.performance}</span>
-                  </td>
-                  <td>
-                    <span className={scoreClass(row.accessibility)}>{row.accessibility}</span>
-                  </td>
-                  <td>
-                    <span className={scoreClass(row.bestPractices)}>{row.bestPractices}</span>
-                  </td>
-                  <td>
-                    <span className={scoreClass(row.seo)}>{row.seo}</span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </article>
-      </section>
-    </main>
+            ))}
+          </tbody>
+        </table>
+      </article>
+    </section>
   );
 }

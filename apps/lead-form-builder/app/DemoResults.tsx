@@ -1,7 +1,5 @@
 'use client';
 
-import type { CSSProperties } from 'react';
-
 const DEMO_EMBED = `<style>
   .dba-form { font-family: Arial, Helvetica, sans-serif; max-width: 520px; }
   .dba-form h3 { color: #172033; font-size: 20px; margin: 0 0 16px; }
@@ -26,30 +24,16 @@ const DEMO_EMBED = `<style>
 
 export function DemoResults() {
   return (
-    <main
-      className="product-shell"
-      style={{ '--accent': '#0369a1', '--accent-soft': '#e0f2fe' } as CSSProperties}
-    >
-      <section className="hero">
-        <div>
-          <p className="eyebrow">Demo — Lead Capture Tool</p>
-          <h1>Sample form with 3 fields</h1>
-          <p className="summary">Drop-in HTML + JS that sends leads to your webhook.</p>
+    <section className="workspace">
+      <article className="panel output-panel" style={{ gridColumn: '1 / -1' }}>
+        <div className="panel-heading">
+          <p>Embed Preview</p>
+          <span>3 fields</span>
         </div>
-        <span className="status">Demo Data</span>
-      </section>
-
-      <section className="workspace">
-        <article className="panel output-panel" style={{ gridColumn: '1 / -1' }}>
-          <div className="panel-heading">
-            <p>Embed Preview</p>
-            <span>3 fields</span>
-          </div>
-          <div className="result-stack">
-            <pre className="code-block">{DEMO_EMBED}</pre>
-          </div>
-        </article>
-      </section>
-    </main>
+        <div className="result-stack">
+          <pre className="code-block">{DEMO_EMBED}</pre>
+        </div>
+      </article>
+    </section>
   );
 }
