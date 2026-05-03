@@ -101,8 +101,22 @@ function buildApp(env: Env) {
         set.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS';
         set.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization';
         set.headers['Access-Control-Allow-Credentials'] = 'true';
+        set.headers['Access-Control-Max-Age'] = '86400';
       })
-      .options('/*', () => new Response(null, { status: 204 }))
+      .options('/*', ({ request }) => {
+        const origin = request.headers.get('origin');
+        return new Response(null, {
+          status: 204,
+          headers: {
+            'Access-Control-Allow-Origin': resolveOrigin(origin),
+            'Vary': 'Origin',
+            'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+            'Access-Control-Allow-Credentials': 'true',
+            'Access-Control-Max-Age': '86400',
+          },
+        });
+      })
 
       // ── Root / Health ──────────────────────────────────────────
       .get('/', () => ({
