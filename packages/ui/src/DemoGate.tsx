@@ -3,31 +3,63 @@
 import { type ReactNode, useCallback, useEffect, useState } from 'react';
 
 const PURCHASE_URL = 'https://designedbyanthony.com/tools';
+const AUTH_API = 'https://api.designedbyanthony.online';
 
 export interface DemoGateProps {
   appName: string;
   tagline: string;
   demoContent: ReactNode;
+  children?: ReactNode;
 }
 
+type AuthState = 'checking' | 'paid' | 'free';
 type Phase = 'intro' | 'playing' | 'cta';
 
-export function DemoGate({ appName, tagline, demoContent }: DemoGateProps) {
+export function DemoGate({ appName, tagline, demoContent, children }: DemoGateProps) {
+  const [auth, setAuth] = useState<AuthState>('checking');
   const [phase, setPhase] = useState<Phase>('intro');
+
+  /* ── Auth bridge: check token against central API ────────── */
+  useEffect(() => {
+    const token = typeof window !== 'undefined' ? localStorage.getItem('dba_token') : null;
+
+    if (!token) {
+      setAuth('free');
+      return;
+    }
+
+    fetch(`${AUTH_API}/auth/verify`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((r) => (r.ok ? r.json() : Promise.reject(new Error('auth-failed'))))
+      .then((data: { plan?: string }) => {
+        setAuth(data.plan && data.plan !== 'free' ? 'paid' : 'free');
+      })
+      .catch(() => setAuth('free'));
+  }, []);
 
   const handlePlay = useCallback(() => {
     setPhase('playing');
   }, []);
 
-  useEffect(() => {
-    if (phase !== 'playing') return;
-    const timer = window.setTimeout(() => setPhase('cta'), 4500);
-    return () => clearTimeout(timer);
-  }, [phase]);
+  /* ── Paid user: drop the gate, render full workspace ─────── */
+  if (auth === 'paid' && children) {
+    return <>{children}</>;
+  }
 
+  /* ── Checking: minimal placeholder ───────────────────────── */
+  if (auth === 'checking') {
+    return (
+      <section className="workspace" style={{ padding: '3rem 1.5rem', textAlign: 'center' }}>
+        <p style={{ color: 'var(--muted, #5d6e80)', fontSize: '0.9rem' }}>Loading&hellip;</p>
+      </section>
+    );
+  }
+
+  /* ── Free / unauthenticated: demo gate ───────────────────── */
   return (
     <>
-      {/* Banner */}
+      {/* Preview banner */}
       <div
         style={{
           display: 'flex',
@@ -38,8 +70,6 @@ export function DemoGate({ appName, tagline, demoContent }: DemoGateProps) {
           borderBottom: '1px solid #3b82f6',
           fontSize: '0.8rem',
           zIndex: 200,
-          position: 'sticky',
-          top: 0,
         }}
       >
         <span
@@ -76,8 +106,7 @@ export function DemoGate({ appName, tagline, demoContent }: DemoGateProps) {
             alignItems: 'center',
             justifyContent: 'center',
             textAlign: 'center',
-            padding: '4rem 1.5rem',
-            minHeight: 'calc(100vh - 40px)',
+            padding: '3rem 1.5rem',
             gap: '1.25rem',
             background: 'var(--background, #f4f5f6)',
           }}
@@ -111,21 +140,20 @@ export function DemoGate({ appName, tagline, demoContent }: DemoGateProps) {
               <polygon points="5 3 19 12 5 21 5 3" />
             </svg>
           </div>
-          <h1
-            style={{
-              margin: 0,
-              fontSize: 'clamp(1.75rem, 4vw, 2.5rem)',
-              fontWeight: 700,
-              letterSpacing: '-0.02em',
-              color: 'var(--foreground, #1a2a40)',
-            }}
-          >
-            {appName}
-          </h1>
           <p
             style={{
               margin: 0,
               fontSize: '1.1rem',
+              fontWeight: 600,
+              color: 'var(--foreground, #1a2a40)',
+            }}
+          >
+            See {appName} in action
+          </p>
+          <p
+            style={{
+              margin: 0,
+              fontSize: '0.95rem',
               color: 'var(--muted, #5d6e80)',
               maxWidth: 480,
             }}
@@ -136,7 +164,7 @@ export function DemoGate({ appName, tagline, demoContent }: DemoGateProps) {
             type="button"
             onClick={handlePlay}
             style={{
-              marginTop: '1rem',
+              marginTop: '0.5rem',
               padding: '0.85rem 2.5rem',
               fontSize: '1rem',
               fontWeight: 600,
@@ -187,7 +215,7 @@ export function DemoGate({ appName, tagline, demoContent }: DemoGateProps) {
       ) : null}
 
       {phase === 'cta' ? (
-        <div style={{ position: 'relative', flex: 1, minHeight: '60vh' }}>
+        <div style={{ position: 'relative', flex: 1, minHeight: '40vh' }}>
           <div
             style={{
               padding: '1.5rem',

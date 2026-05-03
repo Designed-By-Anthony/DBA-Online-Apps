@@ -148,6 +148,12 @@ function buildApp(env: Env) {
           })),
       )
 
+      // ── Auth Verify (token → plan) ──────────────────────────────
+      .get('/auth/verify', async ({ db, request }) => {
+        const auth = await resolveAuth(db, request);
+        return { plan: auth.plan, userId: auth.userId };
+      })
+
       // ── R2 File Serving ────────────────────────────────────────
       .get('/files/:key', async ({ storage, params: { key } }) => {
         const obj = await getObject(storage, decodeURIComponent(key));
