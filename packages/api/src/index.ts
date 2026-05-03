@@ -14,6 +14,7 @@ import {
   getLighthouseJob,
   getOutreachSequence,
   getServiceMap,
+  requirePaidPlan,
   resolveAuth,
   saveFormSubmission,
   saveSeoAuditResults,
@@ -147,6 +148,12 @@ function buildApp(env: Env) {
           })),
       )
 
+      // ── Auth Verify (token → plan) ──────────────────────────────
+      .get('/auth/verify', async ({ db, request }) => {
+        const auth = await resolveAuth(db, request);
+        return { plan: auth.plan, userId: auth.userId };
+      })
+
       // ── R2 File Serving ────────────────────────────────────────
       .get('/files/:key', async ({ storage, params: { key } }) => {
         const obj = await getObject(storage, decodeURIComponent(key));
@@ -165,7 +172,9 @@ function buildApp(env: Env) {
       .group('/lighthouse', (app) =>
         app
           .post('/audit', async ({ db, request, body }) => {
-            const { userId } = await resolveAuth(db, request);
+            const auth = await resolveAuth(db, request);
+            const gate = requirePaidPlan(auth);
+            if (gate) return gate;
             const {
               urls,
               device = 'desktop',
@@ -175,7 +184,7 @@ function buildApp(env: Env) {
             const jobId = crypto.randomUUID();
             await createLighthouseJob(db, {
               id: jobId,
-              user_id: userId,
+              user_id: auth.userId,
               urls: JSON.stringify(urls),
               device,
               categories: JSON.stringify(categories),
@@ -220,7 +229,9 @@ function buildApp(env: Env) {
       .group('/seo-audit', (app) =>
         app
           .post('/run', async ({ db, request, body }) => {
-            const { userId } = await resolveAuth(db, request);
+            const auth = await resolveAuth(db, request);
+            const gate = requirePaidPlan(auth);
+            if (gate) return gate;
             const { businessName, location, results } = body as {
               businessName: string;
               location: string;
@@ -229,7 +240,7 @@ function buildApp(env: Env) {
             const auditId = crypto.randomUUID();
             await createSeoAudit(db, {
               id: auditId,
-              user_id: userId,
+              user_id: auth.userId,
               business_name: businessName,
               location,
             });
@@ -278,23 +289,21 @@ function buildApp(env: Env) {
       .group('/forms', (app) =>
         app
           .get('/', async ({ db, request }) => {
-            const { userId } = await resolveAuth(db, request);
-            if (!userId) return { forms: [], total: 0 };
-            const forms = await getLeadFormsByUser(db, userId);
+            const auth = await resolveAuth(db, request);
+            const gate = requirePaidPlan(auth);
+            if (gate) return gate;
+            const forms = await getLeadFormsByUser(db, auth.userId!);
             return { forms, total: forms.length };
           })
           .post('/', async ({ db, request, body }) => {
-            const { userId } = await resolveAuth(db, request);
-            if (!userId)
-              return new Response(JSON.stringify({ error: 'Authentication required' }), {
-                status: 401,
-                headers: { 'Content-Type': 'application/json' },
-              });
+            const auth = await resolveAuth(db, request);
+            const gate = requirePaidPlan(auth);
+            if (gate) return gate;
             const { name, fields } = body as { name: string; fields: unknown[] };
             const formId = crypto.randomUUID();
             await createLeadForm(db, {
               id: formId,
-              user_id: userId,
+              user_id: auth.userId,
               name,
               fields: JSON.stringify(fields),
             });
@@ -334,7 +343,9 @@ function buildApp(env: Env) {
       .group('/maps', (app) =>
         app
           .post('/', async ({ db, storage, request, body }) => {
-            const { userId } = await resolveAuth(db, request);
+            const auth = await resolveAuth(db, request);
+            const gate = requirePaidPlan(auth);
+            if (gate) return gate;
             const { businessName, areas } = body as {
               businessName: string;
               areas: Array<{ city: string; radiusMiles: number }>;
@@ -342,7 +353,7 @@ function buildApp(env: Env) {
             const mapId = crypto.randomUUID();
             await createServiceMap(db, {
               id: mapId,
-              user_id: userId,
+              user_id: auth.userId,
               business_name: businessName,
               areas: JSON.stringify(areas),
             });
@@ -382,17 +393,14 @@ function buildApp(env: Env) {
       .group('/outreach', (app) =>
         app
           .post('/sequences', async ({ db, request, body }) => {
-            const { userId } = await resolveAuth(db, request);
-            if (!userId)
-              return new Response(JSON.stringify({ error: 'Authentication required' }), {
-                status: 401,
-                headers: { 'Content-Type': 'application/json' },
-              });
+            const auth = await resolveAuth(db, request);
+            const gate = requirePaidPlan(auth);
+            if (gate) return gate;
             const { name, steps } = body as { name: string; steps: unknown[] };
             const id = crypto.randomUUID();
             await createOutreachSequence(db, {
               id,
-              user_id: userId,
+              user_id: auth.userId,
               name,
               steps: JSON.stringify(steps),
             });
@@ -426,10 +434,12 @@ function buildApp(env: Env) {
       .group('/cwv', (app) =>
         app
           .post('/monitors', async ({ db, request, body }) => {
-            const { userId } = await resolveAuth(db, request);
+            const auth = await resolveAuth(db, request);
+            const gate = requirePaidPlan(auth);
+            if (gate) return gate;
             const { url } = body as { url: string };
             const id = crypto.randomUUID();
-            await createCwvMonitor(db, { id, user_id: userId, url });
+            await createCwvMonitor(db, { id, user_id: auth.userId, url });
             return { id, url, createdAt: new Date().toISOString() };
           })
           .get('/monitors/:id/snapshots', async ({ db, params: { id } }) => {

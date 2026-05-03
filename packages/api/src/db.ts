@@ -46,6 +46,17 @@ export async function resolveAuth(db: D1Database, request: Request): Promise<Aut
   return { userId: user.id, plan: user.plan, apiKey };
 }
 
+export function requirePaidPlan(auth: AuthContext): Response | null {
+  if (auth.plan !== 'free' && auth.userId) return null;
+  return new Response(
+    JSON.stringify({
+      error: 'Paid plan required',
+      upgrade: 'https://designedbyanthony.com/tools',
+    }),
+    { status: 403, headers: { 'Content-Type': 'application/json' } },
+  );
+}
+
 // ── Lighthouse Jobs ──────────────────────────────────────────────────────────
 
 export async function createLighthouseJob(

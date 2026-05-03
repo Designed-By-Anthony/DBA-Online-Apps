@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { CalculatorHub } from './CalculatorHub';
+import { GatedWorkspace } from './GatedWorkspace';
 
 export const metadata: Metadata = {
   title: 'Construction Calculator — Material Estimator for Contractors',
@@ -15,5 +15,22 @@ export const metadata: Metadata = {
 };
 
 export default function CalculatorPage() {
-  return <CalculatorHub />;
+  return (
+    <>
+      {/* SEO-visible content — always in the DOM for Googlebot */}
+      <header className="calc-hero">
+        <div className="calc-hero-inner">
+          <p className="calc-hero-eyebrow">14 calculators · free to use</p>
+          <h1 className="calc-hero-title">Construction&nbsp;Calculator</h1>
+          <p className="calc-hero-sub">
+            Concrete, framing, roofing, insulation, flooring, electrical, and labor. Type a number
+            and get your answer — no login, no ads.
+          </p>
+        </div>
+      </header>
+
+      {/* Client-side gated workspace */}
+      <GatedWorkspace />
+    </>
+  );
 }
