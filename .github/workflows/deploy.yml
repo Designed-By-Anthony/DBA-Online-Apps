@@ -10,6 +10,7 @@ jobs:
   deploy-api:
     runs-on: ubuntu-latest
     name: Deploy API Worker
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
@@ -35,6 +36,7 @@ jobs:
           - local-seo-audit-kit
           - service-area-map-generator
           - calculator
+          - store
     steps:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2

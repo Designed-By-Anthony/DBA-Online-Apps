@@ -16,6 +16,8 @@ import {
 
 type Props = { params: Promise<{ tool: string }> };
 
+export const dynamicParams = false;
+
 export async function generateStaticParams() {
   return TOOL_SLUGS.map((slug) => ({ tool: slug }));
 }

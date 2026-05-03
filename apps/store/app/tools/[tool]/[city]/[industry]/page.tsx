@@ -15,6 +15,8 @@ type Props = {
   params: Promise<{ tool: string; city: string; industry: string }>;
 };
 
+export const dynamicParams = false;
+
 export async function generateStaticParams() {
   return listAllToolPaths().map(({ tool, city, industry }) => ({
     tool,

@@ -6,7 +6,7 @@
 		"nodejs_compat"
 	],
 	"build": {
-		"command": "bun build src/index.ts --outfile dist/index.js --target bun"
+		"command": "bun build src/index.ts --outfile dist/index.js --target browser"
 	},
 	"observability": {
 		"enabled": true

@@ -1,7 +1,7 @@
 {
   "name": "dba-lead-form-builder",
   "assets": { "directory": "./dist" },
-  "compatibility_date": "2025-01-01",
+  "compatibility_date": "2025-04-30",
   "routes": [
     { "pattern": "lead-form.designedbyanthony.online", "custom_domain": true }
   ]
