@@ -15,6 +15,7 @@
       "name": "@dba/calculator",
       "version": "0.1.0",
       "dependencies": {
+        "@dba/ui": "workspace:*",
         "next": "16.2.4",
         "react": "19.2.4",
         "react-dom": "19.2.4",
@@ -33,6 +34,7 @@
       "name": "@dba/cold-outreach-sequencer",
       "version": "0.1.0",
       "dependencies": {
+        "@dba/ui": "workspace:*",
         "next": "16.2.4",
         "react": "19.2.4",
         "react-dom": "19.2.4",
@@ -51,6 +53,7 @@
       "name": "@dba/core-web-vitals-monitor",
       "version": "0.1.0",
       "dependencies": {
+        "@dba/ui": "workspace:*",
         "next": "16.2.4",
         "react": "19.2.4",
         "react-dom": "19.2.4",
@@ -69,6 +72,7 @@
       "name": "@dba/lead-form-builder",
       "version": "0.1.0",
       "dependencies": {
+        "@dba/ui": "workspace:*",
         "next": "16.2.4",
         "react": "19.2.4",
         "react-dom": "19.2.4",
@@ -108,6 +112,7 @@
       "name": "@dba/local-seo-audit-kit",
       "version": "0.1.0",
       "dependencies": {
+        "@dba/ui": "workspace:*",
         "next": "16.2.4",
         "react": "19.2.4",
         "react-dom": "19.2.4",
@@ -126,6 +131,7 @@
       "name": "@dba/service-area-map-generator",
       "version": "0.1.0",
       "dependencies": {
+        "@dba/ui": "workspace:*",
         "next": "16.2.4",
         "react": "19.2.4",
         "react-dom": "19.2.4",

@@ -1,19 +1,14 @@
-import type { Metadata } from 'next';
-import { CalculatorHub } from './CalculatorHub';
+'use client';
 
-export const metadata: Metadata = {
-  title: 'Construction Calculator — Material Estimator for Contractors',
-  description:
-    'Free construction calculators for concrete, framing, roofing, insulation, flooring, electrical, and labor. No login required. Built for contractors and field crews.',
-  openGraph: {
-    title: 'Construction Calculator — Designed by Anthony',
-    description:
-      'Concrete, framing, roofing, insulation, flooring, electrical, and labor calculators. Free for contractors.',
-    url: 'https://calculator.designedbyanthony.online',
-    type: 'website',
-  },
-};
+import { DemoGate } from '@dba/ui';
+import { DemoResults } from './DemoResults';
 
-export default function CalculatorPage() {
-  return <CalculatorHub />;
+export default function Home() {
+  return (
+    <DemoGate
+      appName="Construction Calculator"
+      tagline="Free construction calculators for concrete, framing, roofing, insulation, flooring, electrical, and labor."
+      demoContent={<DemoResults />}
+    />
+  );
 }
