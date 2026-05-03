@@ -38,6 +38,12 @@ export function DemoGate({ appName, tagline, demoContent, children }: DemoGatePr
       .catch(() => setAuth('free'));
   }, []);
 
+  useEffect(() => {
+    if (phase !== 'playing') return;
+    const timer = window.setTimeout(() => setPhase('cta'), 4500);
+    return () => window.clearTimeout(timer);
+  }, [phase]);
+
   const handlePlay = useCallback(() => {
     setPhase('playing');
   }, []);
