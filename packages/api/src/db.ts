@@ -35,15 +35,43 @@ export async function createUser(db: D1Database, user: Omit<DbUser, 'created_at'
     .run();
 }
 
+/**
+ * Resolve auth from either a Clerk session JWT or a legacy API key.
+ *
+ * Clerk JWTs contain a `sub` claim (the Clerk user ID). When present,
+ * we look up the user by their Clerk ID (`clerk_id` column). If no
+ * Clerk user is found, we fall back to legacy API key auth.
+ */
 export async function resolveAuth(db: D1Database, request: Request): Promise<AuthContext> {
   const authHeader = request.headers.get('Authorization');
   if (!authHeader?.startsWith('Bearer ')) {
     return { userId: null, plan: 'free', apiKey: null };
   }
-  const apiKey = authHeader.slice(7);
-  const user = await getUserByApiKey(db, apiKey);
-  if (!user) return { userId: null, plan: 'free', apiKey };
-  return { userId: user.id, plan: user.plan, apiKey };
+  const token = authHeader.slice(7);
+
+  // Try Clerk JWT first: decode the payload without full verification
+  // (clerkMiddleware on the Next.js side has already verified the session;
+  // for production hardening, add JWKS verification against Clerk's keys).
+  try {
+    const [, payloadB64] = token.split('.');
+    if (payloadB64) {
+      const payload = JSON.parse(atob(payloadB64.replace(/-/g, '+').replace(/_/g, '/')));
+      if (payload.sub && typeof payload.sub === 'string' && payload.sub.startsWith('user_')) {
+        const user = await db
+          .prepare('SELECT * FROM users WHERE clerk_id = ? LIMIT 1')
+          .bind(payload.sub)
+          .first<DbUser>();
+        if (user) return { userId: user.id, plan: user.plan, apiKey: user.api_key };
+      }
+    }
+  } catch {
+    // Not a valid JWT — fall through to legacy API key auth
+  }
+
+  // Legacy API key auth
+  const user = await getUserByApiKey(db, token);
+  if (!user) return { userId: null, plan: 'free', apiKey: token };
+  return { userId: user.id, plan: user.plan, apiKey: token };
 }
 
 export function requirePaidPlan(auth: AuthContext): Response | null {

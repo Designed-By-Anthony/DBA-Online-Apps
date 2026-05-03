@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import { ClerkClientProvider } from '@dba/ui/ClerkClientProvider';
 
 export const metadata: Metadata = {
   title: 'Free Website Speed Grader — Check Your Site in Seconds',
@@ -14,7 +15,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <ClerkClientProvider publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}>
+          {children}
+        </ClerkClientProvider>
+      </body>
     </html>
   );
 }

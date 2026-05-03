@@ -13,6 +13,7 @@
     "check-types": "next typegen && tsc --noEmit"
   },
   "dependencies": {
+    "@clerk/clerk-react": "^5.61.3",
     "@dba/ui": "workspace:*",
     "next": "16.2.4",
     "react": "19.2.5",

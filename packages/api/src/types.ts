@@ -28,6 +28,7 @@ export interface DbUser {
   api_key: string;
   created_at: string;
   stripe_customer_id: string | null;
+  clerk_id: string | null;
 }
 
 export interface DbLighthouseJob {

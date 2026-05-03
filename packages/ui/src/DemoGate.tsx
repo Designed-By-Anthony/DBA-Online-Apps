@@ -3,7 +3,6 @@
 import { type ReactNode, useCallback, useEffect, useState } from 'react';
 
 const PURCHASE_URL = 'https://designedbyanthony.com/tools';
-const AUTH_API = 'https://api.designedbyanthony.online';
 
 export interface DemoGateProps {
   appName: string;
@@ -12,30 +11,33 @@ export interface DemoGateProps {
   children?: ReactNode;
 }
 
-type AuthState = 'checking' | 'paid' | 'free';
 type Phase = 'intro' | 'playing' | 'cta';
 
 export function DemoGate({ appName, tagline, demoContent, children }: DemoGateProps) {
-  const [auth, setAuth] = useState<AuthState>('checking');
+  const [clerkAuth, setClerkAuth] = useState<{ isLoaded: boolean; isSignedIn: boolean }>({
+    isLoaded: false,
+    isSignedIn: false,
+  });
   const [phase, setPhase] = useState<Phase>('intro');
 
-  /* ── Auth bridge: check token against central API ────────── */
   useEffect(() => {
-    const token = typeof window !== 'undefined' ? localStorage.getItem('dba_token') : null;
-
-    if (!token) {
-      setAuth('free');
-      return;
+    // Check if Clerk is available (ClerkClientProvider renders without Clerk when no key)
+    const w = window as unknown as Record<string, unknown>;
+    const clerk = w.Clerk as { loaded?: boolean; session?: unknown } | undefined;
+    if (clerk) {
+      const poll = setInterval(() => {
+        const c = (window as unknown as Record<string, unknown>).Clerk as
+          | { loaded?: boolean; session?: unknown }
+          | undefined;
+        if (c?.loaded) {
+          clearInterval(poll);
+          setClerkAuth({ isLoaded: true, isSignedIn: !!c.session });
+        }
+      }, 100);
+      return () => clearInterval(poll);
     }
-
-    fetch(`${AUTH_API}/auth/verify`, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then((r) => (r.ok ? r.json() : Promise.reject(new Error('auth-failed'))))
-      .then((data: { plan?: string }) => {
-        setAuth(data.plan && data.plan !== 'free' ? 'paid' : 'free');
-      })
-      .catch(() => setAuth('free'));
+    // No Clerk — show demo gate
+    setClerkAuth({ isLoaded: true, isSignedIn: false });
   }, []);
 
   useEffect(() => {
@@ -49,12 +51,12 @@ export function DemoGate({ appName, tagline, demoContent, children }: DemoGatePr
   }, []);
 
   /* ── Paid user: drop the gate, render full workspace ─────── */
-  if (auth === 'paid' && children) {
+  if (clerkAuth.isLoaded && clerkAuth.isSignedIn && children) {
     return <>{children}</>;
   }
 
   /* ── Checking: minimal placeholder ───────────────────────── */
-  if (auth === 'checking') {
+  if (!clerkAuth.isLoaded) {
     return (
       <section className="workspace" style={{ padding: '3rem 1.5rem', textAlign: 'center' }}>
         <p style={{ color: 'var(--muted, #5d6e80)', fontSize: '0.9rem' }}>Loading&hellip;</p>
