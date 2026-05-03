@@ -59,12 +59,12 @@ export type IndustrySlug = (typeof INDUSTRY_SLUGS)[number];
 
 export const TOOL_LABELS: Record<ToolSlug, string> = {
   'construction-calculator': 'Construction Calculator',
-  'lead-form-builder': 'Lead Form Builder',
-  'site-speed-monitor': 'Site Speed Monitor',
-  'seo-audit': 'SEO Audit Kit',
-  'cold-outreach': 'Cold Outreach Sequencer',
-  'service-area-map': 'Service Area Map Generator',
-  'lighthouse-scanner': 'Lighthouse Batch Scanner',
+  'lead-form-builder': 'Contact Form Builder',
+  'site-speed-monitor': 'Website Speed Test',
+  'seo-audit': 'Local SEO Checker',
+  'cold-outreach': 'Follow-Up Email Writer',
+  'service-area-map': 'Service Area Map',
+  'lighthouse-scanner': 'Website Speed Grader',
 };
 
 export const TOOL_URLS: Record<ToolSlug, string> = {
