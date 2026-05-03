@@ -1,3 +1,4 @@
+import { createRemoteJWKSet, jwtVerify } from 'jose';
 import type {
   AuthContext,
   DbCwvMonitor,
@@ -7,6 +8,7 @@ import type {
   DbSeoAudit,
   DbServiceMap,
   DbUser,
+  Env,
 } from './types';
 
 // ── Auth / Users ─────────────────────────────────────────────────────────────
@@ -35,37 +37,50 @@ export async function createUser(db: D1Database, user: Omit<DbUser, 'created_at'
     .run();
 }
 
+/** Cached JWKS keyset (lives for the Worker isolate lifetime). */
+let cachedJWKS: ReturnType<typeof createRemoteJWKSet> | null = null;
+
+function getJWKS(jwksUrl: string) {
+  if (!cachedJWKS) cachedJWKS = createRemoteJWKSet(new URL(jwksUrl));
+  return cachedJWKS;
+}
+
 /**
  * Resolve auth from either a Clerk session JWT or a legacy API key.
  *
- * Clerk JWTs contain a `sub` claim (the Clerk user ID). When present,
- * we look up the user by their Clerk ID (`clerk_id` column). If no
- * Clerk user is found, we fall back to legacy API key auth.
+ * Clerk JWTs are verified cryptographically against the Clerk JWKS endpoint
+ * when CLERK_JWKS_URL is set. The `sub` claim maps to the `clerk_id` column.
+ * Falls back to legacy API key auth when the token is not a valid Clerk JWT.
  */
-export async function resolveAuth(db: D1Database, request: Request): Promise<AuthContext> {
+export async function resolveAuth(
+  db: D1Database,
+  request: Request,
+  env?: Env,
+): Promise<AuthContext> {
   const authHeader = request.headers.get('Authorization');
   if (!authHeader?.startsWith('Bearer ')) {
     return { userId: null, plan: 'free', apiKey: null };
   }
   const token = authHeader.slice(7);
 
-  // Try Clerk JWT first: decode the payload without full verification
-  // (clerkMiddleware on the Next.js side has already verified the session;
-  // for production hardening, add JWKS verification against Clerk's keys).
-  try {
-    const [, payloadB64] = token.split('.');
-    if (payloadB64) {
-      const payload = JSON.parse(atob(payloadB64.replace(/-/g, '+').replace(/_/g, '/')));
-      if (payload.sub && typeof payload.sub === 'string' && payload.sub.startsWith('user_')) {
+  // Try Clerk JWT verification when JWKS URL is configured
+  if (env?.CLERK_JWKS_URL) {
+    try {
+      const jwks = getJWKS(env.CLERK_JWKS_URL);
+      const { payload } = await jwtVerify(token, jwks);
+      const sub = payload.sub;
+      if (sub && typeof sub === 'string' && sub.startsWith('user_')) {
         const user = await db
           .prepare('SELECT * FROM users WHERE clerk_id = ? LIMIT 1')
-          .bind(payload.sub)
+          .bind(sub)
           .first<DbUser>();
         if (user) return { userId: user.id, plan: user.plan, apiKey: user.api_key };
+        // Valid Clerk JWT but no matching user in DB yet
+        return { userId: null, plan: 'free', apiKey: null };
       }
+    } catch {
+      // Not a valid/verified JWT — fall through to legacy API key auth
     }
-  } catch {
-    // Not a valid JWT — fall through to legacy API key auth
   }
 
   // Legacy API key auth

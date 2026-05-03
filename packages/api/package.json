@@ -12,7 +12,8 @@
     "check-types": "tsc --noEmit"
   },
   "dependencies": {
-    "elysia": "^1.4.28"
+    "elysia": "^1.4.28",
+    "jose": "^6.2.3"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20260503.1",
