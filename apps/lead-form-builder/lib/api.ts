@@ -11,7 +11,7 @@ async function apiFetch<T>(path: string, options?: RequestInit & { token?: strin
     'Content-Type': 'application/json',
     ...(rest.headers as Record<string, string> | undefined),
   };
-  if (token) headers['Authorization'] = `Bearer ${token}`;
+  if (token) headers.Authorization = `Bearer ${token}`;
   const res = await fetch(`${API_BASE}${path}`, { ...rest, headers });
   if (!res.ok) throw new Error(`API ${res.status}: ${res.statusText}`);
   return res.json() as Promise<T>;
@@ -42,10 +42,7 @@ export interface FormListResponse {
 }
 
 /** Save a form schema to D1 (requires auth token) */
-export async function saveForm(
-  payload: SaveFormPayload,
-  token: string,
-): Promise<SaveFormResponse> {
+export async function saveForm(payload: SaveFormPayload, token: string): Promise<SaveFormResponse> {
   return apiFetch<SaveFormResponse>('/forms', {
     method: 'POST',
     body: JSON.stringify(payload),

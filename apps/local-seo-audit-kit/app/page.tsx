@@ -71,7 +71,12 @@ export default function Home() {
   return (
     <>
       <div className="dba-topbar">
-        <a className="dba-topbar-brand" href="https://designedbyanthony.com" target="_blank" rel="noreferrer">
+        <a
+          className="dba-topbar-brand"
+          href="https://designedbyanthony.com"
+          target="_blank"
+          rel="noreferrer"
+        >
           DBA
         </a>
         <span className="dba-topbar-sep">/</span>
@@ -101,31 +106,60 @@ export default function Home() {
             <div className="tool-form">
               <label className="field">
                 Business Name
-                <input className="text-input" value={name} onChange={(e) => setName(e.target.value)} />
+                <input
+                  className="text-input"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
               </label>
               <label className="field">
                 Phone
-                <input className="text-input" value={phone} onChange={(e) => setPhone(e.target.value)} />
+                <input
+                  className="text-input"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                />
               </label>
               <label className="field">
                 Address
-                <input className="text-input" value={address} onChange={(e) => setAddress(e.target.value)} />
+                <input
+                  className="text-input"
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                />
               </label>
               <label className="field">
                 Website
-                <input className="text-input" value={website} onChange={(e) => setWebsite(e.target.value)} placeholder="https://example.com" />
+                <input
+                  className="text-input"
+                  value={website}
+                  onChange={(e) => setWebsite(e.target.value)}
+                  placeholder="https://example.com"
+                />
               </label>
 
               <label className="checkbox-row">
-                <input type="checkbox" checked={hasGbp} onChange={(e) => setHasGbp(e.target.checked)} />
+                <input
+                  type="checkbox"
+                  checked={hasGbp}
+                  onChange={(e) => setHasGbp(e.target.checked)}
+                />
                 I have a Google Business Profile
               </label>
               <label className="checkbox-row">
-                <input type="checkbox" checked={consistentAddress} onChange={(e) => setConsistentAddress(e.target.checked)} />
+                <input
+                  type="checkbox"
+                  checked={consistentAddress}
+                  onChange={(e) => setConsistentAddress(e.target.checked)}
+                />
                 My address is listed consistently online
               </label>
               <label className="checkbox-row">
-                <input type="checkbox" checked={hasReviews} onChange={(e) => setHasReviews(e.target.checked)} />
+                <input
+                  type="checkbox"
+                  checked={hasReviews}
+                  onChange={(e) => setHasReviews(e.target.checked)}
+                />
                 I have 5+ Google reviews
               </label>
 
@@ -162,7 +196,9 @@ export default function Home() {
                 <div>
                   <strong>Recommendations</strong>
                   {recommendations.length === 0 ? (
-                    <p className="muted-note">Everything checks out. Keep collecting reviews every week.</p>
+                    <p className="muted-note">
+                      Everything checks out. Keep collecting reviews every week.
+                    </p>
                   ) : (
                     <ul className="list">
                       {recommendations.map((item) => (
@@ -184,7 +220,12 @@ export default function Home() {
           <p>
             <strong>Designed by Anthony</strong> tools built for real client work.
           </p>
-          <a className="dba-footer-link" href="https://designedbyanthony.online" target="_blank" rel="noreferrer">
+          <a
+            className="dba-footer-link"
+            href="https://designedbyanthony.online"
+            target="_blank"
+            rel="noreferrer"
+          >
             designedbyanthony.online
           </a>
         </div>

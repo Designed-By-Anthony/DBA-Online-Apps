@@ -1,14 +1,14 @@
-import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 import {
-  TOOL_SLUGS,
-  CITY_SLUGS,
-  INDUSTRY_SLUGS,
   buildToolPagePayload,
-  listAllToolPaths,
-  type ToolSlug,
+  CITY_SLUGS,
   type CitySlug,
+  INDUSTRY_SLUGS,
   type IndustrySlug,
+  listAllToolPaths,
+  TOOL_SLUGS,
+  type ToolSlug,
 } from '../../../../../lib/pseo';
 
 type Props = {
@@ -33,11 +33,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     !INDUSTRY_SLUGS.includes(industry as IndustrySlug)
   )
     return {};
-  const p = buildToolPagePayload(
-    tool as ToolSlug,
-    city as CitySlug,
-    industry as IndustrySlug,
-  );
+  const p = buildToolPagePayload(tool as ToolSlug, city as CitySlug, industry as IndustrySlug);
   return {
     title: p.title,
     description: p.description,
@@ -64,11 +60,7 @@ export default async function PseoPage({ params }: Props) {
   )
     notFound();
 
-  const p = buildToolPagePayload(
-    tool as ToolSlug,
-    city as CitySlug,
-    industry as IndustrySlug,
-  );
+  const p = buildToolPagePayload(tool as ToolSlug, city as CitySlug, industry as IndustrySlug);
 
   const year = new Date().getFullYear();
 
@@ -159,9 +151,7 @@ export default async function PseoPage({ params }: Props) {
         <span aria-hidden="true"> / </span>
         <a href={`/tools/${p.toolSlug}`}>{p.toolLabel}</a>
         <span aria-hidden="true"> / </span>
-        <a href={`/tools/${p.toolSlug}/${p.citySlug}/${p.industrySlug}`}>
-          {p.cityLabel}
-        </a>
+        <a href={`/tools/${p.toolSlug}/${p.citySlug}/${p.industrySlug}`}>{p.cityLabel}</a>
         <span aria-hidden="true"> / </span>
         <span>{p.industryLabel}</span>
       </nav>
@@ -207,11 +197,7 @@ export default async function PseoPage({ params }: Props) {
                 {p.toolPrice} · No setup fee · Cancel any time
               </span>
             </div>
-            <a
-              href={p.toolUrl}
-              className="btn-primary"
-              style={{ marginTop: '8px' }}
-            >
+            <a href={p.toolUrl} className="btn-primary" style={{ marginTop: '8px' }}>
               Open {p.toolLabel} →
             </a>
           </div>
@@ -233,13 +219,10 @@ export default async function PseoPage({ params }: Props) {
 
       {/* CTA strip */}
       <div className="strip">
-        <h2>
-          Ready to save time on{' '}
-          {p.toolLabel.toLowerCase().replace(/^(a|an|the)\s/i, '')}?
-        </h2>
+        <h2>Ready to save time on {p.toolLabel.toLowerCase().replace(/^(a|an|the)\s/i, '')}?</h2>
         <p>
-          {p.toolPrice} · No contracts · Cancel any time. Built for{' '}
-          {p.industryLabel.toLowerCase()} businesses in {p.cityLabel}.
+          {p.toolPrice} · No contracts · Cancel any time. Built for {p.industryLabel.toLowerCase()}{' '}
+          businesses in {p.cityLabel}.
         </p>
         <a href={p.toolUrl} className="btn-primary">
           Start free →

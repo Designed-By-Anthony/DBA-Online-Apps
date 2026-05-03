@@ -48,7 +48,10 @@ export default function Home() {
   }, [primary]);
 
   const schemaBlock = useMemo(() => {
-    const areaServed = areas.map((area) => ({ '@type': 'City', name: `${area.city}, ${area.state}` }));
+    const areaServed = areas.map((area) => ({
+      '@type': 'City',
+      name: `${area.city}, ${area.state}`,
+    }));
     return JSON.stringify(
       {
         '@context': 'https://schema.org',
@@ -62,9 +65,10 @@ export default function Home() {
   }, [areas, businessName]);
 
   const cityListHtml = useMemo(
-    () => `<ul class="service-areas">\n${areas
-      .map((area) => `  <li>${area.city}, ${area.state} (${area.radiusMiles} mile radius)</li>`)
-      .join('\n')}\n</ul>`,
+    () =>
+      `<ul class="service-areas">\n${areas
+        .map((area) => `  <li>${area.city}, ${area.state} (${area.radiusMiles} mile radius)</li>`)
+        .join('\n')}\n</ul>`,
     [areas],
   );
 
@@ -77,7 +81,12 @@ export default function Home() {
   return (
     <>
       <div className="dba-topbar">
-        <a className="dba-topbar-brand" href="https://designedbyanthony.com" target="_blank" rel="noreferrer">
+        <a
+          className="dba-topbar-brand"
+          href="https://designedbyanthony.com"
+          target="_blank"
+          rel="noreferrer"
+        >
           DBA
         </a>
         <span className="dba-topbar-sep">/</span>
@@ -92,7 +101,9 @@ export default function Home() {
           <div>
             <p className="eyebrow">Local SEO Utility</p>
             <h1>Show customers and Google exactly where you work.</h1>
-            <p className="summary">Generate a map embed, schema block, and service city list in seconds.</p>
+            <p className="summary">
+              Generate a map embed, schema block, and service city list in seconds.
+            </p>
           </div>
           <span className="status">Ready to Publish</span>
         </section>
@@ -107,17 +118,29 @@ export default function Home() {
             <div className="tool-form">
               <label className="field">
                 Business Name
-                <input className="text-input" value={businessName} onChange={(e) => setBusinessName(e.target.value)} />
+                <input
+                  className="text-input"
+                  value={businessName}
+                  onChange={(e) => setBusinessName(e.target.value)}
+                />
               </label>
 
               <div className="form-grid three-col">
                 <label className="field">
                   City
-                  <input className="text-input" value={city} onChange={(e) => setCity(e.target.value)} />
+                  <input
+                    className="text-input"
+                    value={city}
+                    onChange={(e) => setCity(e.target.value)}
+                  />
                 </label>
                 <label className="field">
                   State
-                  <input className="text-input" value={state} onChange={(e) => setState(e.target.value)} />
+                  <input
+                    className="text-input"
+                    value={state}
+                    onChange={(e) => setState(e.target.value)}
+                  />
                 </label>
                 <label className="field">
                   Radius (miles)
@@ -143,7 +166,11 @@ export default function Home() {
                     <span>
                       {area.city}, {area.state} · {area.radiusMiles} miles
                     </span>
-                    <button type="button" className="link-button" onClick={() => removeArea(area.id)}>
+                    <button
+                      type="button"
+                      className="link-button"
+                      onClick={() => removeArea(area.id)}
+                    >
                       Remove
                     </button>
                   </li>
@@ -160,7 +187,11 @@ export default function Home() {
             {primary ? (
               <div className="result-stack">
                 <div className="map-preview">
-                  <iframe src={toMapSrc(primary.city, primary.state)} loading="lazy" title="Service area map" />
+                  <iframe
+                    src={toMapSrc(primary.city, primary.state)}
+                    loading="lazy"
+                    title="Service area map"
+                  />
                 </div>
 
                 <div>
@@ -217,7 +248,12 @@ export default function Home() {
           <p>
             <strong>Designed by Anthony</strong> tools built for real client work.
           </p>
-          <a className="dba-footer-link" href="https://designedbyanthony.online" target="_blank" rel="noreferrer">
+          <a
+            className="dba-footer-link"
+            href="https://designedbyanthony.online"
+            target="_blank"
+            rel="noreferrer"
+          >
             designedbyanthony.online
           </a>
         </div>

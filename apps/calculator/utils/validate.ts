@@ -1,11 +1,11 @@
-import { toCents } from "@/utils/money";
+import { toCents } from '@/utils/money';
 
 export function sanitizeNum(value: unknown, fallback = 0): number {
-  if (typeof value === "number") {
+  if (typeof value === 'number') {
     return Number.isFinite(value) ? value : fallback;
   }
 
-  if (typeof value === "string") {
+  if (typeof value === 'string') {
     const trimmed = value.trim();
     if (!trimmed) return fallback;
     const parsed = Number(trimmed);
@@ -22,16 +22,8 @@ export function clamp(value: number, min: number, max: number): number {
   return value;
 }
 
-export function safeDiv(
-  numerator: number,
-  denominator: number,
-  fallback = 0,
-): number {
-  if (
-    !Number.isFinite(numerator) ||
-    !Number.isFinite(denominator) ||
-    denominator === 0
-  ) {
+export function safeDiv(numerator: number, denominator: number, fallback = 0): number {
+  if (!Number.isFinite(numerator) || !Number.isFinite(denominator) || denominator === 0) {
     return fallback;
   }
   return numerator / denominator;

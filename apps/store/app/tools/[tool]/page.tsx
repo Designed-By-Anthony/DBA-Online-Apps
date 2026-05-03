@@ -1,16 +1,16 @@
-import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 import {
-  TOOL_SLUGS,
-  TOOL_LABELS,
-  TOOL_TAGLINES,
-  TOOL_PRICES,
-  TOOL_URLS,
-  TOOL_DESCRIPTIONS,
-  CITY_SLUGS,
-  INDUSTRY_SLUGS,
   CITY_LABELS,
+  CITY_SLUGS,
   INDUSTRY_LABELS,
+  INDUSTRY_SLUGS,
+  TOOL_DESCRIPTIONS,
+  TOOL_LABELS,
+  TOOL_PRICES,
+  TOOL_SLUGS,
+  TOOL_TAGLINES,
+  TOOL_URLS,
   type ToolSlug,
 } from '../../../lib/pseo';
 
@@ -132,9 +132,7 @@ export default async function ToolLandingPage({ params }: Props) {
 
       <div className="strip">
         <h2>Available in your area</h2>
-        <p>
-          See how {label} helps local businesses in your city and industry.
-        </p>
+        <p>See how {label} helps local businesses in your city and industry.</p>
         <div className="pseo-link-grid">
           {CITY_SLUGS.map((city) =>
             INDUSTRY_SLUGS.map((industry) => (

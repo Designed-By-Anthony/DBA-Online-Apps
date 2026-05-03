@@ -145,7 +145,9 @@ a {
   padding: 12px 20px;
   border: 1px solid #2d3f58;
   border-radius: 8px;
-  transition: color 0.15s, border-color 0.15s;
+  transition:
+    color 0.15s,
+    border-color 0.15s;
 }
 
 .btn-ghost:hover {
@@ -196,7 +198,9 @@ a {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  transition: box-shadow 0.15s, transform 0.15s;
+  transition:
+    box-shadow 0.15s,
+    transform 0.15s;
 }
 
 .tool-card:hover {
@@ -478,7 +482,9 @@ a {
   border: 1px solid #2d3f58;
   border-radius: 8px;
   padding: 8px 14px;
-  transition: color 0.15s, border-color 0.15s;
+  transition:
+    color 0.15s,
+    border-color 0.15s;
 }
 
 .pseo-link:hover {

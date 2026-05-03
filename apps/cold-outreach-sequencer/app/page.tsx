@@ -98,7 +98,12 @@ export default function Home() {
   return (
     <>
       <div className="dba-topbar">
-        <a className="dba-topbar-brand" href="https://designedbyanthony.com" target="_blank" rel="noreferrer">
+        <a
+          className="dba-topbar-brand"
+          href="https://designedbyanthony.com"
+          target="_blank"
+          rel="noreferrer"
+        >
           DBA
         </a>
         <span className="dba-topbar-sep">/</span>
@@ -113,7 +118,9 @@ export default function Home() {
           <div>
             <p className="eyebrow">Email Sequence Tool</p>
             <h1>Write personalized follow-up emails.</h1>
-            <p className="summary">No CRM required. Paste prospects, generate a full 5-step sequence.</p>
+            <p className="summary">
+              No CRM required. Paste prospects, generate a full 5-step sequence.
+            </p>
           </div>
           <span className="status">5-step outreach</span>
         </section>
@@ -144,9 +151,16 @@ export default function Home() {
                   onChange={(event) => setTemplate(event.target.value)}
                 />
               </label>
-              <p className="muted-note">Use placeholders: {'{{name}}'}, {'{{company}}'}, {'{{city}}'}.</p>
+              <p className="muted-note">
+                Use placeholders: {'{{name}}'}, {'{{company}}'}, {'{{city}}'}.
+              </p>
               <div className="action-row">
-                <button type="button" className="primary-button" onClick={downloadAll} disabled={sequences.length === 0}>
+                <button
+                  type="button"
+                  className="primary-button"
+                  onClick={downloadAll}
+                  disabled={sequences.length === 0}
+                >
                   Download all as .txt
                 </button>
               </div>
@@ -162,9 +176,13 @@ export default function Home() {
             {sequences.length > 0 ? (
               <div className="result-stack">
                 {sequences.map((sequence) => (
-                  <div key={`${sequence.prospect.name}-${sequence.prospect.company}`} className="sequence-card">
+                  <div
+                    key={`${sequence.prospect.name}-${sequence.prospect.company}`}
+                    className="sequence-card"
+                  >
                     <strong>
-                      {sequence.prospect.name} · {sequence.prospect.company} · {sequence.prospect.city}
+                      {sequence.prospect.name} · {sequence.prospect.company} ·{' '}
+                      {sequence.prospect.city}
                     </strong>
                     <ul className="list">
                       {sequence.steps.map((step) => {
@@ -175,7 +193,8 @@ export default function Home() {
                           <li key={key}>
                             <div className="item-row">
                               <span>
-                                <span className="step-label">{step.day}</span> <strong>{step.subject}</strong>
+                                <span className="step-label">{step.day}</span>{' '}
+                                <strong>{step.subject}</strong>
                                 <br />
                                 {step.body}
                               </span>
@@ -206,7 +225,12 @@ export default function Home() {
           <p>
             <strong>Designed by Anthony</strong> tools built for real client work.
           </p>
-          <a className="dba-footer-link" href="https://designedbyanthony.online" target="_blank" rel="noreferrer">
+          <a
+            className="dba-footer-link"
+            href="https://designedbyanthony.online"
+            target="_blank"
+            rel="noreferrer"
+          >
             designedbyanthony.online
           </a>
         </div>

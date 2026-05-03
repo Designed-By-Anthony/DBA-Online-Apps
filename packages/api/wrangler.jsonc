@@ -1,65 +1,61 @@
 {
-	"name": "dba-api",
-	"main": "src/index.ts",
-	"compatibility_date": "2025-04-30",
-	"compatibility_flags": [
-		"nodejs_compat"
-	],
-	"build": {
-		"command": "bun build src/index.ts --outfile dist/index.js --target browser"
-	},
-	"observability": {
-		"enabled": true
-	},
-	// ── Routes ──────────────────────────────────────────────────
-	// Production: api.designedbyanthony.online
-	"routes": [
-		{ "pattern": "api.designedbyanthony.online", "custom_domain": true }
-	],
-	// ── D1 Database ─────────────────────────────────────────────
-	// Create with: bunx wrangler d1 create dba-db
-	"d1_databases": [
-		{
-			"binding": "DB",
-			"database_name": "dba-db",
-			"database_id": "82cc983d-d21b-41ac-90b1-3fd28b897349"
-		}
-	],
-	// ── R2 Buckets ───────────────────────────────────────────────
-	// Create with: bunx wrangler r2 bucket create dba-storage
-	"r2_buckets": [
-		{
-			"binding": "STORAGE",
-			"bucket_name": "dba-storage"
-		}
-	],
-	// ── KV Namespaces ────────────────────────────────────────────
-	// Create with: bunx wrangler kv namespace create CACHE --env=''
-	"kv_namespaces": [
-		{
-			"binding": "CACHE",
-			"id": "fac6ae84f61746ceb0a07ea17912338f",
-			"remote": true
-		}
-	],
-	// ── Environment Variables ────────────────────────────────────
-	"vars": {
-		// Comma-separated list of allowed frontend origins
-		"ALLOWED_ORIGINS": "https://designedbyanthony.online,https://www.designedbyanthony.online,https://designedbyanthony.com,https://www.designedbyanthony.com,https://calculator.designedbyanthony.online,https://lead-form.designedbyanthony.online,https://web-vitals.designedbyanthony.online,https://seo-audit.designedbyanthony.online,https://outreach.designedbyanthony.online,https://service-area.designedbyanthony.online,https://lighthouse.designedbyanthony.online",
-		// Payment domain — used for cross-origin resource sharing
-		"PAYMENT_DOMAIN": "https://designedbyanthony.com",
-		"ENVIRONMENT": "production"
-	},
-	// ── Secrets (set via `wrangler secret put <KEY>`) ────────────
-	// STRIPE_WEBHOOK_SECRET  — for verifying Stripe webhook signatures
-	// JWT_SECRET             — for signing/verifying user session tokens
-	// ── Local dev overrides ──────────────────────────────────────
-	"env": {
-		"development": {
-			"vars": {
-				"ALLOWED_ORIGINS": "http://localhost:3200,http://localhost:3201,http://localhost:3202,http://localhost:3203,http://localhost:3204,http://localhost:3205,http://localhost:3206",
-				"ENVIRONMENT": "development"
-			}
-		}
-	}
+  "name": "dba-api",
+  "main": "src/index.ts",
+  "compatibility_date": "2025-04-30",
+  "compatibility_flags": ["nodejs_compat"],
+  "build": {
+    "command": "bun build src/index.ts --outfile dist/index.js --target browser"
+  },
+  "observability": {
+    "enabled": true
+  },
+  // ── Routes ──────────────────────────────────────────────────
+  // Production: api.designedbyanthony.online
+  "routes": [{ "pattern": "api.designedbyanthony.online", "custom_domain": true }],
+  // ── D1 Database ─────────────────────────────────────────────
+  // Create with: bunx wrangler d1 create dba-db
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "dba-db",
+      "database_id": "82cc983d-d21b-41ac-90b1-3fd28b897349"
+    }
+  ],
+  // ── R2 Buckets ───────────────────────────────────────────────
+  // Create with: bunx wrangler r2 bucket create dba-storage
+  "r2_buckets": [
+    {
+      "binding": "STORAGE",
+      "bucket_name": "dba-storage"
+    }
+  ],
+  // ── KV Namespaces ────────────────────────────────────────────
+  // Create with: bunx wrangler kv namespace create CACHE --env=''
+  "kv_namespaces": [
+    {
+      "binding": "CACHE",
+      "id": "fac6ae84f61746ceb0a07ea17912338f",
+      "remote": true
+    }
+  ],
+  // ── Environment Variables ────────────────────────────────────
+  "vars": {
+    // Comma-separated list of allowed frontend origins
+    "ALLOWED_ORIGINS": "https://designedbyanthony.online,https://www.designedbyanthony.online,https://designedbyanthony.com,https://www.designedbyanthony.com,https://calculator.designedbyanthony.online,https://lead-form.designedbyanthony.online,https://web-vitals.designedbyanthony.online,https://seo-audit.designedbyanthony.online,https://outreach.designedbyanthony.online,https://service-area.designedbyanthony.online,https://lighthouse.designedbyanthony.online",
+    // Payment domain — used for cross-origin resource sharing
+    "PAYMENT_DOMAIN": "https://designedbyanthony.com",
+    "ENVIRONMENT": "production"
+  },
+  // ── Secrets (set via `wrangler secret put <KEY>`) ────────────
+  // STRIPE_WEBHOOK_SECRET  — for verifying Stripe webhook signatures
+  // JWT_SECRET             — for signing/verifying user session tokens
+  // ── Local dev overrides ──────────────────────────────────────
+  "env": {
+    "development": {
+      "vars": {
+        "ALLOWED_ORIGINS": "http://localhost:3200,http://localhost:3201,http://localhost:3202,http://localhost:3203,http://localhost:3204,http://localhost:3205,http://localhost:3206",
+        "ENVIRONMENT": "development"
+      }
+    }
+  }
 }

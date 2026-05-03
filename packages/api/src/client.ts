@@ -29,7 +29,7 @@ export async function apiFetch<T>(
     'Content-Type': 'application/json',
     ...(fetchOptions.headers as Record<string, string> | undefined),
   };
-  if (token) headers['Authorization'] = `Bearer ${token}`;
+  if (token) headers.Authorization = `Bearer ${token}`;
 
   const response = await fetch(`${API_BASE}${path}`, { ...fetchOptions, headers });
 

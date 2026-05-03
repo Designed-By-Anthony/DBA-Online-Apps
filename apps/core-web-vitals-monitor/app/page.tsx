@@ -103,7 +103,12 @@ export default function Home() {
   return (
     <>
       <div className="dba-topbar">
-        <a className="dba-topbar-brand" href="https://designedbyanthony.com" target="_blank" rel="noreferrer">
+        <a
+          className="dba-topbar-brand"
+          href="https://designedbyanthony.com"
+          target="_blank"
+          rel="noreferrer"
+        >
           DBA
         </a>
         <span className="dba-topbar-sep">/</span>
@@ -132,10 +137,19 @@ export default function Home() {
             <div className="tool-form">
               <label className="field">
                 Website URL
-                <input className="text-input" value={url} onChange={(e) => setUrl(e.target.value)} />
+                <input
+                  className="text-input"
+                  value={url}
+                  onChange={(e) => setUrl(e.target.value)}
+                />
               </label>
               <div className="action-row">
-                <button type="button" className="primary-button" onClick={runTest} disabled={loading}>
+                <button
+                  type="button"
+                  className="primary-button"
+                  onClick={runTest}
+                  disabled={loading}
+                >
                   {loading ? 'Running Test...' : 'Run Test'}
                 </button>
               </div>
@@ -157,9 +171,15 @@ export default function Home() {
                 </div>
 
                 <div className="metric-grid">
-                  <span className={metricBadgeClass('lcp', result.lcpMs)}>LCP {(result.lcpMs / 1000).toFixed(1)}s</span>
-                  <span className={metricBadgeClass('cls', result.cls)}>CLS {result.cls.toFixed(3)}</span>
-                  <span className={metricBadgeClass('inp', result.inpMs)}>INP {Math.round(result.inpMs)}ms</span>
+                  <span className={metricBadgeClass('lcp', result.lcpMs)}>
+                    LCP {(result.lcpMs / 1000).toFixed(1)}s
+                  </span>
+                  <span className={metricBadgeClass('cls', result.cls)}>
+                    CLS {result.cls.toFixed(3)}
+                  </span>
+                  <span className={metricBadgeClass('inp', result.inpMs)}>
+                    INP {Math.round(result.inpMs)}ms
+                  </span>
                 </div>
 
                 <div className="metric-grid">
@@ -213,7 +233,12 @@ export default function Home() {
           <p>
             <strong>Designed by Anthony</strong> tools built for real client work.
           </p>
-          <a className="dba-footer-link" href="https://designedbyanthony.online" target="_blank" rel="noreferrer">
+          <a
+            className="dba-footer-link"
+            href="https://designedbyanthony.online"
+            target="_blank"
+            rel="noreferrer"
+          >
             designedbyanthony.online
           </a>
         </div>

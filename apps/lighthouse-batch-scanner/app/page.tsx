@@ -89,7 +89,12 @@ export default function Home() {
   return (
     <>
       <div className="dba-topbar">
-        <a className="dba-topbar-brand" href="https://designedbyanthony.com" target="_blank" rel="noreferrer">
+        <a
+          className="dba-topbar-brand"
+          href="https://designedbyanthony.com"
+          target="_blank"
+          rel="noreferrer"
+        >
           DBA
         </a>
         <span className="dba-topbar-sep">/</span>
@@ -128,7 +133,12 @@ export default function Home() {
               </label>
 
               <div className="action-row">
-                <button type="button" className="primary-button" onClick={scanAll} disabled={scanning}>
+                <button
+                  type="button"
+                  className="primary-button"
+                  onClick={scanAll}
+                  disabled={scanning}
+                >
                   {scanning ? 'Scanning...' : 'Scan All'}
                 </button>
               </div>
@@ -189,7 +199,12 @@ export default function Home() {
           <p>
             <strong>Designed by Anthony</strong> tools built for real client work.
           </p>
-          <a className="dba-footer-link" href="https://designedbyanthony.online" target="_blank" rel="noreferrer">
+          <a
+            className="dba-footer-link"
+            href="https://designedbyanthony.online"
+            target="_blank"
+            rel="noreferrer"
+          >
             designedbyanthony.online
           </a>
         </div>

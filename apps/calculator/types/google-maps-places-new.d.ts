@@ -28,7 +28,7 @@ declare namespace google.maps.places {
     includedRegionCodes: string[];
 
     addEventListener(
-      type: "gmp-select",
+      type: 'gmp-select',
       listener: (event: PlaceAutocompletePlaceSelectEvent) => void,
     ): void;
     addEventListener(

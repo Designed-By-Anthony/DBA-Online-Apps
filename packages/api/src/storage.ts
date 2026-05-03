@@ -30,11 +30,7 @@ export async function uploadPdf(
   return key;
 }
 
-export async function uploadEmbed(
-  storage: R2Bucket,
-  mapId: string,
-  html: string,
-): Promise<string> {
+export async function uploadEmbed(storage: R2Bucket, mapId: string, html: string): Promise<string> {
   const key = embedKey(mapId);
   await storage.put(key, html, {
     httpMetadata: {
@@ -46,10 +42,7 @@ export async function uploadEmbed(
   return key;
 }
 
-export async function getObject(
-  storage: R2Bucket,
-  key: string,
-): Promise<R2ObjectBody | null> {
+export async function getObject(storage: R2Bucket, key: string): Promise<R2ObjectBody | null> {
   return storage.get(key);
 }
 
