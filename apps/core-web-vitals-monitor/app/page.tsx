@@ -14,7 +14,7 @@ export default function Home() {
           DBA
         </a>
         <span className="dba-topbar-sep">/</span>
-        <span className="dba-topbar-name">Core Web Vitals Monitor</span>
+        <span className="dba-topbar-name">Website Speed Test</span>
       </div>
 
       <main
@@ -23,9 +23,11 @@ export default function Home() {
       >
         <section className="hero">
           <div>
-            <p className="eyebrow">Google-Style Speed Test</p>
-            <h1>Test how fast your website loads.</h1>
-            <p className="summary">The same way Google grades it for real users on mobile.</p>
+            <p className="eyebrow">Free website speed test</p>
+            <h1>Test How Fast Your Website Loads on a Phone</h1>
+            <p className="summary">
+              See the same speed score Google uses to rank your site. Takes 30 seconds.
+            </p>
           </div>
         </section>
 

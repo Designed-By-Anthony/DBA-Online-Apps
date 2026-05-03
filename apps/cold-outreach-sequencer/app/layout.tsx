@@ -2,8 +2,9 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Cold Outreach Sequencer - DBA',
-  description: 'Write personalized follow-up emails for every prospect without a CRM.',
+  title: 'Free Follow-Up Email Writer — Send Sequences That Get Replies',
+  description:
+    'Paste your prospect list and get a ready-to-send email sequence in seconds. No CRM needed. Free to try.',
 };
 
 export default function RootLayout({

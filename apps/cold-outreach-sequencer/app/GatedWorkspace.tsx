@@ -7,8 +7,8 @@ import { Workspace } from './Workspace';
 export function GatedWorkspace() {
   return (
     <DemoGate
-      appName="Cold Outreach Sequencer"
-      tagline="No CRM required. Paste prospects, generate a full 5-step sequence."
+      appName="Follow-Up Email Writer"
+      tagline="Paste your prospect list and get a ready-to-send email sequence."
       demoContent={<DemoResults />}
     >
       <Workspace />

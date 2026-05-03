@@ -91,7 +91,7 @@ export default async function ToolLandingPage({ params }: Props) {
       </header>
 
       <section className="hero">
-        <p className="hero-eyebrow">Tool</p>
+        <p className="hero-eyebrow">Free tool</p>
         <h1>{label}</h1>
         <p className="hero-sub">{tagline}</p>
         <div className="hero-cta-group">
@@ -131,8 +131,11 @@ export default async function ToolLandingPage({ params }: Props) {
       </section>
 
       <div className="strip">
-        <h2>Available in your area</h2>
-        <p>See how {label} helps local businesses in your city and industry.</p>
+        <h2>Available for businesses near you</h2>
+        <p>
+          See how {label} helps{' '}
+          {slug === 'construction-calculator' ? 'contractors' : 'local businesses'} in your city.
+        </p>
         <div className="pseo-link-grid">
           {CITY_SLUGS.map((city) =>
             INDUSTRY_SLUGS.map((industry) => (

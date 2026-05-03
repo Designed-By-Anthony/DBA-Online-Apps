@@ -7,8 +7,8 @@ import { Workspace } from './Workspace';
 export function GatedWorkspace() {
   return (
     <DemoGate
-      appName="Lighthouse Batch Scanner"
-      tagline="Scan up to five URLs at once using Google PageSpeed Insights."
+      appName="Website Speed Grader"
+      tagline="Scan up to five pages at once and see exactly what to fix first."
       demoContent={<DemoResults />}
     >
       <Workspace />

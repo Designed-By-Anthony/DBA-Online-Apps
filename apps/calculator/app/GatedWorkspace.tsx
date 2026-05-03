@@ -8,7 +8,7 @@ export function GatedWorkspace() {
   return (
     <DemoGate
       appName="Construction Calculator"
-      tagline="Concrete, framing, roofing, insulation, and more. Type a number and get your answer."
+      tagline="Estimate materials and labor costs in seconds. No spreadsheet required."
       demoContent={<DemoResults />}
     >
       <CalculatorHub />

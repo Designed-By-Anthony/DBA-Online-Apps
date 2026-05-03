@@ -14,7 +14,7 @@ export default function Home() {
           DBA
         </a>
         <span className="dba-topbar-sep">/</span>
-        <span className="dba-topbar-name">Cold Outreach Sequencer</span>
+        <span className="dba-topbar-name">Follow-Up Email Writer</span>
       </div>
 
       <main
@@ -23,10 +23,11 @@ export default function Home() {
       >
         <section className="hero">
           <div>
-            <p className="eyebrow">Email Sequence Tool</p>
-            <h1>Write personalized follow-up emails.</h1>
+            <p className="eyebrow">Free email follow-up tool</p>
+            <h1>Write Follow-Up Emails That Actually Get Replies</h1>
             <p className="summary">
-              No CRM required. Paste prospects, generate a full 5-step sequence.
+              Paste your prospect list and get a ready-to-send email sequence in seconds. No CRM
+              needed.
             </p>
           </div>
         </section>

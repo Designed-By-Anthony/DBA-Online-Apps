@@ -14,7 +14,7 @@ export default function Home() {
           DBA
         </a>
         <span className="dba-topbar-sep">/</span>
-        <span className="dba-topbar-name">Local SEO Audit Kit</span>
+        <span className="dba-topbar-name">Local SEO Checker</span>
       </div>
 
       <main
@@ -23,9 +23,12 @@ export default function Home() {
       >
         <section className="hero">
           <div>
-            <p className="eyebrow">Local Search Checklist</p>
-            <h1>See how your business looks to Google.</h1>
-            <p className="summary">A quick checklist for local visibility and trust.</p>
+            <p className="eyebrow">Free local SEO audit</p>
+            <h1>Free Local SEO Checker for Small Businesses</h1>
+            <p className="summary">
+              Find out if customers can actually find you on Google. Get a simple checklist of what
+              to fix.
+            </p>
           </div>
         </section>
 

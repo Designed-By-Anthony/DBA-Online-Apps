@@ -14,19 +14,19 @@ export default function StorePage() {
       </header>
 
       <section className="hero">
-        <p className="hero-eyebrow">7 tools for local service businesses</p>
+        <p className="hero-eyebrow">7 free tools for small businesses</p>
         <h1>
-          Run your business.
+          Free Tools to Run Your Business.
           <br />
-          <em>Not a spreadsheet.</em>
+          <em>Not a Spreadsheet.</em>
         </h1>
         <p className="hero-sub">
-          Job estimating, lead capture, SEO audits, and site speed monitoring — built for
-          contractors and local service pros in New York State.
+          Cost estimating, lead capture, SEO checkups, and site speed reports — built for
+          contractors and local service businesses.
         </p>
         <div className="hero-cta-group">
           <a href="#tools" className="btn-primary">
-            Browse all tools →
+            See all tools →
           </a>
           <a href="mailto:anthony@designedbyanthony.online" className="btn-ghost">
             Talk to Anthony
@@ -51,10 +51,10 @@ export default function StorePage() {
       </section>
 
       <div className="strip">
-        <h2>One builder. Seven tools. No agency markup.</h2>
+        <h2>One person builds and supports every tool.</h2>
         <p>
-          Every tool is designed, built, and supported by Anthony — one person based in Rome, NY who
-          picks up the phone.
+          No call center. No ticket queue. Every tool is designed, built, and supported by Anthony
+          from Rome, NY — and he picks up the phone.
         </p>
         <a href="mailto:anthony@designedbyanthony.online" className="btn-primary">
           Get in touch →
@@ -62,10 +62,10 @@ export default function StorePage() {
       </div>
 
       <section className="strip" style={{ background: 'var(--surface-2, #111)' }}>
-        <h2>Need a custom build?</h2>
+        <h2>Need a custom website?</h2>
         <p>
-          These tools are built by Anthony Jones — a full-stack web architect based in Rome, NY. For
-          bespoke websites, design systems, and infrastructure work, visit the main studio.
+          These tools are built by Anthony Jones in Rome, NY. For custom websites, SEO, and managed
+          hosting, visit the main studio.
         </p>
         <a href="https://designedbyanthony.com" className="btn-primary" rel="noopener">
           designedbyanthony.com →

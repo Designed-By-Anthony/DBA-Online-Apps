@@ -7,8 +7,8 @@ import { Workspace } from './Workspace';
 export function GatedWorkspace() {
   return (
     <DemoGate
-      appName="Local SEO Audit Kit"
-      tagline="A quick checklist for local visibility and trust."
+      appName="Local SEO Checker"
+      tagline="Find out if customers can find you on Google. Quick and free."
       demoContent={<DemoResults />}
     >
       <Workspace />

@@ -59,12 +59,12 @@ export type IndustrySlug = (typeof INDUSTRY_SLUGS)[number];
 
 export const TOOL_LABELS: Record<ToolSlug, string> = {
   'construction-calculator': 'Construction Calculator',
-  'lead-form-builder': 'Lead Form Builder',
-  'site-speed-monitor': 'Site Speed Monitor',
-  'seo-audit': 'SEO Audit Kit',
-  'cold-outreach': 'Cold Outreach Sequencer',
-  'service-area-map': 'Service Area Map Generator',
-  'lighthouse-scanner': 'Lighthouse Batch Scanner',
+  'lead-form-builder': 'Contact Form Builder',
+  'site-speed-monitor': 'Website Speed Test',
+  'seo-audit': 'Local SEO Checker',
+  'cold-outreach': 'Follow-Up Email Writer',
+  'service-area-map': 'Service Area Map',
+  'lighthouse-scanner': 'Website Speed Grader',
 };
 
 export const TOOL_URLS: Record<ToolSlug, string> = {
@@ -89,58 +89,58 @@ export const TOOL_PRICES: Record<ToolSlug, string> = {
 
 export const TOOL_TAGLINES: Record<ToolSlug, string> = {
   'construction-calculator':
-    'Accurate job estimates in seconds — concrete, framing, roofing, and more.',
-  'lead-form-builder': 'Build smart contact forms that send leads straight to your inbox or CRM.',
-  'site-speed-monitor': 'Know the moment your site slows down, before your customers notice.',
-  'seo-audit': 'See exactly why Google ranks your competitors above you and how to fix it.',
-  'cold-outreach': 'Send personalized follow-up sequences to prospects without the manual work.',
-  'service-area-map': 'Show Google and your customers the exact towns you serve.',
+    'Estimate material and labor costs in seconds. Concrete, framing, roofing, and more.',
+  'lead-form-builder': 'Build a contact form in minutes and start getting leads from your website.',
+  'site-speed-monitor': 'Find out the moment your site slows down — before your customers notice.',
+  'seo-audit': 'See how your business shows up on Google and get a simple list of what to fix.',
+  'cold-outreach': 'Write personalized follow-up emails for every prospect. No CRM needed.',
+  'service-area-map': 'Show customers and Google exactly which towns you serve.',
   'lighthouse-scanner':
-    'Grade every page on your site for speed, SEO, and accessibility in one run.',
+    'Grade your website on speed, SEO, and accessibility. Scan up to five pages at once.',
 };
 
 export const TOOL_DESCRIPTIONS: Record<ToolSlug, { plain: string; who: string; what: string }> = {
   'construction-calculator': {
     plain:
-      'Type in your job dimensions and the calculator tells you exactly how much material you need — concrete bags, lumber, shingles, whatever the job calls for. No more guessing or under-ordering.',
-    who: 'Contractors, estimators, and project managers who price jobs daily.',
+      'Type in your measurements and the calculator tells you how much material you need. Concrete bags, lumber, shingles — whatever the job calls for. No more guessing or over-ordering.',
+    who: 'Contractors, estimators, and project managers who price jobs every day.',
     what: 'Material quantities, bag counts, cost estimates, and waste factors for concrete, framing, roofing, and more.',
   },
   'lead-form-builder': {
     plain:
-      'Create a contact form in minutes, drop it on your site, and get new leads delivered exactly where you need them — email, text, or your CRM. No developer needed.',
-    who: 'Any service business that wants more calls and form submissions from their website.',
-    what: 'Custom form builder, spam protection, instant notifications, and CRM-ready exports.',
+      'Build a contact form in minutes and put it on your website. New leads get sent straight to your email or phone. No coding or developer needed.',
+    who: 'Any service business that wants more calls and form fills from their website.',
+    what: 'Simple form builder, spam protection, instant notifications, and CRM-ready exports.',
   },
   'site-speed-monitor': {
     plain:
-      'We check your website every week for the three speed signals Google actually grades you on. If something slips, you get an alert before it costs you rankings.',
-    who: 'Business owners and web managers who want to stay fast without checking manually.',
-    what: 'Weekly Core Web Vitals scans, trend history, and regression alerts by email.',
+      'We check your website every week for the speed signals Google actually grades you on. If something slips, you get an alert before it hurts your rankings.',
+    who: 'Business owners who want to keep their site fast without checking it themselves.',
+    what: 'Weekly speed scans, trend history, and email alerts when something slows down.',
   },
   'seo-audit': {
     plain:
-      'Run your business through the same checklist Google uses when deciding where to rank you in local search. You get a scored report with clear action items — not a wall of jargon.',
-    who: 'Local service businesses serious about showing up when customers search.',
-    what: 'Google Business Profile review, citation consistency, on-page SEO grade, and a fix list sorted by impact.',
+      'Run your business through the same checklist Google uses when deciding where to rank you. You get a scored report with clear steps to take — no jargon, just action items.',
+    who: 'Local service businesses that want to show up when customers search.',
+    what: 'Google Business Profile review, listing accuracy, on-page SEO grade, and a fix list sorted by impact.',
   },
   'cold-outreach': {
     plain:
-      'Upload a list of prospects, write one good email, and let the tool handle the follow-up timing. You focus on the conversations; we handle the reminders.',
-    who: 'Agencies, consultants, and B2B service providers who prospect by email.',
-    what: 'Personalized email sequences, prospect status tracking, and reply detection.',
+      'Paste a list of prospects and let the tool write your follow-up emails. You handle the conversations — we handle the reminders and timing.',
+    who: 'Agencies, consultants, and service businesses that reach out by email.',
+    what: 'Personalized email sequences, prospect tracking, and follow-up reminders.',
   },
   'service-area-map': {
     plain:
-      'Tell us the towns you cover, and we generate an embeddable map you can drop on your website. Google sees structured location data; customers see exactly where you work.',
+      'Enter the towns you cover and get an embeddable map for your website. Google sees structured location data. Customers see exactly where you work.',
     who: 'Service businesses that travel to customers — HVAC, plumbing, landscaping, and more.',
-    what: 'Embeddable service-area map, SEO-structured location data, and copy-paste embed code.',
+    what: 'Embeddable service-area map, location data for Google, and copy-paste embed code.',
   },
   'lighthouse-scanner': {
     plain:
-      'Paste in your site URLs and get a full performance, accessibility, and SEO grade on every page at once — the same test Google runs, but automated across your whole site.',
-    who: 'Web designers, agencies, and site owners managing multiple pages.',
-    what: 'Batch Lighthouse audits, per-page scores, PDF report, and prioritized fix list.',
+      'Paste your website URLs and get a full speed, accessibility, and SEO grade on every page at once. The same test Google runs, but covering your whole site in one click.',
+    who: 'Business owners, web designers, and agencies managing multiple pages.',
+    what: 'Multi-page website audit, per-page scores, PDF report, and a prioritized fix list.',
   },
 };
 
@@ -218,30 +218,30 @@ export function buildToolPagePayload(
 
   const h1 = `${toolLabel} for ${industryLabel} in ${cityLabel}`;
   const title = `${h1} — Designed by Anthony`;
-  const description = `${toolTagline} Built for ${industryLabel.toLowerCase()} businesses in ${cityLabel} — no setup fees, no long-term contract.`;
+  const description = `${toolTagline} Built for ${industryLabel.toLowerCase()} businesses in ${cityLabel}. No setup fees, no long-term contract.`;
 
-  const lead = `${industryLabel} businesses in ${cityLabel} use the ${toolLabel} to save time on the work that doesn't need to be manual. ${toolDesc.plain} Start free, upgrade when it pays for itself.`;
+  const lead = `${industryLabel} businesses in ${cityLabel} use the ${toolLabel} to save time on the work that does not need to be done by hand. ${toolDesc.plain} Try it free. Upgrade when it pays for itself.`;
 
   const faqs: Array<{ q: string; a: string }> = [
     {
-      q: `Is this built for ${industryLabel.toLowerCase()} businesses specifically?`,
-      a: `Yes. The ${toolLabel} is used by ${industryLabel.toLowerCase()} operators across ${cityLabel} and surrounding areas. The defaults and workflows are tuned for the way service businesses actually operate — not generic office software.`,
+      q: `Is this built for ${industryLabel.toLowerCase()} businesses?`,
+      a: `Yes. The ${toolLabel} is used by ${industryLabel.toLowerCase()} businesses across ${cityLabel} and nearby areas. It is set up for the way service businesses actually work — not generic office software.`,
     },
     {
-      q: 'Do I need to be technical to use it?',
-      a: `No. If you can fill out a form on your phone, you can use this tool. ${toolDesc.what}`,
+      q: 'Do I need to be tech-savvy to use it?',
+      a: `Not at all. If you can fill out a form on your phone, you can use this. ${toolDesc.what}`,
     },
     {
       q: `How much does it cost?`,
       a: `${toolPrice}. No setup fees, no annual commitment required. Cancel any time.`,
     },
     {
-      q: `Does it work on mobile?`,
-      a: `Yes — it is built mobile-first. Most ${industryLabel.toLowerCase()} contractors in ${cityLabel} check it from the job site or truck.`,
+      q: `Does it work on my phone?`,
+      a: `Yes. It is built for mobile first. Most ${industryLabel.toLowerCase()} businesses in ${cityLabel} use it right from the job site or the truck.`,
     },
     {
       q: `Who builds and supports this?`,
-      a: `Designed by Anthony — a one-person digital infrastructure studio based in Rome, NY. You reach the same person who built it, not a support ticket queue.`,
+      a: `Anthony Jones, based in Rome, NY. One person builds and supports every tool. You reach the same person who made it — not a support ticket queue.`,
     },
   ];
 
