@@ -1,6 +1,6 @@
 'use client';
 
-import { DemoGate } from '@dba/ui';
+import { DemoGate } from '@dba/ui/DemoGate';
 import { DemoResults } from './DemoResults';
 
 export default function Home() {

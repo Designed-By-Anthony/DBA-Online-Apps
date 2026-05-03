@@ -31,10 +31,8 @@ export {
   X,
   Zap,
 } from 'lucide-react';
-export type { DemoGateProps } from './DemoGate';
-export { DemoGate } from './DemoGate';
-export type { DesignTokens } from './tokens';
-export { designTokens } from './tokens';
+export type { DesignTokens } from './tokens.js';
+export { designTokens } from './tokens.js';
 
 // Types for component props
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {

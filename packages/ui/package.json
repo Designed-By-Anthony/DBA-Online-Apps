@@ -9,6 +9,10 @@
       "types": "./src/index.tsx",
       "default": "./src/index.tsx"
     },
+    "./DemoGate": {
+      "types": "./src/DemoGate.tsx",
+      "default": "./src/DemoGate.tsx"
+    },
     "./styles.css": "./src/styles.css",
     "./tokens": {
       "types": "./src/tokens.ts",
