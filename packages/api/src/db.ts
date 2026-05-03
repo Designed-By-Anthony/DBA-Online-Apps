@@ -24,7 +24,7 @@ export async function getUserByApiKey(db: D1Database, apiKey: string): Promise<D
 export async function createUser(db: D1Database, user: Omit<DbUser, 'created_at'>): Promise<void> {
   await db
     .prepare(
-      'INSERT INTO users (id, email, plan, api_key, stripe_customer_id, created_at) VALUES (?, ?, ?, ?, ?, ?)',
+      'INSERT INTO users (id, email, plan, api_key, stripe_customer_id, clerk_id, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)',
     )
     .bind(
       user.id,
@@ -32,6 +32,7 @@ export async function createUser(db: D1Database, user: Omit<DbUser, 'created_at'
       user.plan,
       user.api_key,
       user.stripe_customer_id,
+      user.clerk_id,
       new Date().toISOString(),
     )
     .run();
