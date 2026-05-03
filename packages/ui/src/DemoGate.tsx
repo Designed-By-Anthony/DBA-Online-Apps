@@ -3,7 +3,6 @@
 import { type ReactNode, useCallback, useEffect, useState } from 'react';
 
 const PURCHASE_URL = 'https://designedbyanthony.com/tools';
-const AUTH_API = 'https://api.designedbyanthony.online';
 
 export interface DemoGateProps {
   appName: string;
@@ -12,30 +11,57 @@ export interface DemoGateProps {
   children?: ReactNode;
 }
 
-type AuthState = 'checking' | 'paid' | 'free';
 type Phase = 'intro' | 'playing' | 'cta';
+
+type AuthState = 'checking' | 'paid' | 'free';
+
+const AUTH_API = 'https://api.designedbyanthony.online';
 
 export function DemoGate({ appName, tagline, demoContent, children }: DemoGateProps) {
   const [auth, setAuth] = useState<AuthState>('checking');
   const [phase, setPhase] = useState<Phase>('intro');
 
-  /* ── Auth bridge: check token against central API ────────── */
   useEffect(() => {
-    const token = typeof window !== 'undefined' ? localStorage.getItem('dba_token') : null;
-
-    if (!token) {
-      setAuth('free');
-      return;
-    }
-
-    fetch(`${AUTH_API}/auth/verify`, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then((r) => (r.ok ? r.json() : Promise.reject(new Error('auth-failed'))))
-      .then((data: { plan?: string }) => {
-        setAuth(data.plan && data.plan !== 'free' ? 'paid' : 'free');
-      })
-      .catch(() => setAuth('free'));
+    // Poll for Clerk to become available and loaded (clerk-js loads asynchronously)
+    const poll = setInterval(() => {
+      const c = (window as unknown as Record<string, unknown>).Clerk as
+        | { loaded?: boolean; session?: { getToken?: () => Promise<string | null> } | null }
+        | undefined;
+      if (c?.loaded) {
+        clearInterval(poll);
+        clearTimeout(timeout);
+        if (!c.session?.getToken) {
+          setAuth('free');
+          return;
+        }
+        // Signed in — verify paid plan via central API
+        c.session
+          .getToken()
+          .then((token) => {
+            if (!token) {
+              setAuth('free');
+              return;
+            }
+            return fetch(`${AUTH_API}/auth/verify`, {
+              headers: { Authorization: `Bearer ${token}` },
+            })
+              .then((r) => (r.ok ? r.json() : Promise.reject(new Error('auth-failed'))))
+              .then((data: { plan?: string }) => {
+                setAuth(data.plan && data.plan !== 'free' ? 'paid' : 'free');
+              });
+          })
+          .catch(() => setAuth('free'));
+      }
+    }, 100);
+    // Timeout: if Clerk hasn't loaded after 5s, assume no auth
+    const timeout = setTimeout(() => {
+      clearInterval(poll);
+      setAuth((prev) => (prev === 'checking' ? 'free' : prev));
+    }, 5000);
+    return () => {
+      clearInterval(poll);
+      clearTimeout(timeout);
+    };
   }, []);
 
   useEffect(() => {

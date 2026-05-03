@@ -150,7 +150,7 @@ function buildApp(env: Env) {
 
       // ── Auth Verify (token → plan) ──────────────────────────────
       .get('/auth/verify', async ({ db, request }) => {
-        const auth = await resolveAuth(db, request);
+        const auth = await resolveAuth(db, request, env);
         return { plan: auth.plan, userId: auth.userId };
       })
 
@@ -172,7 +172,7 @@ function buildApp(env: Env) {
       .group('/lighthouse', (app) =>
         app
           .post('/audit', async ({ db, request, body }) => {
-            const auth = await resolveAuth(db, request);
+            const auth = await resolveAuth(db, request, env);
             const gate = requirePaidPlan(auth);
             if (gate) return gate;
             const {
@@ -229,7 +229,7 @@ function buildApp(env: Env) {
       .group('/seo-audit', (app) =>
         app
           .post('/run', async ({ db, request, body }) => {
-            const auth = await resolveAuth(db, request);
+            const auth = await resolveAuth(db, request, env);
             const gate = requirePaidPlan(auth);
             if (gate) return gate;
             const { businessName, location, results } = body as {
@@ -289,14 +289,14 @@ function buildApp(env: Env) {
       .group('/forms', (app) =>
         app
           .get('/', async ({ db, request }) => {
-            const auth = await resolveAuth(db, request);
+            const auth = await resolveAuth(db, request, env);
             const gate = requirePaidPlan(auth);
             if (gate) return gate;
             const forms = await getLeadFormsByUser(db, auth.userId!);
             return { forms, total: forms.length };
           })
           .post('/', async ({ db, request, body }) => {
-            const auth = await resolveAuth(db, request);
+            const auth = await resolveAuth(db, request, env);
             const gate = requirePaidPlan(auth);
             if (gate) return gate;
             const { name, fields } = body as { name: string; fields: unknown[] };
@@ -343,7 +343,7 @@ function buildApp(env: Env) {
       .group('/maps', (app) =>
         app
           .post('/', async ({ db, storage, request, body }) => {
-            const auth = await resolveAuth(db, request);
+            const auth = await resolveAuth(db, request, env);
             const gate = requirePaidPlan(auth);
             if (gate) return gate;
             const { businessName, areas } = body as {
@@ -393,7 +393,7 @@ function buildApp(env: Env) {
       .group('/outreach', (app) =>
         app
           .post('/sequences', async ({ db, request, body }) => {
-            const auth = await resolveAuth(db, request);
+            const auth = await resolveAuth(db, request, env);
             const gate = requirePaidPlan(auth);
             if (gate) return gate;
             const { name, steps } = body as { name: string; steps: unknown[] };
@@ -434,7 +434,7 @@ function buildApp(env: Env) {
       .group('/cwv', (app) =>
         app
           .post('/monitors', async ({ db, request, body }) => {
-            const auth = await resolveAuth(db, request);
+            const auth = await resolveAuth(db, request, env);
             const gate = requirePaidPlan(auth);
             if (gate) return gate;
             const { url } = body as { url: string };

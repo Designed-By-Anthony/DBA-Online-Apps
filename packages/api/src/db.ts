@@ -1,3 +1,4 @@
+import { createRemoteJWKSet, jwtVerify } from 'jose';
 import type {
   AuthContext,
   DbCwvMonitor,
@@ -7,6 +8,7 @@ import type {
   DbSeoAudit,
   DbServiceMap,
   DbUser,
+  Env,
 } from './types';
 
 // ── Auth / Users ─────────────────────────────────────────────────────────────
@@ -22,7 +24,7 @@ export async function getUserByApiKey(db: D1Database, apiKey: string): Promise<D
 export async function createUser(db: D1Database, user: Omit<DbUser, 'created_at'>): Promise<void> {
   await db
     .prepare(
-      'INSERT INTO users (id, email, plan, api_key, stripe_customer_id, created_at) VALUES (?, ?, ?, ?, ?, ?)',
+      'INSERT INTO users (id, email, plan, api_key, stripe_customer_id, clerk_id, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)',
     )
     .bind(
       user.id,
@@ -30,20 +32,62 @@ export async function createUser(db: D1Database, user: Omit<DbUser, 'created_at'
       user.plan,
       user.api_key,
       user.stripe_customer_id,
+      user.clerk_id,
       new Date().toISOString(),
     )
     .run();
 }
 
-export async function resolveAuth(db: D1Database, request: Request): Promise<AuthContext> {
+/** Cached JWKS keyset (lives for the Worker isolate lifetime). */
+let cachedJWKS: ReturnType<typeof createRemoteJWKSet> | null = null;
+
+function getJWKS(jwksUrl: string) {
+  if (!cachedJWKS) cachedJWKS = createRemoteJWKSet(new URL(jwksUrl));
+  return cachedJWKS;
+}
+
+/**
+ * Resolve auth from either a Clerk session JWT or a legacy API key.
+ *
+ * Clerk JWTs are verified cryptographically against the Clerk JWKS endpoint
+ * when CLERK_JWKS_URL is set. The `sub` claim maps to the `clerk_id` column.
+ * Falls back to legacy API key auth when the token is not a valid Clerk JWT.
+ */
+export async function resolveAuth(
+  db: D1Database,
+  request: Request,
+  env?: Env,
+): Promise<AuthContext> {
   const authHeader = request.headers.get('Authorization');
   if (!authHeader?.startsWith('Bearer ')) {
     return { userId: null, plan: 'free', apiKey: null };
   }
-  const apiKey = authHeader.slice(7);
-  const user = await getUserByApiKey(db, apiKey);
-  if (!user) return { userId: null, plan: 'free', apiKey };
-  return { userId: user.id, plan: user.plan, apiKey };
+  const token = authHeader.slice(7);
+
+  // Try Clerk JWT verification when JWKS URL is configured
+  if (env?.CLERK_JWKS_URL) {
+    try {
+      const jwks = getJWKS(env.CLERK_JWKS_URL);
+      const { payload } = await jwtVerify(token, jwks);
+      const sub = payload.sub;
+      if (sub && typeof sub === 'string' && sub.startsWith('user_')) {
+        const user = await db
+          .prepare('SELECT * FROM users WHERE clerk_id = ? LIMIT 1')
+          .bind(sub)
+          .first<DbUser>();
+        if (user) return { userId: user.id, plan: user.plan, apiKey: user.api_key };
+        // Valid Clerk JWT but no matching user in DB yet
+        return { userId: null, plan: 'free', apiKey: null };
+      }
+    } catch {
+      // Not a valid/verified JWT — fall through to legacy API key auth
+    }
+  }
+
+  // Legacy API key auth
+  const user = await getUserByApiKey(db, token);
+  if (!user) return { userId: null, plan: 'free', apiKey: token };
+  return { userId: user.id, plan: user.plan, apiKey: token };
 }
 
 export function requirePaidPlan(auth: AuthContext): Response | null {

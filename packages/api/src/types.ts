@@ -15,6 +15,8 @@ export interface Env {
   // Secrets (set via `wrangler secret put`)
   STRIPE_WEBHOOK_SECRET?: string;
   JWT_SECRET?: string;
+  // Clerk JWKS URL for JWT signature verification (e.g. https://<your-clerk-domain>/.well-known/jwks.json)
+  CLERK_JWKS_URL?: string;
 }
 
 // ── Shared Domain Types ─────────────────────────────────────────────────────
@@ -28,6 +30,7 @@ export interface DbUser {
   api_key: string;
   created_at: string;
   stripe_customer_id: string | null;
+  clerk_id: string | null;
 }
 
 export interface DbLighthouseJob {
