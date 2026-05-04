@@ -204,7 +204,10 @@ function Results({ results, locked = false }: { results: CalculationResult[]; lo
         style={locked ? { filter: 'blur(4px)', opacity: 0.35, pointerEvents: 'none' } : undefined}
       >
         {results.map((r) => (
-          <div key={r.label} className={`result-row${r.highlight ? ' result-row--highlight' : ''}`}>
+          <div
+            key={`${r.label}-${r.unit ?? ''}`}
+            className={`result-row${r.highlight ? ' result-row--highlight' : ''}`}
+          >
             <div className="result-label">{r.label}</div>
             <div className="result-value">
               <span className="result-num">{r.value}</span>
