@@ -834,15 +834,6 @@ export function CalculatorHub() {
 
   return (
     <div className="hub">
-      {/* top bar */}
-      <div className="topbar">
-        <a href="https://designedbyanthony.online" className="topbar-brand">
-          DESIGNED BY ANTHONY
-        </a>
-        <span className="topbar-sep">/</span>
-        <span className="topbar-name">Construction Calculator</span>
-      </div>
-
       {/* hero */}
       <header className="calc-hero">
         <div className="calc-hero-inner">

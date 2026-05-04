@@ -394,39 +394,6 @@ select.text-input:focus {
   }
 }
 
-/* ── DBA Brand Utilities ──────────────────────────────────────────────────── */
-
-.dba-topbar {
-  background: #172033;
-  color: #94a3b8;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  height: 44px;
-  padding: 0 20px;
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 12px;
-}
-
-.dba-topbar-brand {
-  color: #ffffff;
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: 0.1em;
-  text-decoration: none;
-  text-transform: uppercase;
-}
-
-.dba-topbar-brand:hover {
-  color: #e0f2fe;
-}
-.dba-topbar-sep {
-  opacity: 0.3;
-}
-.dba-topbar-name {
-  font-weight: 600;
-}
-
 .dba-footer {
   background: #172033;
   border-top: 1px solid rgba(255, 255, 255, 0.08);

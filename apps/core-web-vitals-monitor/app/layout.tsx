@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { ClerkClientProvider } from '@dba/ui/ClerkClientProvider';
+import { Navbar } from '@dba/ui/Navbar';
 
 export const metadata: Metadata = {
   title: 'Free Website Speed Test — See How Google Scores Your Site',
@@ -16,6 +17,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+        <Navbar />
         <ClerkClientProvider publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}>
           {children}
         </ClerkClientProvider>

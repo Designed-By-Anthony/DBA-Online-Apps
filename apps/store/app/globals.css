@@ -42,18 +42,6 @@ a {
   justify-content: space-between;
 }
 
-.topbar-brand {
-  font-size: 14px;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #f6f7fb;
-}
-
-.topbar-brand span {
-  color: var(--accent);
-}
-
 .topbar-link {
   font-size: 13px;
   color: #94a3b8;

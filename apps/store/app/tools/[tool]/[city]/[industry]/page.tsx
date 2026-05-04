@@ -137,9 +137,6 @@ export default async function PseoPage({ params }: Props) {
       />
 
       <header className="topbar">
-        <a href="/" className="topbar-brand">
-          Designed by <span>Anthony</span>
-        </a>
         <a href={`/tools/${p.toolSlug}`} className="topbar-link">
           ← {p.toolLabel}
         </a>

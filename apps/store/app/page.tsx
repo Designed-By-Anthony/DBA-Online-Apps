@@ -5,9 +5,6 @@ export default function StorePage() {
   return (
     <>
       <header className="topbar">
-        <span className="topbar-brand">
-          Designed by <span>Anthony</span>
-        </span>
         <a href="mailto:anthony@designedbyanthony.online" className="topbar-link">
           Get in touch
         </a>

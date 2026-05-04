@@ -82,9 +82,6 @@ export default async function ToolLandingPage({ params }: Props) {
       />
 
       <header className="topbar">
-        <a href="/" className="topbar-brand">
-          Designed by <span>Anthony</span>
-        </a>
         <a href="/" className="topbar-link">
           ← All tools
         </a>

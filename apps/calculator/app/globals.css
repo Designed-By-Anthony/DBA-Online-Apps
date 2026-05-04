@@ -32,35 +32,6 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* ── Topbar ───────────────────────────────────────────────────────────────── */
-.topbar {
-  background: var(--fg);
-  color: #94a3b8;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  height: 44px;
-  padding: 0 20px;
-  font-size: 12px;
-}
-.topbar-brand {
-  color: #ffffff;
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: 0.1em;
-  text-decoration: none;
-  text-transform: uppercase;
-}
-.topbar-brand:hover {
-  color: var(--accent-soft);
-}
-.topbar-sep {
-  opacity: 0.3;
-}
-.topbar-name {
-  font-weight: 600;
-}
-
 /* ── Hero ─────────────────────────────────────────────────────────────────── */
 .calc-hero {
   background: var(--fg);

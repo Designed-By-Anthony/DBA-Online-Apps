@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { ClerkClientProvider } from '@dba/ui/ClerkClientProvider';
+import { Navbar } from '@dba/ui/Navbar';
 
 export const metadata: Metadata = {
   title: 'Free Business Tools — Calculators, SEO Audits, Lead Forms & More',
@@ -15,6 +16,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en">
       <body>
+        <Navbar />
         <ClerkClientProvider publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}>
           {children}
         </ClerkClientProvider>

@@ -4,19 +4,6 @@ import { GatedWorkspace } from './GatedWorkspace';
 export default function Home() {
   return (
     <>
-      <div className="dba-topbar">
-        <a
-          className="dba-topbar-brand"
-          href="https://designedbyanthony.com"
-          target="_blank"
-          rel="noreferrer"
-        >
-          DBA
-        </a>
-        <span className="dba-topbar-sep">/</span>
-        <span className="dba-topbar-name">Contact Form Builder</span>
-      </div>
-
       <main
         className="product-shell"
         style={{ '--accent': '#0369a1', '--accent-soft': '#e0f2fe' } as CSSProperties}

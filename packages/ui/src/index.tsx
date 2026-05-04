@@ -1,5 +1,7 @@
 import type { ReactNode } from 'react';
 
+export { Navbar } from './Navbar.js';
+
 // Icons
 export {
   Activity,
