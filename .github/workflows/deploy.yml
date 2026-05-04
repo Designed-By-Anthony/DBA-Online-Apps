@@ -27,6 +27,31 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
 
+  deploy-store:
+    runs-on: ubuntu-latest
+    name: Deploy Store Worker
+    needs: verify-apps
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.13
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: bun install
+      - name: Build Store
+        run: bunx turbo run build --filter=@dba/store
+        env:
+          NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY }}
+      - name: Deploy Store to Cloudflare Workers
+        working-directory: apps/store
+        run: bunx wrangler deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
   verify-apps:
     runs-on: ubuntu-latest
     name: Verify App Build Matrix
@@ -46,28 +71,18 @@ jobs:
       - uses: oven-sh/setup-bun@v2
         with:
           bun-version: 1.3.13
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
       - run: bun install
       - name: Verify app package
         run: bunx turbo run build check-types lint --filter=@dba/${{ matrix.app }}
         env:
           NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY }}
-      - name: Resolve deploy output directory
-        id: deploy_output
+      - name: Deploy to Cloudflare Workers
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && matrix.app != 'store'
         working-directory: apps/${{ matrix.app }}
-        run: |
-          if [ -d "./dist" ]; then
-            echo "path=./dist" >> "$GITHUB_OUTPUT"
-          elif [ -d "./out" ]; then
-            echo "path=./out" >> "$GITHUB_OUTPUT"
-          elif [ -d "./.next" ]; then
-            echo "path=./.next" >> "$GITHUB_OUTPUT"
-          else
-            echo "No deploy output directory found for ${{ matrix.app }}. Expected one of: ./dist, ./out, ./.next"
-            exit 1
-          fi
-      - name: Deploy to Cloudflare Pages
-        run: bunx wrangler pages deploy ${{ steps.deploy_output.outputs.path }} --project-name=${{ matrix.app }}
-        working-directory: apps/${{ matrix.app }}
+        run: bunx wrangler deploy
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
