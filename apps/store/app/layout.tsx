@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import { ClerkClientProvider } from '@dba/ui/ClerkClientProvider';
 import { Navbar } from '@dba/ui/Navbar';
+import { AuthNavClient } from './AuthNavClient';
 
 export const metadata: Metadata = {
   title: 'Business Tools — Calculators, SEO Audits, Lead Forms & More',
@@ -19,13 +20,15 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en">
       <body>
-        <Navbar />
         <ClerkClientProvider
           publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
           domain={process.env.NEXT_PUBLIC_CLERK_DOMAIN}
           signInUrl={process.env.NEXT_PUBLIC_CLERK_SIGN_IN_URL}
           signUpUrl={process.env.NEXT_PUBLIC_CLERK_SIGN_UP_URL}
         >
+          <Navbar>
+            <AuthNavClient />
+          </Navbar>
           {children}
         </ClerkClientProvider>
       </body>

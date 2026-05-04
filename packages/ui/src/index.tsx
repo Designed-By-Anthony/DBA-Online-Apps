@@ -31,6 +31,7 @@ export {
   X,
   Zap,
 } from 'lucide-react';
+export { AuthNav } from './AuthNav.js';
 export { Navbar } from './Navbar.js';
 export type { DesignTokens } from './tokens.js';
 export { designTokens } from './tokens.js';
