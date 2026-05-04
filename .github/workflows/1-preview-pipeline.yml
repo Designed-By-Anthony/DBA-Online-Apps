@@ -193,6 +193,11 @@ jobs:
           API_BASE_URL: https://preview.api.designedbyanthony.online
           SCANNER_BASE_URL: https://preview.lighthouse.designedbyanthony.online
           LEAD_FORM_BASE_URL: https://preview.lead-form.designedbyanthony.online
+          SEO_BASE_URL: https://preview.seo-audit.designedbyanthony.online
+          MAP_BASE_URL: https://preview.service-area.designedbyanthony.online
+          OUTREACH_BASE_URL: https://preview.outreach.designedbyanthony.online
+          CWV_BASE_URL: https://preview.web-vitals.designedbyanthony.online
+          CALC_BASE_URL: https://preview.calculator.designedbyanthony.online
           # Optional: supply a Clerk testing token for authenticated flows.
           # Without it, global.setup.ts writes an empty storageState and the
           # window.Clerk addInitScript mock in each test takes over.

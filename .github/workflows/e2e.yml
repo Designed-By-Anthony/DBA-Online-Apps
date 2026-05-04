@@ -62,6 +62,11 @@ jobs:
           bun run --cwd apps/store dev &
           bun run --cwd apps/lighthouse-batch-scanner dev &
           bun run --cwd apps/lead-form-builder dev &
+          bun run --cwd apps/local-seo-audit-kit dev &
+          bun run --cwd apps/service-area-map-generator dev &
+          bun run --cwd apps/cold-outreach-sequencer dev &
+          bun run --cwd apps/core-web-vitals-monitor dev &
+          bun run --cwd apps/calculator dev &
         env:
           # Clerk publishable key is optional for dev; when absent the Clerk
           # provider simply never loads, which is fine — tests mock window.Clerk.
@@ -76,7 +81,12 @@ jobs:
             http://localhost:8787/health \
             http://localhost:3207 \
             http://localhost:3201 \
+            http://localhost:3202 \
             http://localhost:3203 \
+            http://localhost:3204 \
+            http://localhost:3205 \
+            http://localhost:3206 \
+            http://localhost:3208 \
             --timeout 180000 \
             --interval 3000
 
@@ -88,7 +98,12 @@ jobs:
           API_BASE_URL: http://localhost:8787
           STORE_BASE_URL: http://localhost:3207
           SCANNER_BASE_URL: http://localhost:3201
+          SEO_BASE_URL: http://localhost:3202
           LEAD_FORM_BASE_URL: http://localhost:3203
+          MAP_BASE_URL: http://localhost:3204
+          OUTREACH_BASE_URL: http://localhost:3205
+          CWV_BASE_URL: http://localhost:3206
+          CALC_BASE_URL: http://localhost:3208
           # Optional: supply a long-lived Clerk testing token (minted in the
           # Clerk dashboard under "Testing tokens") to exercise the full
           # authenticated flow.  Without it, global.setup.ts writes an empty

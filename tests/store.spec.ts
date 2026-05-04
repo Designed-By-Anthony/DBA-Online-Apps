@@ -22,7 +22,6 @@ import { expect, test } from '@playwright/test';
  */
 
 const STORE_BASE = process.env.STORE_BASE_URL ?? 'http://localhost:3207';
-const API_BASE = process.env.API_BASE_URL ?? 'http://localhost:8787';
 
 // ── Public pages (no auth) ────────────────────────────────────────────────────
 
@@ -123,7 +122,7 @@ test.describe('Store — tool detail pages', () => {
     await expect(jsonLd).toHaveCount(1);
     const content = await jsonLd.textContent();
     expect(content).toContain('SoftwareApplication');
-    expect(content).toContain('LocalBusiness');
+    expect(content).toContain('WebApplication');
   });
 
   test('tool detail page has pSEO city/industry links grid', async ({ page }) => {
@@ -252,8 +251,10 @@ test.describe('Store — /dashboard — authenticated', () => {
       };
     });
 
-    // Stub all API calls the dashboard makes
-    await page.route(`${API_BASE}/me`, async (route) => {
+    // Stub all API calls the dashboard makes — use glob patterns because
+    // DashboardClient reads NEXT_PUBLIC_API_URL which may point to the
+    // production domain in a local Next.js build.
+    await page.route('**/me', async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -266,12 +267,12 @@ test.describe('Store — /dashboard — authenticated', () => {
     });
 
     for (const path of [
-      `${API_BASE}/lighthouse/jobs`,
-      `${API_BASE}/seo-audit/audits`,
-      `${API_BASE}/forms`,
-      `${API_BASE}/maps`,
-      `${API_BASE}/outreach/sequences`,
-      `${API_BASE}/cwv/monitors`,
+      '**/lighthouse/jobs',
+      '**/seo-audit/audits',
+      '**/forms',
+      '**/maps',
+      '**/outreach/sequences',
+      '**/cwv/monitors',
     ]) {
       await page.route(path, async (route) => {
         await route.fulfill({
@@ -293,8 +294,8 @@ test.describe('Store — /dashboard — authenticated', () => {
   });
 
   test('dashboard "Your Tools" section is present when authenticated', async ({ page }) => {
-    // Stub API
-    await page.route(`${API_BASE}/me`, async (route) => {
+    // Stub API using glob patterns
+    await page.route('**/me', async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -307,12 +308,12 @@ test.describe('Store — /dashboard — authenticated', () => {
     });
 
     for (const path of [
-      `${API_BASE}/lighthouse/jobs`,
-      `${API_BASE}/seo-audit/audits`,
-      `${API_BASE}/forms`,
-      `${API_BASE}/maps`,
-      `${API_BASE}/outreach/sequences`,
-      `${API_BASE}/cwv/monitors`,
+      '**/lighthouse/jobs',
+      '**/seo-audit/audits',
+      '**/forms',
+      '**/maps',
+      '**/outreach/sequences',
+      '**/cwv/monitors',
     ]) {
       await page.route(path, async (route) => {
         await route.fulfill({

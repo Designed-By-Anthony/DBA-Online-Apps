@@ -59,7 +59,7 @@ test.describe('Service Area Map Generator — page load', () => {
     await expect(cityList.locator('li').first()).toContainText('20');
   });
 
-  test('output panel shows "1 cities" in the heading', async ({ page }) => {
+  test('output panel shows "1 cities" counter after adding the first city', async ({ page }) => {
     await expect(page.locator('.panel-heading span').first()).toContainText('1 cities');
   });
 

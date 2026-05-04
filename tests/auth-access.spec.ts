@@ -511,6 +511,9 @@ test.describe('API — CORS headers on every response', () => {
     { path: '/lighthouse/jobs', method: 'GET' as const },
     { path: '/forms', method: 'GET' as const },
     { path: '/maps', method: 'GET' as const },
+    { path: '/outreach/sequences', method: 'GET' as const },
+    { path: '/cwv/monitors', method: 'GET' as const },
+    { path: '/seo-audit/audits', method: 'GET' as const },
     { path: '/health', method: 'GET' as const },
   ];
 
