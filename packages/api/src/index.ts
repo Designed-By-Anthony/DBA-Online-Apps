@@ -164,13 +164,16 @@ function buildApp(env: Env) {
           });
         }
 
-        const paymentDomain = env.PAYMENT_DOMAIN || 'https://api.designedbyanthony.com';
+        // PAYMENT_DOMAIN is the website (designedbyanthony.com); the API lives at api.designedbyanthony.com
+        const paymentApiDomain = env.PAYMENT_DOMAIN
+          ? env.PAYMENT_DOMAIN.replace('://', '://api.')
+          : 'https://api.designedbyanthony.com';
         const bearer = request.headers.get('Authorization') ?? '';
 
         let purchases: unknown[] = [];
         let remotePlan: string | null = null;
         try {
-          const meRes = await fetch(`${paymentDomain}/me`, {
+          const meRes = await fetch(`${paymentApiDomain}/me`, {
             headers: { Authorization: bearer },
           });
           if (meRes.ok) {
