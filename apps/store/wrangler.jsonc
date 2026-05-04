@@ -5,5 +5,13 @@
   "routes": [
     { "pattern": "designedbyanthony.online", "custom_domain": true },
     { "pattern": "www.designedbyanthony.online", "custom_domain": true }
-  ]
+  ],
+  "env": {
+    "preview": {
+      "name": "dba-store-preview",
+      "routes": [
+        { "pattern": "preview.designedbyanthony.online", "custom_domain": true }
+      ]
+    }
+  }
 }
