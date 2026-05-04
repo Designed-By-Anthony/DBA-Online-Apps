@@ -83,7 +83,7 @@ export async function resolveAuth(
           try {
             // Link legacy user (email exists, clerk_id NULL) to this Clerk account
             await db
-              .prepare('UPDATE users SET clerk_id = ? WHERE email = ? AND clerk_id IS NULL')
+              .prepare('UPDATE users SET clerk_id = ? WHERE LOWER(email) = ? AND clerk_id IS NULL')
               .bind(sub, email)
               .run();
             const linked = await db

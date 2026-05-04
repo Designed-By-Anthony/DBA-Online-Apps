@@ -194,6 +194,18 @@ function buildApp(env: Env) {
         const plan =
           (planRank[remotePlan ?? ''] ?? 0) > (planRank[auth.plan] ?? 0) ? remotePlan! : auth.plan;
 
+        // Persist upgraded plan so resolveAuth / requirePaidPlan see it on future requests
+        if (plan !== auth.plan) {
+          try {
+            await db
+              .prepare('UPDATE users SET plan = ? WHERE id = ?')
+              .bind(plan, auth.userId)
+              .run();
+          } catch {
+            // best-effort — display still shows correct plan
+          }
+        }
+
         const user = await db
           .prepare('SELECT id, email, plan, created_at FROM users WHERE id = ? LIMIT 1')
           .bind(auth.userId)
