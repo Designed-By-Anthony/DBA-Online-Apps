@@ -88,7 +88,7 @@ export default async function ToolLandingPage({ params }: Props) {
       </header>
 
       <section className="hero">
-        <p className="hero-eyebrow">{price} / month</p>
+        <p className="hero-eyebrow">{price}</p>
         <h1>{label}</h1>
         <p className="hero-sub">{tagline}</p>
         <div className="hero-cta-group">

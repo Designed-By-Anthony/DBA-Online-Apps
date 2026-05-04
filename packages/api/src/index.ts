@@ -1,4 +1,5 @@
 import { Elysia } from 'elysia';
+import { TOOL_CATALOG } from './catalog';
 import {
   appendCwvSnapshot,
   createCwvMonitor,
@@ -147,6 +148,9 @@ function buildApp(env: Env) {
             uptime: performance.now(),
           })),
       )
+
+      // ── Tool catalog (public, cacheable) ─────────────────────────
+      .get('/tools/catalog', () => ({ tools: TOOL_CATALOG }))
 
       // ── Auth Verify (token → plan) ──────────────────────────────
       .get('/auth/verify', async ({ db, request }) => {
