@@ -1,6 +1,8 @@
 'use client';
 
+import { getClerkToken } from '@dba/ui/getClerkToken';
 import { useMemo, useState } from 'react';
+import { addProspects, createSequence } from '../lib/api';
 
 type Prospect = { name: string; company: string; city: string };
 
@@ -73,7 +75,7 @@ export function Workspace({ locked = false }: { locked?: boolean }) {
     window.setTimeout(() => setCopiedKey(''), 1200);
   };
 
-  const downloadAll = () => {
+  const downloadAll = async () => {
     const content = sequences
       .map((seq) => {
         const header = `${seq.prospect.name} | ${seq.prospect.company} | ${seq.prospect.city}`;
@@ -89,6 +91,34 @@ export function Workspace({ locked = false }: { locked?: boolean }) {
     link.download = 'outreach-sequences.txt';
     link.click();
     URL.revokeObjectURL(link.href);
+
+    // Persist sequence + prospects to D1
+    try {
+      const token = await getClerkToken();
+      if (token && sequences.length > 0) {
+        const first = sequences[0];
+        if (first) {
+          const steps = STEP_CONFIG.map((s) => ({
+            subject: `${first.prospect.company} in ${first.prospect.city}: quick idea`,
+            body: `${s.opener}${fillTemplate(template, first.prospect)}`,
+            delayDays: Number.parseInt(s.day.replace('Day ', ''), 10),
+          }));
+          const res = await createSequence(
+            { name: `Outreach – ${first.prospect.company}`, steps },
+            token,
+          );
+          if (prospects.length > 0) {
+            await addProspects(
+              res.id,
+              prospects.map((p) => ({ ...p, email: '' })),
+              token,
+            );
+          }
+        }
+      }
+    } catch {
+      // best-effort persist
+    }
   };
 
   return (

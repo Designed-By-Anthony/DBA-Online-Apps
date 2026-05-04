@@ -29,6 +29,10 @@
       "types": "./src/useAuthState.ts",
       "default": "./src/useAuthState.ts"
     },
+    "./getClerkToken": {
+      "types": "./src/getClerkToken.ts",
+      "default": "./src/getClerkToken.ts"
+    },
     "./styles.css": "./src/styles.css",
     "./tokens": {
       "types": "./src/tokens.ts",

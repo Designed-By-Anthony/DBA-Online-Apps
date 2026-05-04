@@ -10,16 +10,18 @@ const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8787';
 /**
  * Generic fetch wrapper with error handling
  */
-async function fetchApi<T>(path: string, options?: RequestInit): Promise<T> {
+async function fetchApi<T>(path: string, options?: RequestInit & { token?: string }): Promise<T> {
+  const { token, ...rest } = options ?? {};
   const url = `${API_BASE}${path}`;
-  console.log(`[API] ${options?.method || 'GET'} ${url}`);
+  console.log(`[API] ${rest?.method || 'GET'} ${url}`);
+
+  const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+  if (token) headers.Authorization = `Bearer ${token}`;
 
   try {
     const response = await fetch(url, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      ...options,
+      headers,
+      ...rest,
     });
 
     if (!response.ok) {
@@ -51,15 +53,28 @@ export interface AuditResponse {
   estimatedTime: number;
 }
 
-export function startAudit(data: AuditRequest): Promise<AuditResponse> {
+export function startAudit(data: AuditRequest, token?: string): Promise<AuditResponse> {
   return fetchApi('/lighthouse/audit', {
     method: 'POST',
     body: JSON.stringify(data),
+    token,
   });
 }
 
 export function getAuditStatus(jobId: string): Promise<AuditResponse> {
   return fetchApi(`/lighthouse/audit/${jobId}`);
+}
+
+export function completeAudit(
+  jobId: string,
+  results: unknown,
+  token?: string,
+): Promise<{ ok: boolean }> {
+  return fetchApi(`/lighthouse/audit/${jobId}/complete`, {
+    method: 'POST',
+    body: JSON.stringify({ results }),
+    token,
+  });
 }
 
 export function getAuditPdf(jobId: string): Promise<{ pdfUrl: string }> {

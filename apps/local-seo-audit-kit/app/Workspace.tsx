@@ -1,6 +1,8 @@
 'use client';
 
+import { getClerkToken } from '@dba/ui/getClerkToken';
 import { useMemo, useState } from 'react';
+import { saveAudit } from '../lib/api';
 
 type Check = { label: string; pass: boolean; recommendation: string };
 
@@ -21,6 +23,7 @@ export function Workspace({ locked = false }: { locked?: boolean }) {
   const [consistentAddress, setConsistentAddress] = useState(false);
   const [hasReviews, setHasReviews] = useState(false);
   const [audited, setAudited] = useState(false);
+  const [saving, setSaving] = useState(false);
 
   const checks = useMemo<Check[]>(
     () => [
@@ -68,6 +71,28 @@ export function Workspace({ locked = false }: { locked?: boolean }) {
   const scoreState = scoreClass(score);
 
   const recommendations = checks.filter((item) => !item.pass).map((item) => item.recommendation);
+
+  const runAudit = async () => {
+    setAudited(true);
+    setSaving(true);
+    try {
+      const token = await getClerkToken();
+      if (token) {
+        await saveAudit(
+          {
+            businessName: name,
+            location: [address, website].filter(Boolean).join(' · '),
+            results: { score, checks: checks.map((c) => ({ label: c.label, pass: c.pass })) },
+          },
+          token,
+        );
+      }
+    } catch {
+      // persist is best-effort; the UI still shows the audit result
+    } finally {
+      setSaving(false);
+    }
+  };
 
   return (
     <section className="workspace">
@@ -139,8 +164,8 @@ export function Workspace({ locked = false }: { locked?: boolean }) {
                 Unlock to Run Audit
               </a>
             ) : (
-              <button type="button" className="primary-button" onClick={() => setAudited(true)}>
-                Run Audit
+              <button type="button" className="primary-button" onClick={runAudit} disabled={saving}>
+                {saving ? 'Saving...' : 'Run Audit'}
               </button>
             )}
           </div>

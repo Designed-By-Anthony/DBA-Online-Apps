@@ -1,6 +1,8 @@
 'use client';
 
+import { getClerkToken } from '@dba/ui/getClerkToken';
 import { useMemo, useState } from 'react';
+import { saveForm } from '../lib/api';
 
 type FieldType = 'text' | 'email' | 'tel' | 'textarea';
 
@@ -41,6 +43,7 @@ export function Workspace({ locked = false }: { locked?: boolean }) {
   const [fieldType, setFieldType] = useState<FieldType>('text');
   const [required, setRequired] = useState(true);
   const [copied, setCopied] = useState(false);
+  const [savedFormId, setSavedFormId] = useState<string | null>(null);
   const [fields, setFields] = useState<LeadField[]>([
     { id: 'full-name', label: 'Full Name', type: 'text', required: true },
     { id: 'email', label: 'Email', type: 'email', required: true },
@@ -116,6 +119,29 @@ ${fieldsMarkup}
     await navigator.clipboard.writeText(embedCode);
     setCopied(true);
     window.setTimeout(() => setCopied(false), 1200);
+
+    if (!savedFormId) {
+      try {
+        const token = await getClerkToken();
+        if (token) {
+          const res = await saveForm(
+            {
+              name: formName,
+              fields: fields.map((f) => ({
+                id: f.id,
+                label: f.label,
+                type: f.type,
+                required: f.required,
+              })),
+            },
+            token,
+          );
+          setSavedFormId(res.id);
+        }
+      } catch {
+        // best-effort persist
+      }
+    }
   };
 
   return (

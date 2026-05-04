@@ -1,6 +1,8 @@
 'use client';
 
+import { getClerkToken } from '@dba/ui/getClerkToken';
 import { useState } from 'react';
+import { createMonitor, saveSnapshot as persistSnapshot } from '../lib/api';
 
 type Snapshot = {
   id: string;
@@ -51,6 +53,7 @@ export function Workspace({ locked = false }: { locked?: boolean }) {
   const [error, setError] = useState('');
   const [result, setResult] = useState<Snapshot | null>(null);
   const [snapshots, setSnapshots] = useState<Snapshot[]>([]);
+  const [monitorId, setMonitorId] = useState<string | null>(null);
 
   const runTest = async () => {
     const input = url.trim();
@@ -87,6 +90,17 @@ export function Workspace({ locked = false }: { locked?: boolean }) {
       };
 
       setResult(next);
+
+      // Create a monitor in D1 for this URL (once per URL)
+      try {
+        const token = await getClerkToken();
+        if (token && !monitorId) {
+          const mon = await createMonitor(input, token);
+          setMonitorId(mon.id);
+        }
+      } catch {
+        // best-effort
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unable to run test right now.');
     } finally {
@@ -94,9 +108,31 @@ export function Workspace({ locked = false }: { locked?: boolean }) {
     }
   };
 
-  const saveSnapshot = () => {
+  const saveSnapshot = async () => {
     if (!result) return;
     setSnapshots((prev) => [result, ...prev]);
+
+    // Persist snapshot to D1
+    if (monitorId) {
+      try {
+        const token = await getClerkToken();
+        if (token) {
+          await persistSnapshot(
+            monitorId,
+            {
+              date: result.date,
+              url: result.url,
+              lcp: result.lcpMs,
+              cls: result.cls,
+              inp: result.inpMs,
+            },
+            token,
+          );
+        }
+      } catch {
+        // best-effort
+      }
+    }
   };
 
   const perfClass = result ? scoreClass(result.performance) : 'ok';

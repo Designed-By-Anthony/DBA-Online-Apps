@@ -20,6 +20,14 @@ type MeResponse = {
   purchases: Purchase[];
 };
 
+type ActivityItem = {
+  tool: string;
+  icon: string;
+  label: string;
+  date: string;
+  url: string;
+};
+
 const PRODUCT_META: Record<string, { name: string; icon: string; url: string }> = {
   'construction-calculator': {
     name: 'Construction Calculator',
@@ -62,6 +70,7 @@ export function DashboardClient() {
   const { getToken, isSignedIn } = useAuth();
   const { user } = useUser();
   const [data, setData] = useState<MeResponse | null>(null);
+  const [activity, setActivity] = useState<ActivityItem[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -76,12 +85,110 @@ export function DashboardClient() {
       try {
         const token = await getToken();
         if (!token || cancelled) return;
-        const res = await fetch(`${API_BASE}/me`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        if (!res.ok) return;
-        const json = (await res.json()) as MeResponse;
-        if (!cancelled) setData(json);
+        const headers = { Authorization: `Bearer ${token}` };
+
+        const [meRes, ...toolRes] = await Promise.all([
+          fetch(`${API_BASE}/me`, { headers }),
+          fetch(`${API_BASE}/lighthouse/jobs`, { headers }).catch(() => null),
+          fetch(`${API_BASE}/seo-audit/audits`, { headers }).catch(() => null),
+          fetch(`${API_BASE}/forms`, { headers }).catch(() => null),
+          fetch(`${API_BASE}/maps`, { headers }).catch(() => null),
+          fetch(`${API_BASE}/outreach/sequences`, { headers }).catch(() => null),
+          fetch(`${API_BASE}/cwv/monitors`, { headers }).catch(() => null),
+        ]);
+
+        if (meRes.ok && !cancelled) {
+          setData((await meRes.json()) as MeResponse);
+        }
+
+        const items: ActivityItem[] = [];
+        const [lhRes, seoRes, formsRes, mapsRes, outreachRes, cwvRes] = toolRes;
+
+        if (lhRes?.ok) {
+          const d = (await lhRes.json()) as { jobs: { id: string; created_at: string }[] };
+          for (const j of d.jobs ?? []) {
+            items.push({
+              tool: 'lighthouse',
+              icon: '\u{1F680}',
+              label: `Lighthouse scan`,
+              date: j.created_at,
+              url: 'https://lighthouse.designedbyanthony.online',
+            });
+          }
+        }
+        if (seoRes?.ok) {
+          const d = (await seoRes.json()) as {
+            audits: { id: string; businessName: string; createdAt: string }[];
+          };
+          for (const a of d.audits ?? []) {
+            items.push({
+              tool: 'seo-audit',
+              icon: '\u{1F50D}',
+              label: `SEO audit: ${a.businessName}`,
+              date: a.createdAt,
+              url: 'https://seo-audit.designedbyanthony.online',
+            });
+          }
+        }
+        if (formsRes?.ok) {
+          const d = (await formsRes.json()) as {
+            forms: { id: string; name: string; created_at: string }[];
+          };
+          for (const f of d.forms ?? []) {
+            items.push({
+              tool: 'lead-form',
+              icon: '\u{1F4CB}',
+              label: `Form: ${f.name}`,
+              date: f.created_at,
+              url: 'https://lead-form.designedbyanthony.online',
+            });
+          }
+        }
+        if (mapsRes?.ok) {
+          const d = (await mapsRes.json()) as {
+            maps: { id: string; businessName: string; createdAt: string }[];
+          };
+          for (const m of d.maps ?? []) {
+            items.push({
+              tool: 'service-map',
+              icon: '\u{1F4CD}',
+              label: `Map: ${m.businessName}`,
+              date: m.createdAt,
+              url: 'https://service-area.designedbyanthony.online',
+            });
+          }
+        }
+        if (outreachRes?.ok) {
+          const d = (await outreachRes.json()) as {
+            sequences: { id: string; name: string; createdAt: string }[];
+          };
+          for (const s of d.sequences ?? []) {
+            items.push({
+              tool: 'outreach',
+              icon: '\u2709\uFE0F',
+              label: `Sequence: ${s.name}`,
+              date: s.createdAt,
+              url: 'https://outreach.designedbyanthony.online',
+            });
+          }
+        }
+        if (cwvRes?.ok) {
+          const d = (await cwvRes.json()) as {
+            monitors: { id: string; url: string; createdAt: string }[];
+          };
+          for (const m of d.monitors ?? []) {
+            items.push({
+              tool: 'cwv',
+              icon: '\u26A1',
+              label: `Monitor: ${m.url}`,
+              date: m.createdAt,
+              url: 'https://web-vitals.designedbyanthony.online',
+            });
+          }
+        }
+
+        items.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+        if (!cancelled) setActivity(items.slice(0, 20));
       } catch {
         // silent
       } finally {
@@ -271,6 +378,71 @@ export function DashboardClient() {
                 </div>
               )}
             </section>
+
+            {/* Recent Activity */}
+            {activity.length > 0 && (
+              <section style={{ marginBottom: '2.5rem' }}>
+                <h2
+                  style={{
+                    fontSize: '1.1rem',
+                    fontWeight: 600,
+                    color: '#1a2a40',
+                    marginBottom: '1rem',
+                  }}
+                >
+                  Recent Activity
+                </h2>
+                <div
+                  style={{
+                    background: '#fff',
+                    border: '1px solid rgba(26,42,64,0.1)',
+                    borderRadius: '0.75rem',
+                    overflow: 'hidden',
+                  }}
+                >
+                  {activity.map((item, i) => (
+                    <a
+                      key={`${item.tool}-${item.date}-${i}`}
+                      href={item.url}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.75rem',
+                        padding: '0.85rem 1.25rem',
+                        borderBottom:
+                          i < activity.length - 1 ? '1px solid rgba(26,42,64,0.06)' : 'none',
+                        textDecoration: 'none',
+                        color: 'inherit',
+                        transition: 'background 0.15s',
+                      }}
+                    >
+                      <span style={{ fontSize: '1.15rem' }} aria-hidden="true">
+                        {item.icon}
+                      </span>
+                      <span
+                        style={{
+                          flex: 1,
+                          fontSize: '0.85rem',
+                          fontWeight: 500,
+                          color: '#1a2a40',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
+                        }}
+                      >
+                        {item.label}
+                      </span>
+                      <span style={{ fontSize: '0.75rem', color: '#5d6e80', whiteSpace: 'nowrap' }}>
+                        {new Date(item.date).toLocaleDateString('en-US', {
+                          month: 'short',
+                          day: 'numeric',
+                        })}
+                      </span>
+                    </a>
+                  ))}
+                </div>
+              </section>
+            )}
 
             {/* Account info */}
             <section style={{ marginBottom: '2.5rem' }}>

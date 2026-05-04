@@ -1,6 +1,8 @@
 'use client';
 
+import { getClerkToken } from '@dba/ui/getClerkToken';
 import { useState } from 'react';
+import { completeAudit, startAudit } from '../lib/api';
 
 type ScanResult = {
   url: string;
@@ -47,6 +49,7 @@ export function Workspace({ locked = false }: { locked?: boolean }) {
     setError('');
     setResults([]);
     setScanning(true);
+    const collected: ScanResult[] = [];
 
     try {
       for (let index = 0; index < urls.length; index += 1) {
@@ -89,18 +92,28 @@ export function Workspace({ locked = false }: { locked?: boolean }) {
         const data = await response.json();
         const lighthouse = data?.lighthouseResult;
 
-        setResults((prev) => [
-          ...prev,
-          {
-            url,
-            performance: asScore(lighthouse?.categories?.performance?.score),
-            accessibility: asScore(lighthouse?.categories?.accessibility?.score),
-            bestPractices: asScore(lighthouse?.categories?.['best-practices']?.score),
-            seo: asScore(lighthouse?.categories?.seo?.score),
-          },
-        ]);
+        const result: ScanResult = {
+          url,
+          performance: asScore(lighthouse?.categories?.performance?.score),
+          accessibility: asScore(lighthouse?.categories?.accessibility?.score),
+          bestPractices: asScore(lighthouse?.categories?.['best-practices']?.score),
+          seo: asScore(lighthouse?.categories?.seo?.score),
+        };
+        collected.push(result);
+        setResults((prev) => [...prev, result]);
 
         await new Promise((resolve) => window.setTimeout(resolve, 200));
+      }
+
+      // Persist scan results to D1
+      try {
+        const token = await getClerkToken();
+        if (token && urls.length > 0) {
+          const { jobId } = await startAudit({ urls, device: 'mobile' }, token);
+          await completeAudit(jobId, collected, token);
+        }
+      } catch {
+        // best-effort persist
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to run batch scan.');
