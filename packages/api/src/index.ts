@@ -154,6 +154,72 @@ function buildApp(env: Env) {
         return { plan: auth.plan, userId: auth.userId };
       })
 
+      // ── /me — user profile + purchases from .com API ────────────
+      .get('/me', async ({ db, request }) => {
+        const auth = await resolveAuth(db, request, env);
+        if (!auth.userId) {
+          return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+            status: 401,
+            headers: { 'Content-Type': 'application/json' },
+          });
+        }
+
+        // PAYMENT_DOMAIN is the website (designedbyanthony.com); the API lives at api.designedbyanthony.com
+        const paymentApiDomain = env.PAYMENT_DOMAIN
+          ? env.PAYMENT_DOMAIN.replace('://', '://api.')
+          : 'https://api.designedbyanthony.com';
+        const bearer = request.headers.get('Authorization') ?? '';
+
+        let purchases: unknown[] = [];
+        let remotePlan: string | null = null;
+        try {
+          const meRes = await fetch(`${paymentApiDomain}/me`, {
+            headers: { Authorization: bearer },
+          });
+          if (meRes.ok) {
+            const meData = (await meRes.json()) as {
+              ok?: boolean;
+              user?: { plan?: string };
+              purchases?: unknown[];
+            };
+            purchases = meData.purchases ?? [];
+            remotePlan = meData.user?.plan ?? null;
+          }
+        } catch {
+          // .com API unreachable — return local data only
+        }
+
+        // Sync plan from .com if it's higher than local
+        const planRank: Record<string, number> = { free: 0, pro: 1, agency: 2 };
+        const plan =
+          (planRank[remotePlan ?? ''] ?? 0) > (planRank[auth.plan] ?? 0) ? remotePlan! : auth.plan;
+
+        // Persist upgraded plan so resolveAuth / requirePaidPlan see it on future requests
+        if (plan !== auth.plan) {
+          try {
+            await db
+              .prepare('UPDATE users SET plan = ? WHERE id = ?')
+              .bind(plan, auth.userId)
+              .run();
+          } catch {
+            // best-effort — display still shows correct plan
+          }
+        }
+
+        const user = await db
+          .prepare('SELECT id, email, plan, created_at FROM users WHERE id = ? LIMIT 1')
+          .bind(auth.userId)
+          .first<{ id: string; email: string; plan: string; created_at: string }>();
+
+        return {
+          ok: true,
+          user: user
+            ? { id: user.id, email: user.email, plan, created_at: user.created_at }
+            : { id: auth.userId, plan },
+          purchases,
+        };
+      })
+
       // ── R2 File Serving ────────────────────────────────────────
       .get('/files/:key', async ({ storage, params: { key } }) => {
         const obj = await getObject(storage, decodeURIComponent(key));
