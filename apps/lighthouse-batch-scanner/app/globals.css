@@ -496,6 +496,11 @@ select.text-input:focus {
   color: #991b1b;
 }
 
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
 .check-row-result {
   align-items: flex-start;
   display: flex;
