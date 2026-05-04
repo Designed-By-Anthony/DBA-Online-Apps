@@ -1,7 +1,5 @@
 import type { ReactNode } from 'react';
 
-export { Navbar } from './Navbar.js';
-
 // Icons
 export {
   Activity,
@@ -33,6 +31,7 @@ export {
   X,
   Zap,
 } from 'lucide-react';
+export { Navbar } from './Navbar.js';
 export type { DesignTokens } from './tokens.js';
 export { designTokens } from './tokens.js';
 

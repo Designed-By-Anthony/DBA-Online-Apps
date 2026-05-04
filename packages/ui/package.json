@@ -21,6 +21,10 @@
       "types": "./src/Navbar.tsx",
       "default": "./src/Navbar.tsx"
     },
+    "./useAuthState": {
+      "types": "./src/useAuthState.ts",
+      "default": "./src/useAuthState.ts"
+    },
     "./styles.css": "./src/styles.css",
     "./tokens": {
       "types": "./src/tokens.ts",

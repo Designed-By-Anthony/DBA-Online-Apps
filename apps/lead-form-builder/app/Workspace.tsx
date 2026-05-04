@@ -224,7 +224,9 @@ ${fieldsMarkup}
             >
               <p className="muted-note">Paste this anywhere in your website&apos;s HTML.</p>
               <pre className="code-block">
-                {'<form class="dba-form">\n  <label>Full Name</label>\n  <input type="text" />\n  ...\n</form>'}
+                {
+                  '<form class="dba-form">\n  <label>Full Name</label>\n  <input type="text" />\n  ...\n</form>'
+                }
               </pre>
             </div>
             <div

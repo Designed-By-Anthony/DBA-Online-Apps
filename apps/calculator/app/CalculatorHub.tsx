@@ -194,13 +194,7 @@ function CheckInput({
 
 // ─── Results panel ────────────────────────────────────────────────────────────
 
-function Results({
-  results,
-  locked = false,
-}: {
-  results: CalculationResult[];
-  locked?: boolean;
-}) {
+function Results({ results, locked = false }: { results: CalculationResult[]; locked?: boolean }) {
   if (!results.length) return null;
   return (
     <div className="results" style={locked ? { position: 'relative' } : undefined}>
@@ -258,7 +252,13 @@ function Results({
 
 // ─── Calculator forms ─────────────────────────────────────────────────────────
 
-function ConcreteForm({ type, locked = false }: { type: 'slab' | 'footing' | 'forms'; locked?: boolean }) {
+function ConcreteForm({
+  type,
+  locked = false,
+}: {
+  type: 'slab' | 'footing' | 'forms';
+  locked?: boolean;
+}) {
   const [length, setLength] = useState('10');
   const [width, setWidth] = useState('10');
   const [thickness, setThickness] = useState('4');

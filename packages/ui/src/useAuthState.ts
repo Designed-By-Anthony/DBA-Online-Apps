@@ -19,9 +19,7 @@ export function useAuthState(): AuthState {
 
   useEffect(() => {
     const poll = setInterval(() => {
-      const c = (window as unknown as Record<string, unknown>).Clerk as
-        | ClerkWindow
-        | undefined;
+      const c = (window as unknown as Record<string, unknown>).Clerk as ClerkWindow | undefined;
       if (c?.loaded) {
         clearInterval(poll);
         clearTimeout(timeout);

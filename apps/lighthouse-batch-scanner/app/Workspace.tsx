@@ -37,11 +37,7 @@ export function Workspace({ locked = false }: { locked?: boolean }) {
   const [error, setError] = useState('');
 
   const scanAll = async () => {
-    const urls = urlsInput
-      .split('\n')
-      .map(normalizeUrl)
-      .filter(Boolean)
-      .slice(0, 5);
+    const urls = urlsInput.split('\n').map(normalizeUrl).filter(Boolean).slice(0, 5);
 
     if (urls.length === 0) {
       setError('Add at least one URL (e.g. example.com or https://example.com)');
@@ -74,7 +70,7 @@ export function Workspace({ locked = false }: { locked?: boolean }) {
           if (attempt === 2) break;
 
           setProgress('Google API is busy. Retrying...');
-          const delay = Math.pow(2, attempt + 1) * 1000;
+          const delay = 2 ** (attempt + 1) * 1000;
           await new Promise((resolve) => window.setTimeout(resolve, delay));
         }
 
@@ -205,10 +201,18 @@ export function Workspace({ locked = false }: { locked?: boolean }) {
                   {DEMO_ROWS.map((r) => (
                     <tr key={r.url}>
                       <td className="url-cell">{r.url}</td>
-                      <td><span className={scoreClass(r.p)}>{r.p}</span></td>
-                      <td><span className={scoreClass(r.a)}>{r.a}</span></td>
-                      <td><span className={scoreClass(r.bp)}>{r.bp}</span></td>
-                      <td><span className={scoreClass(r.s)}>{r.s}</span></td>
+                      <td>
+                        <span className={scoreClass(r.p)}>{r.p}</span>
+                      </td>
+                      <td>
+                        <span className={scoreClass(r.a)}>{r.a}</span>
+                      </td>
+                      <td>
+                        <span className={scoreClass(r.bp)}>{r.bp}</span>
+                      </td>
+                      <td>
+                        <span className={scoreClass(r.s)}>{r.s}</span>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -256,11 +260,21 @@ export function Workspace({ locked = false }: { locked?: boolean }) {
             <tbody>
               {results.map((row) => (
                 <tr key={row.url}>
-                  <td className="url-cell" title={row.url}>{row.url}</td>
-                  <td><span className={scoreClass(row.performance)}>{row.performance}</span></td>
-                  <td><span className={scoreClass(row.accessibility)}>{row.accessibility}</span></td>
-                  <td><span className={scoreClass(row.bestPractices)}>{row.bestPractices}</span></td>
-                  <td><span className={scoreClass(row.seo)}>{row.seo}</span></td>
+                  <td className="url-cell" title={row.url}>
+                    {row.url}
+                  </td>
+                  <td>
+                    <span className={scoreClass(row.performance)}>{row.performance}</span>
+                  </td>
+                  <td>
+                    <span className={scoreClass(row.accessibility)}>{row.accessibility}</span>
+                  </td>
+                  <td>
+                    <span className={scoreClass(row.bestPractices)}>{row.bestPractices}</span>
+                  </td>
+                  <td>
+                    <span className={scoreClass(row.seo)}>{row.seo}</span>
+                  </td>
                 </tr>
               ))}
             </tbody>

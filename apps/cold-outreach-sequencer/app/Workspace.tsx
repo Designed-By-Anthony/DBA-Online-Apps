@@ -155,7 +155,12 @@ export function Workspace({ locked = false }: { locked?: boolean }) {
         {locked ? (
           <div style={{ position: 'relative', minHeight: 260 }}>
             <div
-              style={{ filter: 'blur(4px)', opacity: 0.35, pointerEvents: 'none', padding: '12px 0' }}
+              style={{
+                filter: 'blur(4px)',
+                opacity: 0.35,
+                pointerEvents: 'none',
+                padding: '12px 0',
+              }}
             >
               {[1, 2].map((i) => (
                 <div key={i} className="sequence-card" style={{ marginBottom: 12 }}>
@@ -163,7 +168,8 @@ export function Workspace({ locked = false }: { locked?: boolean }) {
                   <ul className="list">
                     {STEP_CONFIG.map((step) => (
                       <li key={step.day}>
-                        <span className="step-label">{step.day}</span> Sample email subject · Sample body text here.
+                        <span className="step-label">{step.day}</span> Sample email subject · Sample
+                        body text here.
                       </li>
                     ))}
                   </ul>
@@ -234,7 +240,7 @@ export function Workspace({ locked = false }: { locked?: boolean }) {
               </div>
             )}
 
-            {activeSequence && (
+            {!!activeSequence && (
               <>
                 <p style={{ fontSize: 13, color: 'var(--muted)', margin: '0 0 12px' }}>
                   {activeSequence.prospect.company} · {activeSequence.prospect.city}
@@ -272,7 +278,14 @@ export function Workspace({ locked = false }: { locked?: boolean }) {
                           </button>
                         </div>
                         <strong style={{ fontSize: 13 }}>{step.subject}</strong>
-                        <p style={{ fontSize: 13, color: 'var(--muted)', margin: 0, lineHeight: 1.45 }}>
+                        <p
+                          style={{
+                            fontSize: 13,
+                            color: 'var(--muted)',
+                            margin: 0,
+                            lineHeight: 1.45,
+                          }}
+                        >
                           {step.body}
                         </p>
                       </div>
