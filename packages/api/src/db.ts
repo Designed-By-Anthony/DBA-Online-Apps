@@ -156,6 +156,17 @@ export async function createLighthouseJob(
     .run();
 }
 
+export async function getLighthouseJobsByUser(
+  db: D1Database,
+  userId: string,
+): Promise<DbLighthouseJob[]> {
+  const result = await db
+    .prepare('SELECT * FROM lighthouse_jobs WHERE user_id = ? ORDER BY created_at DESC')
+    .bind(userId)
+    .all<DbLighthouseJob>();
+  return result.results;
+}
+
 export async function getLighthouseJob(
   db: D1Database,
   jobId: string,
@@ -184,6 +195,14 @@ export async function updateLighthouseJob(
 }
 
 // ── SEO Audits ───────────────────────────────────────────────────────────────
+
+export async function getSeoAuditsByUser(db: D1Database, userId: string): Promise<DbSeoAudit[]> {
+  const result = await db
+    .prepare('SELECT * FROM seo_audits WHERE user_id = ? ORDER BY created_at DESC')
+    .bind(userId)
+    .all<DbSeoAudit>();
+  return result.results;
+}
 
 export async function createSeoAudit(
   db: D1Database,
@@ -266,6 +285,17 @@ export async function getFormSubmissions(db: D1Database, formId: string) {
 
 // ── Service Maps ─────────────────────────────────────────────────────────────
 
+export async function getServiceMapsByUser(
+  db: D1Database,
+  userId: string,
+): Promise<DbServiceMap[]> {
+  const result = await db
+    .prepare('SELECT * FROM service_maps WHERE user_id = ? ORDER BY created_at DESC')
+    .bind(userId)
+    .all<DbServiceMap>();
+  return result.results;
+}
+
 export async function createServiceMap(
   db: D1Database,
   map: Pick<DbServiceMap, 'id' | 'user_id' | 'business_name' | 'areas'>,
@@ -298,6 +328,17 @@ export async function setServiceMapEmbedKey(
 }
 
 // ── Outreach Sequences ───────────────────────────────────────────────────────
+
+export async function getOutreachSequencesByUser(
+  db: D1Database,
+  userId: string,
+): Promise<DbOutreachSequence[]> {
+  const result = await db
+    .prepare('SELECT * FROM outreach_sequences WHERE user_id = ? ORDER BY created_at DESC')
+    .bind(userId)
+    .all<DbOutreachSequence>();
+  return result.results;
+}
 
 export async function createOutreachSequence(
   db: D1Database,
@@ -342,6 +383,17 @@ export async function updateSequenceStatus(
 }
 
 // ── CWV Monitors ─────────────────────────────────────────────────────────────
+
+export async function getCwvMonitorsByUser(
+  db: D1Database,
+  userId: string,
+): Promise<DbCwvMonitor[]> {
+  const result = await db
+    .prepare('SELECT * FROM cwv_monitors WHERE user_id = ? ORDER BY created_at DESC')
+    .bind(userId)
+    .all<DbCwvMonitor>();
+  return result.results;
+}
 
 export async function createCwvMonitor(
   db: D1Database,

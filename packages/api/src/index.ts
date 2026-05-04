@@ -9,12 +9,17 @@ import {
   createSeoAudit,
   createServiceMap,
   getCwvMonitor,
+  getCwvMonitorsByUser,
   getFormSubmissions,
   getLeadForm,
   getLeadFormsByUser,
   getLighthouseJob,
+  getLighthouseJobsByUser,
   getOutreachSequence,
+  getOutreachSequencesByUser,
+  getSeoAuditsByUser,
   getServiceMap,
+  getServiceMapsByUser,
   requirePaidPlan,
   resolveAuth,
   saveFormSubmission,
@@ -241,6 +246,13 @@ function buildApp(env: Env) {
       // ─────────────────────────────────────────────────────────
       .group('/lighthouse', (app) =>
         app
+          .get('/jobs', async ({ db, request }) => {
+            const auth = await resolveAuth(db, request, env);
+            const gate = requirePaidPlan(auth);
+            if (gate) return gate;
+            const jobs = await getLighthouseJobsByUser(db, auth.userId!);
+            return { jobs, total: jobs.length };
+          })
           .post('/audit', async ({ db, request, body }) => {
             const auth = await resolveAuth(db, request, env);
             const gate = requirePaidPlan(auth);
@@ -298,6 +310,13 @@ function buildApp(env: Env) {
       // ─────────────────────────────────────────────────────────
       .group('/seo-audit', (app) =>
         app
+          .get('/audits', async ({ db, request }) => {
+            const auth = await resolveAuth(db, request, env);
+            const gate = requirePaidPlan(auth);
+            if (gate) return gate;
+            const audits = await getSeoAuditsByUser(db, auth.userId!);
+            return { audits, total: audits.length };
+          })
           .post('/run', async ({ db, request, body }) => {
             const auth = await resolveAuth(db, request, env);
             const gate = requirePaidPlan(auth);
@@ -412,6 +431,22 @@ function buildApp(env: Env) {
       // ─────────────────────────────────────────────────────────
       .group('/maps', (app) =>
         app
+          .get('/', async ({ db, request }) => {
+            const auth = await resolveAuth(db, request, env);
+            const gate = requirePaidPlan(auth);
+            if (gate) return gate;
+            const maps = await getServiceMapsByUser(db, auth.userId!);
+            return {
+              maps: maps.map((m) => ({
+                id: m.id,
+                businessName: m.business_name,
+                areas: JSON.parse(m.areas),
+                embedUrl: m.embed_key ? publicUrl(m.embed_key, apiBase) : null,
+                createdAt: m.created_at,
+              })),
+              total: maps.length,
+            };
+          })
           .post('/', async ({ db, storage, request, body }) => {
             const auth = await resolveAuth(db, request, env);
             const gate = requirePaidPlan(auth);
@@ -462,6 +497,21 @@ function buildApp(env: Env) {
       // ─────────────────────────────────────────────────────────
       .group('/outreach', (app) =>
         app
+          .get('/sequences', async ({ db, request }) => {
+            const auth = await resolveAuth(db, request, env);
+            const gate = requirePaidPlan(auth);
+            if (gate) return gate;
+            const sequences = await getOutreachSequencesByUser(db, auth.userId!);
+            return {
+              sequences: sequences.map((s) => ({
+                id: s.id,
+                name: s.name,
+                status: s.status,
+                createdAt: s.created_at,
+              })),
+              total: sequences.length,
+            };
+          })
           .post('/sequences', async ({ db, request, body }) => {
             const auth = await resolveAuth(db, request, env);
             const gate = requirePaidPlan(auth);
@@ -503,6 +553,20 @@ function buildApp(env: Env) {
       // ─────────────────────────────────────────────────────────
       .group('/cwv', (app) =>
         app
+          .get('/monitors', async ({ db, request }) => {
+            const auth = await resolveAuth(db, request, env);
+            const gate = requirePaidPlan(auth);
+            if (gate) return gate;
+            const monitors = await getCwvMonitorsByUser(db, auth.userId!);
+            return {
+              monitors: monitors.map((m) => ({
+                id: m.id,
+                url: m.url,
+                createdAt: m.created_at,
+              })),
+              total: monitors.length,
+            };
+          })
           .post('/monitors', async ({ db, request, body }) => {
             const auth = await resolveAuth(db, request, env);
             const gate = requirePaidPlan(auth);

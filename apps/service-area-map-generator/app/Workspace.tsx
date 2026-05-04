@@ -1,6 +1,8 @@
 'use client';
 
+import { getClerkToken } from '@dba/ui/getClerkToken';
 import { useMemo, useState } from 'react';
+import { createMap } from '../lib/api';
 
 type ServiceArea = { id: string; city: string; state: string; radiusMiles: number };
 
@@ -73,10 +75,38 @@ export function Workspace({ locked = false }: { locked?: boolean }) {
     [areas],
   );
 
+  const [savedMapId, setSavedMapId] = useState<string | null>(null);
+  const [savingMap, setSavingMap] = useState(false);
+
   const copyValue = async (value: string, key: string) => {
     await navigator.clipboard.writeText(value);
     setCopiedKey(key);
     window.setTimeout(() => setCopiedKey(''), 1200);
+  };
+
+  const saveMap = async () => {
+    if (areas.length === 0) return;
+    setSavingMap(true);
+    try {
+      const token = await getClerkToken();
+      if (token) {
+        const res = await createMap(
+          {
+            businessName,
+            areas: areas.map((a) => ({
+              city: `${a.city}, ${a.state}`,
+              radiusMiles: a.radiusMiles,
+            })),
+          },
+          token,
+        );
+        setSavedMapId(res.mapId);
+      }
+    } catch {
+      // best-effort
+    } finally {
+      setSavingMap(false);
+    }
   };
 
   return (
@@ -241,6 +271,17 @@ export function Workspace({ locked = false }: { locked?: boolean }) {
                 </button>
               </div>
               <pre className="code-block">{cityListHtml}</pre>
+            </div>
+
+            <div className="action-row">
+              <button
+                type="button"
+                className="primary-button"
+                onClick={saveMap}
+                disabled={savingMap || !!savedMapId}
+              >
+                {savedMapId ? 'Saved to Dashboard' : savingMap ? 'Saving...' : 'Save Map'}
+              </button>
             </div>
           </div>
         ) : (
