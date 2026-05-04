@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from 'react';
 
+const ADMIN_USER_IDS = new Set(['user_3DG3F2Edy2A3fdfbiJFFbEy7cOQ']);
+
 export type AuthState = 'checking' | 'paid' | 'free';
 
 const AUTH_API =
@@ -11,6 +13,7 @@ const AUTH_API =
 
 type ClerkWindow = {
   loaded?: boolean;
+  user?: { id?: string } | null;
   session?: { getToken?: () => Promise<string | null> } | null;
 };
 
@@ -23,6 +26,10 @@ export function useAuthState(): AuthState {
       if (c?.loaded) {
         clearInterval(poll);
         clearTimeout(timeout);
+        if (c.user?.id && ADMIN_USER_IDS.has(c.user.id)) {
+          setAuth('paid');
+          return;
+        }
         if (!c.session?.getToken) {
           setAuth('free');
           return;
