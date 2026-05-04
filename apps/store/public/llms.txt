@@ -1,36 +1,70 @@
-# Designed by Anthony
+# Designed by Anthony — Business Tools Platform
 
-> Seven web tools for contractors and local service businesses in New York State.
-> Built and maintained by one person — Anthony Jones — based in Rome, NY.
+> Purpose-built micro-SaaS tools for local service businesses. Built by ANTHONY. (designedbyanthony.com) and engineered in Rome, NY.
 
-Designed by Anthony (designedbyanthony.online) is a one-person digital
-infrastructure studio. The tools listed below are self-contained web apps that
-solve specific operational problems for small service businesses: job
-estimating, lead capture, local SEO, site speed monitoring, outreach
-automation, service area mapping, and batch performance auditing.
+## Platform Overview
 
-All tools are subscription-based (no contracts, cancel any time). Support goes
-directly to the builder, not a ticket queue.
+designedbyanthony.online is the tool suite companion to designedbyanthony.com. It hosts standalone web applications that help contractors, HVAC technicians, plumbers, electricians, roofers, landscapers, and other service professionals run their businesses more efficiently.
 
-## Tools
+## Available Tools
 
-- Construction Calculator (https://calculator.designedbyanthony.online): Material estimating for concrete, framing, roofing, and more. Accurate job quotes in seconds.
-- Lead Form Builder (https://lead-form.designedbyanthony.online): Build embeddable contact forms that deliver leads to email or CRM. No developer needed.
-- Site Speed Monitor (https://web-vitals.designedbyanthony.online): Weekly Core Web Vitals scans with trend history and regression alerts.
-- SEO Audit Kit (https://seo-audit.designedbyanthony.online): Local SEO checklist graded against Google's ranking signals with a prioritized fix list.
-- Cold Outreach Sequencer (https://outreach.designedbyanthony.online): Upload prospect lists and generate personalized multi-step email sequences.
-- Service Area Map Generator (https://service-area.designedbyanthony.online): Embeddable service-area maps with SEO-structured location data and embed code.
-- Lighthouse Batch Scanner (https://lighthouse.designedbyanthony.online): Batch Lighthouse audits across multiple URLs — performance, accessibility, and SEO in one run.
+### Construction Calculator ($29/mo)
+Estimate material and labor costs in seconds. Concrete bags, lumber, shingles — whatever the job calls for.
+- URL: https://calculator.designedbyanthony.online
+- For: Contractors, estimators, and project managers
 
-## Store
+### Contact Form Builder ($49/mo)
+Build a contact form in minutes and start getting leads from your website. No coding needed.
+- URL: https://lead-form.designedbyanthony.online
+- For: Any service business wanting more website leads
 
-- Tools store and pSEO landing pages: https://designedbyanthony.online
+### Website Speed Test ($29/mo)
+Weekly Core Web Vitals monitoring. Get alerts before slow pages hurt your Google rankings.
+- URL: https://web-vitals.designedbyanthony.online
+- For: Business owners who want to keep their site fast
 
-## Contact
+### Local SEO Checker ($49/mo)
+Run your business through Google's ranking checklist. Get a scored report with clear action items.
+- URL: https://seo-audit.designedbyanthony.online
+- For: Local service businesses that want to rank higher
 
-- Email: anthony@designedbyanthony.online
-- Location: Rome, NY, United States
+### Follow-Up Email Writer ($79/mo)
+Write personalized follow-up emails for every prospect. No CRM needed.
+- URL: https://outreach.designedbyanthony.online
+- For: Sales teams and business owners doing outbound outreach
 
-## Sitemap
+### Service Area Map ($29/mo)
+Show customers and Google exactly which towns you serve with an embeddable map.
+- URL: https://service-area.designedbyanthony.online
+- For: Multi-location or service-area businesses
 
-- https://designedbyanthony.online/sitemap.xml
+### Website Speed Grader ($49/mo)
+Grade your website on speed, SEO, and accessibility. Scan up to five pages at once.
+- URL: https://lighthouse.designedbyanthony.online
+- For: Web developers and business owners auditing their sites
+
+## How It Works
+
+1. Visit the tool you need
+2. Use it for free (limited) or sign up for full access
+3. Data persists to your dashboard at designedbyanthony.online/dashboard
+4. All tools are authenticated via Clerk — one account, all tools
+
+## Pricing
+
+All tools are monthly subscriptions. Cancel any time. Prices range from $29/mo to $79/mo depending on the tool. Founding member pricing is available for early adopters.
+
+## Built By
+
+- **Company**: ANTHONY. (Designed by Anthony)
+- **Founder**: Anthony Jones
+- **Website**: https://designedbyanthony.com
+- **Email**: anthony@designedbyanthony.com
+- **Location**: Rome, NY 13440
+
+## Links
+
+- All Tools: https://designedbyanthony.online
+- Dashboard: https://designedbyanthony.online/dashboard
+- Main Site: https://designedbyanthony.com
+- Contact: https://designedbyanthony.com/contact

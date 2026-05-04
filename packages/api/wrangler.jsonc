@@ -52,6 +52,14 @@
   // SENTRY_DSN             — Sentry error reporting DSN
   // ── Local dev overrides ──────────────────────────────────────
   "env": {
+    "preview": {
+      "name": "dba-api-preview",
+      "routes": [{ "pattern": "preview.api.designedbyanthony.online", "custom_domain": true }],
+      "vars": {
+        "ALLOWED_ORIGINS": "https://preview.designedbyanthony.online,https://designedbyanthony.com,https://preview.designedbyanthony.com",
+        "ENVIRONMENT": "preview"
+      }
+    },
     "development": {
       "vars": {
         "ALLOWED_ORIGINS": "http://localhost:3200,http://localhost:3201,http://localhost:3202,http://localhost:3203,http://localhost:3204,http://localhost:3205,http://localhost:3206",

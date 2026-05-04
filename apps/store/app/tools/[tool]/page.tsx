@@ -57,20 +57,24 @@ export default async function ToolLandingPage({ params }: Props) {
 
   const jsonLd = {
     '@context': 'https://schema.org',
-    '@type': 'SoftwareApplication',
+    '@type': ['SoftwareApplication', 'WebApplication'],
     name: label,
     description: tagline,
     applicationCategory: 'BusinessApplication',
+    operatingSystem: 'Web',
+    url: url,
     offers: {
       '@type': 'Offer',
       price: price.replace(/[^0-9.]/g, ''),
       priceCurrency: 'USD',
       billingIncrement: 'P1M',
+      availability: 'https://schema.org/InStock',
+      url: `https://designedbyanthony.online/tools/${slug}`,
     },
     provider: {
-      '@type': 'Person',
-      name: 'Anthony Jones',
-      url: 'https://designedbyanthony.online',
+      '@type': 'Organization',
+      name: 'ANTHONY.',
+      url: 'https://designedbyanthony.com',
     },
   };
 
@@ -87,7 +91,7 @@ export default async function ToolLandingPage({ params }: Props) {
         </a>
       </header>
 
-      <section className="hero">
+      <section className="hero" aria-label={`${label} overview`}>
         <p className="hero-eyebrow">{price}</p>
         <h1>{label}</h1>
         <p className="hero-sub">{tagline}</p>
@@ -101,7 +105,7 @@ export default async function ToolLandingPage({ params }: Props) {
         </div>
       </section>
 
-      <section className="grid-section">
+      <section className="grid-section" aria-label={`${label} details and pricing`}>
         <div className="detail-two-col">
           <div className="detail-block">
             <p className="section-label">What it does</p>
