@@ -20,7 +20,7 @@ async function apiFetch<T>(path: string, options?: RequestInit & { token?: strin
 export interface FormField {
   id: string;
   label: string;
-  type: 'text' | 'email' | 'phone' | 'textarea' | 'select';
+  type: string;
   required: boolean;
 }
 
