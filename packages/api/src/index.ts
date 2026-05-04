@@ -187,7 +187,9 @@ function buildApp(env: Env) {
         }
 
         // Sync plan from .com if it's higher than local
-        const plan = remotePlan && remotePlan !== 'free' ? remotePlan : auth.plan;
+        const planRank: Record<string, number> = { free: 0, pro: 1, agency: 2 };
+        const plan =
+          (planRank[remotePlan ?? ''] ?? 0) > (planRank[auth.plan] ?? 0) ? remotePlan! : auth.plan;
 
         const user = await db
           .prepare('SELECT id, email, plan, created_at FROM users WHERE id = ? LIMIT 1')

@@ -161,7 +161,7 @@ export function DashboardClient() {
               >
                 Your Tools
               </h2>
-              {data?.purchases && data.purchases.length > 0 ? (
+              {data?.purchases && data.purchases.filter((p) => p.status === 'active').length > 0 ? (
                 <div
                   style={{
                     display: 'grid',
@@ -283,7 +283,7 @@ export function DashboardClient() {
                       {data?.user?.created_at
                         ? new Date(
                             typeof data.user.created_at === 'number'
-                              ? data.user.created_at
+                              ? data.user.created_at * 1000
                               : data.user.created_at,
                           ).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
                         : '\u2014'}
