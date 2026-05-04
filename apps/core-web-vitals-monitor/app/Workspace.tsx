@@ -63,11 +63,21 @@ export function Workspace({ locked = false }: { locked?: boolean }) {
     setError('');
 
     try {
-      const response = await fetch(
-        `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encodeURIComponent(
-          input,
-        )}&strategy=mobile&category=performance&category=accessibility&category=best-practices&category=seo`,
-      );
+      const token = await getClerkToken();
+      const proxyBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8787';
+
+      const response = await fetch(`${proxyBase}/external/pagespeed`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify({
+          url: input,
+          strategy: 'mobile',
+          categories: ['performance', 'accessibility', 'best-practices', 'seo'],
+        }),
+      });
 
       if (!response.ok) {
         throw new Error(`PSI request failed with status ${response.status}`);
@@ -93,7 +103,6 @@ export function Workspace({ locked = false }: { locked?: boolean }) {
 
       // Create a monitor in D1 for this URL (once per URL)
       try {
-        const token = await getClerkToken();
         if (token && !monitorId) {
           const mon = await createMonitor(input, token);
           setMonitorId(mon.id);

@@ -52,11 +52,12 @@ export function Workspace({ locked = false }: { locked?: boolean }) {
     const collected: ScanResult[] = [];
 
     try {
+      const token = await getClerkToken();
+      const proxyBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8787';
+
       for (let index = 0; index < urls.length; index += 1) {
         const url = urls[index];
         if (!url) continue;
-
-        const apiUrl = `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encodeURIComponent(url)}&strategy=mobile&category=performance&category=accessibility&category=best-practices&category=seo`;
 
         let response: Response | null = null;
 
@@ -64,7 +65,18 @@ export function Workspace({ locked = false }: { locked?: boolean }) {
           setProgress(`Testing ${index + 1} of ${urls.length}...`);
 
           try {
-            response = await fetch(apiUrl);
+            response = await fetch(`${proxyBase}/external/pagespeed`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                ...(token ? { Authorization: `Bearer ${token}` } : {}),
+              },
+              body: JSON.stringify({
+                url,
+                strategy: 'mobile',
+                categories: ['performance', 'accessibility', 'best-practices', 'seo'],
+              }),
+            });
           } catch {
             throw new Error(`Network error scanning ${url}`);
           }
@@ -72,7 +84,7 @@ export function Workspace({ locked = false }: { locked?: boolean }) {
           if (response.status !== 429) break;
           if (attempt === 2) break;
 
-          setProgress('Google API is busy. Retrying...');
+          setProgress('API is busy. Retrying...');
           const delay = 2 ** (attempt + 1) * 1000;
           await new Promise((resolve) => window.setTimeout(resolve, delay));
         }
@@ -82,7 +94,7 @@ export function Workspace({ locked = false }: { locked?: boolean }) {
         }
 
         if (response.status === 429) {
-          throw new Error('Google API is still busy. Please try again in a minute.');
+          throw new Error('API is still busy. Please try again in a minute.');
         }
 
         if (!response.ok) {
@@ -107,7 +119,6 @@ export function Workspace({ locked = false }: { locked?: boolean }) {
 
       // Persist scan results to D1
       try {
-        const token = await getClerkToken();
         if (token && urls.length > 0) {
           const { jobId } = await startAudit({ urls, device: 'mobile' }, token);
           await completeAudit(jobId, collected, token);
