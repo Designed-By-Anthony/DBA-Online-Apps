@@ -20,13 +20,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Navbar />
         <ClerkClientProvider
           publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
           domain={process.env.NEXT_PUBLIC_CLERK_DOMAIN}
           signInUrl={process.env.NEXT_PUBLIC_CLERK_SIGN_IN_URL}
           signUpUrl={process.env.NEXT_PUBLIC_CLERK_SIGN_UP_URL}
         >
+          <Navbar />
           {children}
         </ClerkClientProvider>
       </body>
