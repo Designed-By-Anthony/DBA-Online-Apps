@@ -21,7 +21,8 @@
     "@biomejs/biome": "^2.4.14",
     "@dba/config-biome": "workspace:*",
     "turbo": "^2.9.8",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "wrangler": "^4.87.0"
   },
   "engines": {
     "node": ">=22"
