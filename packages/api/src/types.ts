@@ -108,3 +108,9 @@ export interface AuthContext {
   plan: Plan;
   apiKey: string | null;
 }
+
+export interface AuthenticatedContext {
+  userId: string;
+  plan: Plan;
+  apiKey: string | null;
+}

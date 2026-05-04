@@ -205,8 +205,8 @@ export default async function PseoPage({ params }: Props) {
       <section className="grid-section" style={{ marginTop: 0 }}>
         <p className="section-label">Frequently asked questions</p>
         <div className="faq-list">
-          {p.faqs.map((faq, i) => (
-            <div key={i} className="faq-item">
+          {p.faqs.map((faq) => (
+            <div key={faq.q} className="faq-item">
               <p className="faq-q">{faq.q}</p>
               <p className="faq-a">{faq.a}</p>
             </div>

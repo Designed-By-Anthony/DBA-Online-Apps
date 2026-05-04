@@ -134,6 +134,11 @@ export function requirePaidPlan(auth: AuthContext): Response | null {
   );
 }
 
+export function getVerifiedUserId(auth: AuthContext): string {
+  if (!auth.userId) throw new Error('Expected authenticated user');
+  return auth.userId;
+}
+
 // ── Lighthouse Jobs ──────────────────────────────────────────────────────────
 
 export async function createLighthouseJob(

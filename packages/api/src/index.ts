@@ -21,6 +21,7 @@ import {
   getSeoAuditsByUser,
   getServiceMap,
   getServiceMapsByUser,
+  getVerifiedUserId,
   requirePaidPlan,
   resolveAuth,
   saveFormSubmission,
@@ -92,10 +93,11 @@ function buildEmbedHtml(
 
 function buildApp(env: Env) {
   const resolveOrigin = buildResolveOrigin(env.ALLOWED_ORIGINS);
-  const apiBase =
-    env.ENVIRONMENT === 'production'
-      ? 'https://api.designedbyanthony.online'
-      : 'http://localhost:8787';
+  const apiBaseMap: Record<string, string> = {
+    production: 'https://api.designedbyanthony.online',
+    preview: 'https://preview.api.designedbyanthony.online',
+  };
+  const apiBase = apiBaseMap[env.ENVIRONMENT] ?? 'http://localhost:8787';
 
   return (
     new Elysia({ aot: false })
@@ -202,7 +204,9 @@ function buildApp(env: Env) {
         // Sync plan from .com if it's higher than local
         const planRank: Record<string, number> = { free: 0, pro: 1, agency: 2 };
         const plan =
-          (planRank[remotePlan ?? ''] ?? 0) > (planRank[auth.plan] ?? 0) ? remotePlan! : auth.plan;
+          (planRank[remotePlan ?? ''] ?? 0) > (planRank[auth.plan] ?? 0) && remotePlan
+            ? remotePlan
+            : auth.plan;
 
         // Persist upgraded plan so resolveAuth / requirePaidPlan see it on future requests
         if (plan !== auth.plan) {
@@ -251,7 +255,7 @@ function buildApp(env: Env) {
             const auth = await resolveAuth(db, request, env);
             const gate = requirePaidPlan(auth);
             if (gate) return gate;
-            const jobs = await getLighthouseJobsByUser(db, auth.userId!);
+            const jobs = await getLighthouseJobsByUser(db, getVerifiedUserId(auth));
             return { jobs, total: jobs.length };
           })
           .post('/audit', async ({ db, request, body }) => {
@@ -315,7 +319,7 @@ function buildApp(env: Env) {
             const auth = await resolveAuth(db, request, env);
             const gate = requirePaidPlan(auth);
             if (gate) return gate;
-            const audits = await getSeoAuditsByUser(db, auth.userId!);
+            const audits = await getSeoAuditsByUser(db, getVerifiedUserId(auth));
             return { audits, total: audits.length };
           })
           .post('/run', async ({ db, request, body }) => {
@@ -382,7 +386,7 @@ function buildApp(env: Env) {
             const auth = await resolveAuth(db, request, env);
             const gate = requirePaidPlan(auth);
             if (gate) return gate;
-            const forms = await getLeadFormsByUser(db, auth.userId!);
+            const forms = await getLeadFormsByUser(db, getVerifiedUserId(auth));
             return { forms, total: forms.length };
           })
           .post('/', async ({ db, request, body }) => {
@@ -436,7 +440,7 @@ function buildApp(env: Env) {
             const auth = await resolveAuth(db, request, env);
             const gate = requirePaidPlan(auth);
             if (gate) return gate;
-            const maps = await getServiceMapsByUser(db, auth.userId!);
+            const maps = await getServiceMapsByUser(db, getVerifiedUserId(auth));
             return {
               maps: maps.map((m) => ({
                 id: m.id,
@@ -502,7 +506,7 @@ function buildApp(env: Env) {
             const auth = await resolveAuth(db, request, env);
             const gate = requirePaidPlan(auth);
             if (gate) return gate;
-            const sequences = await getOutreachSequencesByUser(db, auth.userId!);
+            const sequences = await getOutreachSequencesByUser(db, getVerifiedUserId(auth));
             return {
               sequences: sequences.map((s) => ({
                 id: s.id,
@@ -558,7 +562,7 @@ function buildApp(env: Env) {
             const auth = await resolveAuth(db, request, env);
             const gate = requirePaidPlan(auth);
             if (gate) return gate;
-            const monitors = await getCwvMonitorsByUser(db, auth.userId!);
+            const monitors = await getCwvMonitorsByUser(db, getVerifiedUserId(auth));
             return {
               monitors: monitors.map((m) => ({
                 id: m.id,
