@@ -1,7 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { ADMIN_USER_IDS } from './constants.js';
+
+const ADMIN_USER_IDS = new Set(['user_3DG3F2Edy2A3fdfbiJFFbEy7cOQ']);
 
 export type AuthState = 'checking' | 'paid' | 'free';
 

@@ -1,7 +1,8 @@
 'use client';
 
 import { type ReactNode, useCallback, useEffect, useState } from 'react';
-import { ADMIN_USER_IDS } from './constants.js';
+
+const ADMIN_USER_IDS = new Set(['user_3DG3F2Edy2A3fdfbiJFFbEy7cOQ']);
 
 const PURCHASE_URL = 'https://designedbyanthony.online/shop';
 
