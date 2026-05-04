@@ -5,8 +5,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev --port 3207",
-    "build": "next build",
-    "pages:build": "next build",
+    "build": "node ../../scripts/require-clerk-build-env.mjs && next build",
+    "pages:build": "node ../../scripts/require-clerk-build-env.mjs && next build",
     "pages:deploy": "bunx wrangler deploy",
     "lint": "biome check .",
     "check-types": "next typegen && tsc --noEmit"
