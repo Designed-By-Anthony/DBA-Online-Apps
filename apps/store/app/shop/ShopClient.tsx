@@ -86,7 +86,7 @@ export function ShopClient({ tools }: { tools: Tool[] }) {
 
       // Fallback: redirect to .com /tools with selected tools in query
       const params = new URLSearchParams();
-      selected.forEach((slug) => params.append('tool', slug));
+      for (const slug of selected) params.append('tool', slug);
       window.location.href = `https://designedbyanthony.com/tools?${params.toString()}`;
     } catch {
       // Fallback to .com tools page
@@ -100,7 +100,7 @@ export function ShopClient({ tools }: { tools: Tool[] }) {
     .filter((t) => selected.has(t.slug))
     .reduce((sum, t) => {
       const num = parseInt(t.price.replace(/[^0-9]/g, ''), 10);
-      return sum + (isNaN(num) ? 0 : num);
+      return sum + (Number.isNaN(num) ? 0 : num);
     }, 0);
 
   return (
@@ -145,7 +145,14 @@ export function ShopClient({ tools }: { tools: Tool[] }) {
       ) : null}
 
       <section className="grid-section">
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: '24px',
+          }}
+        >
           <p className="section-label" style={{ margin: 0 }}>
             Select tools
           </p>

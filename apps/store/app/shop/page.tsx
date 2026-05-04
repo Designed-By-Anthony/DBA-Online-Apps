@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { TOOL_SLUGS, TOOL_LABELS, TOOL_PRICES, TOOL_TAGLINES, type ToolSlug } from '../../lib/pseo';
+import { TOOL_LABELS, TOOL_PRICES, TOOL_SLUGS, TOOL_TAGLINES, type ToolSlug } from '../../lib/pseo';
 import { ShopClient } from './ShopClient';
 
 export const metadata: Metadata = {
