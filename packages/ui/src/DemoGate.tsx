@@ -2,7 +2,7 @@
 
 import { type ReactNode, useCallback, useEffect, useState } from 'react';
 
-const PURCHASE_URL = 'https://designedbyanthony.com/tools';
+const PURCHASE_URL = 'https://designedbyanthony.online/shop';
 
 export interface DemoGateProps {
   appName: string;
@@ -210,7 +210,7 @@ export function DemoGate({ appName, tagline, demoContent, children }: DemoGatePr
             Try the Demo
           </button>
           <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--muted, #5d6e80)' }}>
-            Free &middot; No sign-up &middot; 30-second preview
+            No sign-up required &middot; 30-second preview
           </p>
         </div>
       ) : null}

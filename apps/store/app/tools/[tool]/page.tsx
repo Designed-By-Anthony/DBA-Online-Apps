@@ -88,7 +88,7 @@ export default async function ToolLandingPage({ params }: Props) {
       </header>
 
       <section className="hero">
-        <p className="hero-eyebrow">Free tool</p>
+        <p className="hero-eyebrow">{price} / month</p>
         <h1>{label}</h1>
         <p className="hero-sub">{tagline}</p>
         <div className="hero-cta-group">
@@ -159,7 +159,7 @@ export default async function ToolLandingPage({ params }: Props) {
               <a href="/.well-known/security.txt">Security</a>
             </li>
             <li>
-              <a href="mailto:anthony@designedbyanthony.online">Contact</a>
+              <a href="https://designedbyanthony.com/contact">Contact</a>
             </li>
           </ul>
           <p className="footer-copy">© {year} Designed by Anthony · Rome, NY</p>

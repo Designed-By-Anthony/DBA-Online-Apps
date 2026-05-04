@@ -242,7 +242,7 @@ export default async function PseoPage({ params }: Props) {
               </a>
             </li>
             <li>
-              <a href="mailto:anthony@designedbyanthony.online">Contact</a>
+              <a href="https://designedbyanthony.com/contact">Contact</a>
             </li>
           </ul>
           <p className="footer-copy">© {year} Designed by Anthony · Rome, NY</p>

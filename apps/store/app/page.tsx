@@ -5,15 +5,15 @@ export default function StorePage() {
   return (
     <>
       <header className="topbar">
-        <a href="mailto:anthony@designedbyanthony.online" className="topbar-link">
+        <a href="https://designedbyanthony.com/contact" className="topbar-link">
           Get in touch
         </a>
       </header>
 
       <section className="hero">
-        <p className="hero-eyebrow">7 free tools for small businesses</p>
+        <p className="hero-eyebrow">7 tools for small businesses</p>
         <h1>
-          Free Tools to Run Your Business.
+          Tools to Run Your Business.
           <br />
           <em>Not a Spreadsheet.</em>
         </h1>
@@ -25,7 +25,7 @@ export default function StorePage() {
           <a href="#tools" className="btn-primary">
             See all tools →
           </a>
-          <a href="mailto:anthony@designedbyanthony.online" className="btn-ghost">
+          <a href="https://designedbyanthony.com/contact" className="btn-ghost">
             Talk to Anthony
           </a>
         </div>
@@ -53,7 +53,7 @@ export default function StorePage() {
           No call center. No ticket queue. Every tool is designed, built, and supported by Anthony
           from Rome, NY — and he picks up the phone.
         </p>
-        <a href="mailto:anthony@designedbyanthony.online" className="btn-primary">
+        <a href="https://designedbyanthony.com/contact" className="btn-primary">
           Get in touch →
         </a>
       </div>
@@ -80,7 +80,7 @@ export default function StorePage() {
               <a href="/llms.txt">LLMs</a>
             </li>
             <li>
-              <a href="mailto:anthony@designedbyanthony.online">Contact</a>
+              <a href="https://designedbyanthony.com/contact">Contact</a>
             </li>
           </ul>
           <p className="footer-copy">© {year} Designed by Anthony · Rome, NY</p>
