@@ -15,11 +15,15 @@
     "deploy:apps": "turbo run pages:deploy",
     "deploy:api": "bun run --cwd packages/api deploy",
     "verify:apps": "turbo run build check-types lint --filter=@dba/*",
-    "deploy": "bun run build && bun run check-types && bun run deploy:api"
+    "deploy": "bun run build && bun run check-types && bun run deploy:api",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:report": "playwright show-report"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.14",
     "@dba/config-biome": "workspace:*",
+    "@playwright/test": "^1.52.0",
     "turbo": "^2.9.8",
     "typescript": "^6.0.3",
     "wrangler": "^4.87.0"
