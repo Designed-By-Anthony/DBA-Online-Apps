@@ -1,23 +1,34 @@
+import Image from 'next/image';
 import { TOOL_LABELS, TOOL_PRICES, TOOL_SLUGS, TOOL_TAGLINES } from '../lib/pseo';
 
 export default function StorePage() {
   const year = new Date().getFullYear();
   return (
     <>
-      <header className="topbar" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1rem 2rem' }}>
+      <header
+        className="topbar"
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: '1rem 2rem',
+        }}
+      >
         {/* THE LOGO */}
         <a href="/" style={{ display: 'flex', alignItems: 'center' }}>
-          <img 
-            src="/tools logo.png" 
-            alt="Tools by Anthony" 
-            style={{ height: '24px', width: 'auto', objectFit: 'contain' }} 
+          <Image
+            src="/tools logo.png"
+            alt="Tools by Anthony"
+            height={24}
+            width={120}
+            style={{ height: '24px', width: 'auto', objectFit: 'contain' }}
           />
         </a>
 
         {/* THE CTA BUTTON */}
-        <a 
-          href="https://designedbyanthony.com/contact" 
-          className="btn-ghost" 
+        <a
+          href="https://designedbyanthony.com/contact"
+          className="btn-ghost"
           style={{ padding: '0.4rem 1.2rem', fontSize: '0.85rem', borderRadius: '99px' }}
         >
           Get in touch

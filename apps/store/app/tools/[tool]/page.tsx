@@ -82,6 +82,7 @@ export default async function ToolLandingPage({ params }: Props) {
     <>
       <script
         type="application/ld+json"
+        // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD structured data – no user input
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
