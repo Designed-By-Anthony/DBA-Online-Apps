@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import { AuthNav } from '@dba/ui/AuthNav';
 import { ClerkClientProvider } from '@dba/ui/ClerkClientProvider';
 import { Navbar } from '@dba/ui/Navbar';
+import { AuthNavClient } from './AuthNavClient';
 
 export const metadata: Metadata = {
   title: 'Business Tools — Calculators, SEO Audits, Lead Forms & More',
@@ -27,7 +27,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           signUpUrl={process.env.NEXT_PUBLIC_CLERK_SIGN_UP_URL}
         >
           <Navbar>
-            <AuthNav />
+            <AuthNavClient />
           </Navbar>
           {children}
         </ClerkClientProvider>
