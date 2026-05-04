@@ -399,6 +399,17 @@ export async function updateSequenceProspects(
     .run();
 }
 
+export async function updateSequenceStatus(
+  db: D1Database,
+  id: string,
+  status: DbOutreachSequence['status'],
+): Promise<void> {
+  await db
+    .prepare('UPDATE outreach_sequences SET status = ? WHERE id = ?')
+    .bind(status, id)
+    .run();
+}
+
 // ── CWV Monitors ─────────────────────────────────────────────────────────────
 
 export async function getCwvMonitor(
@@ -410,6 +421,29 @@ export async function getCwvMonitor(
     .bind(monitorId)
     .first<DbCwvMonitor>();
   return result ?? null;
+}
+
+export async function getCwvMonitorsByUser(
+  db: D1Database,
+  userId: string,
+): Promise<DbCwvMonitor[]> {
+  const result = await db
+    .prepare('SELECT * FROM cwv_monitors WHERE user_id = ? ORDER BY created_at DESC')
+    .bind(userId)
+    .all<DbCwvMonitor>();
+  return result.results;
+}
+
+export async function createCwvMonitor(
+  db: D1Database,
+  monitor: Pick<DbCwvMonitor, 'id' | 'user_id' | 'url'>,
+): Promise<void> {
+  await db
+    .prepare(
+      'INSERT INTO cwv_monitors (id, user_id, url, snapshots, created_at) VALUES (?, ?, ?, ?, ?)',
+    )
+    .bind(monitor.id, monitor.user_id, monitor.url, '[]', new Date().toISOString())
+    .run();
 }
 
 export async function appendCwvSnapshot(
