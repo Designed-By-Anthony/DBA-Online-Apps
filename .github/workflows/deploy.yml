@@ -78,25 +78,3 @@ jobs:
         run: bunx turbo run build check-types lint --filter=@dba/${{ matrix.app }}
         env:
           NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY }}
-      - name: Resolve deploy output directory
-        if: matrix.app != 'store'
-        id: deploy_output
-        working-directory: apps/${{ matrix.app }}
-        run: |
-          if [ -d "./dist" ]; then
-            echo "path=./dist" >> "$GITHUB_OUTPUT"
-          elif [ -d "./out" ]; then
-            echo "path=./out" >> "$GITHUB_OUTPUT"
-          elif [ -d "./.next" ]; then
-            echo "path=./.next" >> "$GITHUB_OUTPUT"
-          else
-            echo "No deploy output directory found for ${{ matrix.app }}. Expected one of: ./dist, ./out, ./.next"
-            exit 1
-          fi
-      - name: Deploy to Cloudflare Pages
-        if: matrix.app != 'store'
-        run: bunx wrangler pages deploy ${{ steps.deploy_output.outputs.path }} --project-name=${{ matrix.app }}
-        working-directory: apps/${{ matrix.app }}
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
