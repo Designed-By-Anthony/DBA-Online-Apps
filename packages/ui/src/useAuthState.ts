@@ -4,7 +4,10 @@ import { useEffect, useState } from 'react';
 
 export type AuthState = 'checking' | 'paid' | 'free';
 
-const AUTH_API = 'https://api.designedbyanthony.online';
+const AUTH_API =
+  process.env.NEXT_PUBLIC_AUTH_API_URL ??
+  process.env.NEXT_PUBLIC_API_URL ??
+  'https://api.designedbyanthony.com';
 
 type ClerkWindow = {
   loaded?: boolean;

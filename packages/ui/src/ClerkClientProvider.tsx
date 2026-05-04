@@ -18,9 +18,9 @@ export interface ClerkClientProviderProps {
 export function ClerkClientProvider({
   children,
   publishableKey,
-  domain = 'designedbyanthony.online',
-  signInUrl = 'https://designedbyanthony.com/sign-in',
-  signUpUrl = 'https://designedbyanthony.com/sign-up',
+  domain = process.env.NEXT_PUBLIC_CLERK_DOMAIN ?? 'designedbyanthony.online',
+  signInUrl = process.env.NEXT_PUBLIC_CLERK_SIGN_IN_URL ?? 'https://designedbyanthony.com/sign-in',
+  signUpUrl = process.env.NEXT_PUBLIC_CLERK_SIGN_UP_URL ?? 'https://designedbyanthony.com/sign-up',
 }: ClerkClientProviderProps) {
   if (!publishableKey) return <>{children}</>;
 

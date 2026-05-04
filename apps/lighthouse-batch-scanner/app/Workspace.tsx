@@ -29,16 +29,6 @@ function normalizeUrl(raw: string): string {
   return `https://${trimmed}`;
 }
 
-async function fetchWithRetry(url: string, maxRetries = 3): Promise<Response> {
-  for (let attempt = 0; attempt < maxRetries; attempt++) {
-    const res = await fetch(url);
-    if (res.status !== 429) return res;
-    const delay = Math.pow(2, attempt + 1) * 1000;
-    await new Promise((resolve) => window.setTimeout(resolve, delay));
-  }
-  return fetch(url);
-}
-
 export function Workspace({ locked = false }: { locked?: boolean }) {
   const [urlsInput, setUrlsInput] = useState('');
   const [results, setResults] = useState<ScanResult[]>([]);
@@ -69,17 +59,31 @@ export function Workspace({ locked = false }: { locked?: boolean }) {
 
         const apiUrl = `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encodeURIComponent(url)}&strategy=mobile&category=performance&category=accessibility&category=best-practices&category=seo`;
 
-        setProgress(`Testing ${index + 1} of ${urls.length}... (checking API)`);
+        let response: Response | null = null;
 
-        let response: Response;
-        try {
-          response = await fetchWithRetry(apiUrl);
-        } catch {
+        for (let attempt = 0; attempt < 3; attempt += 1) {
+          setProgress(`Testing ${index + 1} of ${urls.length}...`);
+
+          try {
+            response = await fetch(apiUrl);
+          } catch {
+            throw new Error(`Network error scanning ${url}`);
+          }
+
+          if (response.status !== 429) break;
+          if (attempt === 2) break;
+
+          setProgress('Google API is busy. Retrying...');
+          const delay = Math.pow(2, attempt + 1) * 1000;
+          await new Promise((resolve) => window.setTimeout(resolve, delay));
+        }
+
+        if (!response) {
           throw new Error(`Network error scanning ${url}`);
         }
 
         if (response.status === 429) {
-          throw new Error('Google API rate limit reached. Please wait 60 seconds and try again.');
+          throw new Error('Google API is still busy. Please try again in a minute.');
         }
 
         if (!response.ok) {

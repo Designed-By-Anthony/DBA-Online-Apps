@@ -4,13 +4,15 @@ import { useMemo, useState } from 'react';
 
 type Check = { label: string; pass: boolean; recommendation: string };
 
+const PURCHASE_URL = 'https://designedbyanthony.com/tools';
+
 function scoreClass(score: number): 'good' | 'ok' | 'poor' {
   if (score >= 70) return 'good';
   if (score >= 40) return 'ok';
   return 'poor';
 }
 
-export function Workspace() {
+export function Workspace({ locked = false }: { locked?: boolean }) {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [address, setAddress] = useState('');
@@ -128,9 +130,19 @@ export function Workspace() {
           </label>
 
           <div className="action-row">
-            <button type="button" className="primary-button" onClick={() => setAudited(true)}>
-              Run Audit
-            </button>
+            {locked ? (
+              <a
+                href={PURCHASE_URL}
+                className="primary-button"
+                style={{ textDecoration: 'none', display: 'inline-block' }}
+              >
+                Unlock to Run Audit
+              </a>
+            ) : (
+              <button type="button" className="primary-button" onClick={() => setAudited(true)}>
+                Run Audit
+              </button>
+            )}
           </div>
         </div>
       </article>
@@ -141,7 +153,55 @@ export function Workspace() {
           <span>{audited ? `${score}/100` : 'Waiting for audit'}</span>
         </div>
 
-        {audited ? (
+        {locked ? (
+          <div style={{ position: 'relative', minHeight: 260 }}>
+            <div
+              style={{ filter: 'blur(4px)', opacity: 0.35, pointerEvents: 'none', marginTop: 12 }}
+            >
+              <div className="result-stack">
+                <div className="score-circle score-good">
+                  82
+                  <small>SCORE</small>
+                </div>
+                <div>
+                  {['Name', 'Phone', 'GBP', 'Reviews'].map((item) => (
+                    <div className="check-row-result" key={item}>
+                      <span className="check-icon">✅</span>
+                      <span>{item} looks strong</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+            <div
+              style={{
+                position: 'absolute',
+                inset: 0,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: 'rgba(244,245,246,0.7)',
+                backdropFilter: 'blur(8px)',
+              }}
+            >
+              <div style={{ textAlign: 'center', padding: '2rem' }}>
+                <p style={{ fontWeight: 700, fontSize: '1.1rem', margin: '0 0 8px' }}>
+                  See your full local SEO audit
+                </p>
+                <p className="muted-note" style={{ marginBottom: 16 }}>
+                  Unlock recommendations and score breakdown for your business.
+                </p>
+                <a
+                  href={PURCHASE_URL}
+                  className="primary-button"
+                  style={{ textDecoration: 'none', display: 'inline-block' }}
+                >
+                  Unlock Full Access →
+                </a>
+              </div>
+            </div>
+          </div>
+        ) : audited ? (
           <div className="result-stack">
             <div className={`score-circle score-${scoreState}`}>
               {score}

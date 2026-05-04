@@ -19,6 +19,8 @@ import {
 } from '@/calculators';
 import type { CalculationResult } from '@/types';
 
+const PURCHASE_URL = 'https://designedbyanthony.com/tools';
+
 // ─── Category / Calculator registry ──────────────────────────────────────────
 
 const CATEGORIES = [
@@ -192,12 +194,21 @@ function CheckInput({
 
 // ─── Results panel ────────────────────────────────────────────────────────────
 
-function Results({ results }: { results: CalculationResult[] }) {
+function Results({
+  results,
+  locked = false,
+}: {
+  results: CalculationResult[];
+  locked?: boolean;
+}) {
   if (!results.length) return null;
   return (
-    <div className="results">
+    <div className="results" style={locked ? { position: 'relative' } : undefined}>
       <p className="results-heading">Results</p>
-      <div className="result-list">
+      <div
+        className="result-list"
+        style={locked ? { filter: 'blur(4px)', opacity: 0.35, pointerEvents: 'none' } : undefined}
+      >
         {results.map((r, i) => (
           <div key={i} className={`result-row${r.highlight ? ' result-row--highlight' : ''}`}>
             <div className="result-label">{r.label}</div>
@@ -209,13 +220,45 @@ function Results({ results }: { results: CalculationResult[] }) {
           </div>
         ))}
       </div>
+      {locked ? (
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            background: 'rgba(255,255,255,0.72)',
+            backdropFilter: 'blur(8px)',
+            borderRadius: 16,
+            textAlign: 'center',
+            padding: '2rem',
+          }}
+        >
+          <div>
+            <p style={{ margin: '0 0 8px', fontWeight: 700, fontSize: '1.05rem' }}>
+              Unlock calculator results
+            </p>
+            <p style={{ margin: '0 0 16px', color: 'var(--muted, #64748b)' }}>
+              Keep the inputs, unlock exact quantities and material totals.
+            </p>
+            <a
+              href={PURCHASE_URL}
+              className="primary-button"
+              style={{ textDecoration: 'none', display: 'inline-block' }}
+            >
+              Unlock Full Access →
+            </a>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }
 
 // ─── Calculator forms ─────────────────────────────────────────────────────────
 
-function ConcreteForm({ type }: { type: 'slab' | 'footing' | 'forms' }) {
+function ConcreteForm({ type, locked = false }: { type: 'slab' | 'footing' | 'forms'; locked?: boolean }) {
   const [length, setLength] = useState('10');
   const [width, setWidth] = useState('10');
   const [thickness, setThickness] = useState('4');
@@ -261,12 +304,12 @@ function ConcreteForm({ type }: { type: 'slab' | 'footing' | 'forms' }) {
           onChange={setIncludeWaste}
         />
       </div>
-      <Results results={results} />
+      <Results results={results} locked={locked} />
     </div>
   );
 }
 
-function FramingForm() {
+function FramingForm({ locked = false }: { locked?: boolean }) {
   const [wallLength, setWallLength] = useState('20');
   const [wallHeight, setWallHeight] = useState('9');
   const [spacing, setSpacing] = useState('16');
@@ -309,12 +352,12 @@ function FramingForm() {
         <CheckInput label="Include sheathing" checked={hasSheathing} onChange={setHasSheathing} />
         <CheckInput label="Include drywall" checked={hasDrywall} onChange={setHasDrywall} />
       </div>
-      <Results results={results} />
+      <Results results={results} locked={locked} />
     </div>
   );
 }
 
-function RafterForm() {
+function RafterForm({ locked = false }: { locked?: boolean }) {
   const [span, setSpan] = useState('24');
   const [pitch, setPitch] = useState('6');
   const [overhang, setOverhang] = useState('12');
@@ -335,12 +378,12 @@ function RafterForm() {
         <NumInput label="Overhang" value={overhang} onChange={setOverhang} unit="in" />
         <NumInput label="Number of Rafters" value={count} onChange={setCount} unit="ea" />
       </div>
-      <Results results={results} />
+      <Results results={results} locked={locked} />
     </div>
   );
 }
 
-function RoofingSquaresForm() {
+function RoofingSquaresForm({ locked = false }: { locked?: boolean }) {
   const [length, setLength] = useState('40');
   const [width, setWidth] = useState('25');
   const [pitch, setPitch] = useState('6');
@@ -368,12 +411,12 @@ function RoofingSquaresForm() {
           onChange={setIncludeWaste}
         />
       </div>
-      <Results results={results} />
+      <Results results={results} locked={locked} />
     </div>
   );
 }
 
-function RoofingForm({ type }: { type: 'shingles' | 'metal' }) {
+function RoofingForm({ type, locked = false }: { type: 'shingles' | 'metal'; locked?: boolean }) {
   const [length, setLength] = useState('40');
   const [width, setWidth] = useState('25');
   const [pitch, setPitch] = useState('6');
@@ -405,12 +448,12 @@ function RoofingForm({ type }: { type: 'shingles' | 'metal' }) {
         />
         <CheckInput label="Include roof decking" checked={hasDecking} onChange={setHasDecking} />
       </div>
-      <Results results={results} />
+      <Results results={results} locked={locked} />
     </div>
   );
 }
 
-function RoofPitchForm() {
+function RoofPitchForm({ locked = false }: { locked?: boolean }) {
   const [rise, setRise] = useState('6');
   const [run, setRun] = useState('12');
   const [spanFt, setSpanFt] = useState('24');
@@ -433,12 +476,12 @@ function RoofPitchForm() {
           unit="ft"
         />
       </div>
-      <Results results={results} />
+      <Results results={results} locked={locked} />
     </div>
   );
 }
 
-function InsulationForm() {
+function InsulationForm({ locked = false }: { locked?: boolean }) {
   const [area, setArea] = useState('500');
   const [rValue, setRValue] = useState('19');
   const [spacing, setSpacing] = useState('16');
@@ -486,12 +529,12 @@ function InsulationForm() {
           onChange={setIncludeWaste}
         />
       </div>
-      <Results results={results} />
+      <Results results={results} locked={locked} />
     </div>
   );
 }
 
-function SprayFoamForm() {
+function SprayFoamForm({ locked = false }: { locked?: boolean }) {
   const [area, setArea] = useState('500');
   const [thickness, setThickness] = useState('2');
   const [foamType, setFoamType] = useState('closed');
@@ -533,12 +576,12 @@ function SprayFoamForm() {
           onChange={setIncludeWaste}
         />
       </div>
-      <Results results={results} />
+      <Results results={results} locked={locked} />
     </div>
   );
 }
 
-function CelluloseForm() {
+function CelluloseForm({ locked = false }: { locked?: boolean }) {
   const [area, setArea] = useState('800');
   const [rValue, setRValue] = useState('38');
   const [cellType, setCellType] = useState('attic');
@@ -574,12 +617,12 @@ function CelluloseForm() {
           onChange={setIncludeWaste}
         />
       </div>
-      <Results results={results} />
+      <Results results={results} locked={locked} />
     </div>
   );
 }
 
-function FlooringForm() {
+function FlooringForm({ locked = false }: { locked?: boolean }) {
   const [length, setLength] = useState('20');
   const [width, setWidth] = useState('15');
   const [costPerSqFt, setCostPerSqFt] = useState('3.50');
@@ -626,12 +669,12 @@ function FlooringForm() {
           onChange={setIncludeWaste}
         />
       </div>
-      <Results results={results} />
+      <Results results={results} locked={locked} />
     </div>
   );
 }
 
-function SidingForm() {
+function SidingForm({ locked = false }: { locked?: boolean }) {
   const [area, setArea] = useState('800');
   const [sidingType, setSidingType] = useState('vinyl');
   const [waste, setWaste] = useState('10');
@@ -664,12 +707,12 @@ function SidingForm() {
           onChange={setIncludeWaste}
         />
       </div>
-      <Results results={results} />
+      <Results results={results} locked={locked} />
     </div>
   );
 }
 
-function PaintForm() {
+function PaintForm({ locked = false }: { locked?: boolean }) {
   const [area, setArea] = useState('600');
   const [coats, setCoats] = useState('2');
   const [waste, setWaste] = useState('10');
@@ -700,12 +743,12 @@ function PaintForm() {
           onChange={setIncludeWaste}
         />
       </div>
-      <Results results={results} />
+      <Results results={results} locked={locked} />
     </div>
   );
 }
 
-function WireGaugeForm() {
+function WireGaugeForm({ locked = false }: { locked?: boolean }) {
   const [amps, setAmps] = useState('20');
   const [voltage, setVoltage] = useState('120');
   const [distance, setDistance] = useState('50');
@@ -743,12 +786,12 @@ function WireGaugeForm() {
           ]}
         />
       </div>
-      <Results results={results} />
+      <Results results={results} locked={locked} />
     </div>
   );
 }
 
-function LaborForm() {
+function LaborForm({ locked = false }: { locked?: boolean }) {
   const [workers, setWorkers] = useState('3');
   const [hours, setHours] = useState('8');
   const [wage, setWage] = useState('35');
@@ -772,14 +815,14 @@ function LaborForm() {
         />
         <NumInput label="Hourly Wage" value={wage} onChange={setWage} unit="$/hr" step={0.5} />
       </div>
-      <Results results={results} />
+      <Results results={results} locked={locked} />
     </div>
   );
 }
 
 // ─── Main hub ─────────────────────────────────────────────────────────────────
 
-export function CalculatorHub() {
+export function CalculatorHub({ locked = false }: { locked?: boolean }) {
   const [activeCatId, setActiveCatId] = useState<string>('concrete');
   const [activeCalcId, setActiveCalcId] = useState<CalcId>('concrete-slab');
 
@@ -796,39 +839,39 @@ export function CalculatorHub() {
   function renderCalcForm(id: CalcId) {
     switch (id) {
       case 'concrete-slab':
-        return <ConcreteForm type="slab" />;
+        return <ConcreteForm type="slab" locked={locked} />;
       case 'concrete-footing':
-        return <ConcreteForm type="footing" />;
+        return <ConcreteForm type="footing" locked={locked} />;
       case 'concrete-forms':
-        return <ConcreteForm type="forms" />;
+        return <ConcreteForm type="forms" locked={locked} />;
       case 'wall-studs':
-        return <FramingForm />;
+        return <FramingForm locked={locked} />;
       case 'rafter-length':
-        return <RafterForm />;
+        return <RafterForm locked={locked} />;
       case 'roofing-squares':
-        return <RoofingSquaresForm />;
+        return <RoofingSquaresForm locked={locked} />;
       case 'shingles':
-        return <RoofingForm type="shingles" />;
+        return <RoofingForm type="shingles" locked={locked} />;
       case 'metal-roof':
-        return <RoofingForm type="metal" />;
+        return <RoofingForm type="metal" locked={locked} />;
       case 'roof-pitch':
-        return <RoofPitchForm />;
+        return <RoofPitchForm locked={locked} />;
       case 'batt-insulation':
-        return <InsulationForm />;
+        return <InsulationForm locked={locked} />;
       case 'spray-foam':
-        return <SprayFoamForm />;
+        return <SprayFoamForm locked={locked} />;
       case 'cellulose':
-        return <CelluloseForm />;
+        return <CelluloseForm locked={locked} />;
       case 'flooring':
-        return <FlooringForm />;
+        return <FlooringForm locked={locked} />;
       case 'siding':
-        return <SidingForm />;
+        return <SidingForm locked={locked} />;
       case 'paint':
-        return <PaintForm />;
+        return <PaintForm locked={locked} />;
       case 'wire-gauge':
-        return <WireGaugeForm />;
+        return <WireGaugeForm locked={locked} />;
       case 'labor-cost':
-        return <LaborForm />;
+        return <LaborForm locked={locked} />;
     }
   }
 

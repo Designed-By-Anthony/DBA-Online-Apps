@@ -15,6 +15,8 @@ type Snapshot = {
   seo: number;
 };
 
+const PURCHASE_URL = 'https://designedbyanthony.com/tools';
+
 function asScore(value: unknown): number {
   return Math.round((Number(value) || 0) * 100);
 }
@@ -43,7 +45,7 @@ function metricBadgeClass(metric: 'lcp' | 'cls' | 'inp', value: number): string 
   return 'score-badge score-badge--poor';
 }
 
-export function Workspace() {
+export function Workspace({ locked = false }: { locked?: boolean }) {
   const [url, setUrl] = useState('https://example.com');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -112,9 +114,19 @@ export function Workspace() {
             <input className="text-input" value={url} onChange={(e) => setUrl(e.target.value)} />
           </label>
           <div className="action-row">
-            <button type="button" className="primary-button" onClick={runTest} disabled={loading}>
-              {loading ? 'Running Test...' : 'Run Test'}
-            </button>
+            {locked ? (
+              <a
+                href={PURCHASE_URL}
+                className="primary-button"
+                style={{ textDecoration: 'none', display: 'inline-block' }}
+              >
+                Unlock to Run Test
+              </a>
+            ) : (
+              <button type="button" className="primary-button" onClick={runTest} disabled={loading}>
+                {loading ? 'Running Test...' : 'Run Test'}
+              </button>
+            )}
           </div>
           {error ? <p className="warning-note">{error}</p> : null}
         </div>
@@ -126,7 +138,52 @@ export function Workspace() {
           <span>{result ? 'Ready' : 'Waiting for test'}</span>
         </div>
 
-        {result ? (
+        {locked ? (
+          <div style={{ position: 'relative', minHeight: 260 }}>
+            <div
+              style={{ filter: 'blur(4px)', opacity: 0.35, pointerEvents: 'none', marginTop: 12 }}
+            >
+              <div className="result-stack">
+                <div className="score-circle score-good">
+                  91
+                  <small>PERF</small>
+                </div>
+                <div className="metric-grid">
+                  <span className="score-badge score-badge--good">LCP 1.9s</span>
+                  <span className="score-badge score-badge--good">CLS 0.042</span>
+                  <span className="score-badge score-badge--ok">INP 265ms</span>
+                </div>
+              </div>
+            </div>
+            <div
+              style={{
+                position: 'absolute',
+                inset: 0,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: 'rgba(244,245,246,0.7)',
+                backdropFilter: 'blur(8px)',
+              }}
+            >
+              <div style={{ textAlign: 'center', padding: '2rem' }}>
+                <p style={{ fontWeight: 700, fontSize: '1.1rem', margin: '0 0 8px' }}>
+                  Unlock live CWV monitoring
+                </p>
+                <p className="muted-note" style={{ marginBottom: 16 }}>
+                  Save snapshots and compare your real performance trends.
+                </p>
+                <a
+                  href={PURCHASE_URL}
+                  className="primary-button"
+                  style={{ textDecoration: 'none', display: 'inline-block' }}
+                >
+                  Unlock Full Access →
+                </a>
+              </div>
+            </div>
+          </div>
+        ) : result ? (
           <div className="result-stack">
             <div className={`score-circle score-${perfClass}`}>
               {result.performance}
