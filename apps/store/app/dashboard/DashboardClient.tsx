@@ -20,13 +20,42 @@ type MeResponse = {
   purchases: Purchase[];
 };
 
-const PRODUCT_META: Record<string, { name: string; icon: string; path: string }> = {
-  sitescan: { name: 'SiteScan', icon: '\u{1F50D}', path: '/tools/lighthouse-batch-scanner' },
-  reviewpilot: { name: 'ReviewPilot', icon: '\u2B50', path: '/tools/local-seo-audit-kit' },
-  clienthub: { name: 'ClientHub', icon: '\u{1F465}', path: '/tools/lead-form-builder' },
-  localrank: { name: 'LocalRank', icon: '\u{1F4CD}', path: '/tools/local-seo-audit-kit' },
-  testiflow: { name: 'TestiFlow', icon: '\u{1F4AC}', path: '/tools/cold-outreach-sequencer' },
-  contentmill: { name: 'ContentMill', icon: '\u270F\uFE0F', path: '/tools/calculator' },
+const PRODUCT_META: Record<string, { name: string; icon: string; url: string }> = {
+  'construction-calculator': {
+    name: 'Construction Calculator',
+    icon: '\u{1F3D7}\uFE0F',
+    url: 'https://calculator.designedbyanthony.online',
+  },
+  'lead-form-builder': {
+    name: 'Contact Form Builder',
+    icon: '\u{1F4CB}',
+    url: 'https://lead-form.designedbyanthony.online',
+  },
+  'site-speed-monitor': {
+    name: 'Website Speed Test',
+    icon: '\u26A1',
+    url: 'https://web-vitals.designedbyanthony.online',
+  },
+  'seo-audit': {
+    name: 'Local SEO Checker',
+    icon: '\u{1F50D}',
+    url: 'https://seo-audit.designedbyanthony.online',
+  },
+  'cold-outreach': {
+    name: 'Follow-Up Email Writer',
+    icon: '\u2709\uFE0F',
+    url: 'https://outreach.designedbyanthony.online',
+  },
+  'service-area-map': {
+    name: 'Service Area Map',
+    icon: '\u{1F4CD}',
+    url: 'https://service-area.designedbyanthony.online',
+  },
+  'lighthouse-scanner': {
+    name: 'Website Speed Grader',
+    icon: '\u{1F680}',
+    url: 'https://lighthouse.designedbyanthony.online',
+  },
 };
 
 export function DashboardClient() {
@@ -176,7 +205,7 @@ export function DashboardClient() {
                       return (
                         <a
                           key={p.id}
-                          href={meta?.path ?? '#'}
+                          href={meta?.url ?? '#'}
                           style={{
                             display: 'flex',
                             alignItems: 'flex-start',
