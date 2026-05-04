@@ -80,16 +80,27 @@ export async function resolveAuth(
         // Auto-provision: valid Clerk JWT but no local DB row yet.
         const email = typeof payload.email === 'string' ? payload.email.trim().toLowerCase() : null;
         if (email) {
-          const newId = crypto.randomUUID();
-          const newApiKey = crypto.randomUUID();
           try {
+            // Link legacy user (email exists, clerk_id NULL) to this Clerk account
+            await db
+              .prepare('UPDATE users SET clerk_id = ? WHERE email = ? AND clerk_id IS NULL')
+              .bind(sub, email)
+              .run();
+            const linked = await db
+              .prepare('SELECT * FROM users WHERE clerk_id = ? LIMIT 1')
+              .bind(sub)
+              .first<DbUser>();
+            if (linked) return { userId: linked.id, plan: linked.plan, apiKey: linked.api_key };
+
+            // Truly new user — insert a fresh row
+            const newId = crypto.randomUUID();
+            const newApiKey = crypto.randomUUID();
             await db
               .prepare(
                 'INSERT OR IGNORE INTO users (id, email, plan, api_key, clerk_id, created_at) VALUES (?, ?, ?, ?, ?, ?)',
               )
               .bind(newId, email, 'free', newApiKey, sub, new Date().toISOString())
               .run();
-            // Re-fetch to handle race conditions (OR IGNORE)
             const created = await db
               .prepare('SELECT * FROM users WHERE clerk_id = ? LIMIT 1')
               .bind(sub)
