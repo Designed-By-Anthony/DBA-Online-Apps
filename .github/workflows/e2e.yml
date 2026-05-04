@@ -1,0 +1,131 @@
+name: E2E Tests
+
+# Fires on feature-branch pushes and PRs to main — gives early feedback while
+# you develop.  Push to main is handled by 1-preview-pipeline.yml which runs
+# the same suite against the deployed preview domain instead of local servers.
+on:
+  push:
+    branches-ignore:
+      - main
+  pull_request:
+    branches: [main]
+
+jobs:
+  e2e:
+    name: Playwright E2E
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    steps:
+      # ── Checkout ────────────────────────────────────────────────────────────
+      - uses: actions/checkout@v4
+
+      # ── Runtime ─────────────────────────────────────────────────────────────
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.13
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # ── Dependencies ─────────────────────────────────────────────────────────
+      - name: Install dependencies
+        run: bun install
+
+      # ── Playwright browsers ──────────────────────────────────────────────────
+      - name: Install Playwright Chromium + OS dependencies
+        run: bunx playwright install --with-deps chromium
+
+      # ── Start dev servers ────────────────────────────────────────────────────
+      # All four processes are launched in the background; the next step waits
+      # for every port to become healthy before Playwright begins.
+      #
+      # API:   packages/api  → port 8787 (ElysiaJS / Wrangler)
+      # Store: apps/store    → port 3207 (designedbyanthony.online)
+      # Light: apps/lighthouse-batch-scanner → port 3201
+      # Lead:  apps/lead-form-builder        → port 3203
+
+      - name: Start API worker (wrangler dev --env development)
+        run: |
+          (cd packages/api && bunx wrangler dev --env development --port 8787) &
+        env:
+          # CLOUDFLARE_API_TOKEN is used for the remote KV binding.
+          # If the secret is absent (e.g. fork PRs) wrangler falls back to local
+          # emulation for all bindings — tests still pass since none of the
+          # exercised request paths require KV.
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+      - name: Start Next.js apps
+        run: |
+          bun run --cwd apps/store dev &
+          bun run --cwd apps/lighthouse-batch-scanner dev &
+          bun run --cwd apps/lead-form-builder dev &
+          bun run --cwd apps/local-seo-audit-kit dev &
+          bun run --cwd apps/service-area-map-generator dev &
+          bun run --cwd apps/cold-outreach-sequencer dev &
+          bun run --cwd apps/core-web-vitals-monitor dev &
+          bun run --cwd apps/calculator dev &
+        env:
+          # Clerk publishable key is optional for dev; when absent the Clerk
+          # provider simply never loads, which is fine — tests mock window.Clerk.
+          NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY }}
+          NEXT_PUBLIC_API_URL: http://localhost:8787
+
+      # ── Wait for all ports ───────────────────────────────────────────────────
+      # Next.js dev compiles on the first request, so we allow up to 3 minutes.
+      - name: Wait for servers to be ready
+        run: |
+          npx --yes wait-on \
+            http://localhost:8787/health \
+            http://localhost:3207 \
+            http://localhost:3201 \
+            http://localhost:3202 \
+            http://localhost:3203 \
+            http://localhost:3204 \
+            http://localhost:3205 \
+            http://localhost:3206 \
+            http://localhost:3208 \
+            --timeout 180000 \
+            --interval 3000
+
+      # ── Playwright ───────────────────────────────────────────────────────────
+      - name: Run Playwright E2E tests
+        run: bunx playwright test
+        env:
+          CI: true
+          API_BASE_URL: http://localhost:8787
+          STORE_BASE_URL: http://localhost:3207
+          SCANNER_BASE_URL: http://localhost:3201
+          SEO_BASE_URL: http://localhost:3202
+          LEAD_FORM_BASE_URL: http://localhost:3203
+          MAP_BASE_URL: http://localhost:3204
+          OUTREACH_BASE_URL: http://localhost:3205
+          CWV_BASE_URL: http://localhost:3206
+          CALC_BASE_URL: http://localhost:3208
+          # Optional: supply a long-lived Clerk testing token (minted in the
+          # Clerk dashboard under "Testing tokens") to exercise the full
+          # authenticated flow.  Without it, global.setup.ts writes an empty
+          # storageState and the window.Clerk mock in the test files takes over.
+          CLERK_TEST_USER_TOKEN: ${{ secrets.CLERK_TEST_USER_TOKEN }}
+          CLERK_ADMIN_ID: ${{ secrets.CLERK_ADMIN_ID }}
+
+      # ── Artifacts ────────────────────────────────────────────────────────────
+      # Upload the HTML report on every run so the results are always reviewable.
+      - name: Upload Playwright HTML report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-${{ github.run_id }}
+          path: playwright-report/
+          retention-days: 14
+
+      # Upload traces only on failure to keep storage usage low.
+      - name: Upload Playwright traces
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-traces-${{ github.run_id }}
+          path: test-results/
+          retention-days: 7

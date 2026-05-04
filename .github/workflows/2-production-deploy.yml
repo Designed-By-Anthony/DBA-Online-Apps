@@ -1,0 +1,99 @@
+name: "2 · LIVE PRODUCTION DEPLOY"
+
+# Production deploys are ALWAYS manual.
+# Push to main → preview only (see 1-preview-pipeline.yml).
+# When you're happy with preview, trigger this workflow from the GitHub Actions
+# UI (Actions tab → "2 · LIVE PRODUCTION DEPLOY" → "Run workflow").
+
+on:
+  workflow_dispatch:
+
+jobs:
+  # ── Deploy API to production ───────────────────────────────────────────────
+  deploy-api:
+    name: "Deploy API → api.designedbyanthony.online"
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://api.designedbyanthony.online
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.13
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: bun install
+      - name: Deploy API
+        working-directory: packages/api
+        run: bunx wrangler deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+  # ── Build + deploy all tool apps (parallel matrix) ────────────────────────
+  deploy-apps:
+    name: "Deploy ${{ matrix.app }}"
+    needs: deploy-api
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        app:
+          - calculator
+          - cold-outreach-sequencer
+          - core-web-vitals-monitor
+          - lead-form-builder
+          - lighthouse-batch-scanner
+          - local-seo-audit-kit
+          - service-area-map-generator
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.13
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: bun install
+      - name: Build ${{ matrix.app }}
+        run: bunx turbo run build --filter=@dba/${{ matrix.app }}
+        env:
+          NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY }}
+          NEXT_PUBLIC_API_URL: https://api.designedbyanthony.online
+      - name: Deploy ${{ matrix.app }}
+        working-directory: apps/${{ matrix.app }}
+        run: bunx wrangler deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+  # ── Deploy store last (depends on all apps being live) ────────────────────
+  deploy-store:
+    name: "Deploy Store → designedbyanthony.online"
+    needs: [deploy-api, deploy-apps]
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://designedbyanthony.online
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.13
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: bun install
+      - name: Build Store
+        run: bunx turbo run build --filter=@dba/store
+        env:
+          NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY }}
+          NEXT_PUBLIC_API_URL: https://api.designedbyanthony.online
+      - name: Deploy Store
+        working-directory: apps/store
+        run: bunx wrangler deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

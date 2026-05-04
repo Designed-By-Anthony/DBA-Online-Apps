@@ -26,3 +26,8 @@ dist/
 !.env.example
 *.log
 .DS_Store
+
+# Playwright
+playwright/.auth/
+playwright-report/
+test-results/

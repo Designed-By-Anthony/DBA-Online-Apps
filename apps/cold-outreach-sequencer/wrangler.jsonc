@@ -2,5 +2,11 @@
   "name": "dba-cold-outreach",
   "assets": { "directory": "./dist" },
   "compatibility_date": "2025-04-30",
-  "routes": [{ "pattern": "outreach.designedbyanthony.online", "custom_domain": true }]
+  "routes": [{ "pattern": "outreach.designedbyanthony.online", "custom_domain": true }],
+  "env": {
+    "preview": {
+      "name": "dba-cold-outreach-preview",
+      "routes": [{ "pattern": "preview.outreach.designedbyanthony.online", "custom_domain": true }]
+    }
+  }
 }
