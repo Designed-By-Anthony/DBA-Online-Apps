@@ -598,18 +598,14 @@ function buildApp(env: Env) {
       )
 
       // ── PageSpeed Proxy (authenticated — .online tools) ───────────
-      .post('/external/pagespeed', async ({ db, request, set }) => {
+      .post('/external/pagespeed', async ({ db, request, body: rawBody, set }) => {
         const auth = await resolveAuth(db, request, env);
         if (!auth.userId) {
           set.status = 401;
           return { error: 'Authentication required' };
         }
 
-        const raw = await request
-          .clone()
-          .json()
-          .catch(() => null);
-        const body = raw as { url?: string; strategy?: string; categories?: string[] } | null;
+        const body = rawBody as { url?: string; strategy?: string; categories?: string[] } | null;
         const targetUrl = body?.url?.trim();
         if (!targetUrl) {
           set.status = 400;
