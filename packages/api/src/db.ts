@@ -70,13 +70,13 @@ export async function resolveAuth(
       const jwks = getJWKS(env.CLERK_JWKS_URL);
       const { payload } = await jwtVerify(token, jwks);
       const sub = payload.sub;
-      
+
       if (sub && typeof sub === 'string' && sub.startsWith('user_')) {
         const user = await db
           .prepare('SELECT * FROM users WHERE clerk_id = ? LIMIT 1')
           .bind(sub)
           .first<DbUser>();
-          
+
         if (user) {
           // 👑 GOD MODE OVERRIDE: If the DB says free, but it's you, force Founder in memory
           const actualPlan = sub === ADMIN_CLERK_ID ? 'founder' : user.plan;
@@ -96,7 +96,7 @@ export async function resolveAuth(
               .prepare('SELECT * FROM users WHERE clerk_id = ? LIMIT 1')
               .bind(sub)
               .first<DbUser>();
-              
+
             if (linked) {
               const actualPlan = sub === ADMIN_CLERK_ID ? 'founder' : linked.plan;
               return { userId: linked.id, plan: actualPlan, apiKey: linked.api_key };
@@ -105,22 +105,22 @@ export async function resolveAuth(
             // Truly new user — insert a fresh row
             const newId = crypto.randomUUID();
             const newApiKey = crypto.randomUUID();
-            
+
             // 👑 GOD MODE: If it's your Clerk ID, provision you as a Founder immediately
             const initialPlan = sub === ADMIN_CLERK_ID ? 'founder' : 'free';
-            
+
             await db
               .prepare(
                 'INSERT OR IGNORE INTO users (id, email, plan, api_key, clerk_id, created_at) VALUES (?, ?, ?, ?, ?, ?)',
               )
               .bind(newId, email, initialPlan, newApiKey, sub, new Date().toISOString())
               .run();
-              
+
             const created = await db
               .prepare('SELECT * FROM users WHERE clerk_id = ? LIMIT 1')
               .bind(sub)
               .first<DbUser>();
-              
+
             if (created) return { userId: created.id, plan: created.plan, apiKey: created.api_key };
           } catch {
             // fall through to free
@@ -143,7 +143,7 @@ export function requirePaidPlan(auth: AuthContext): Response | null {
   // 👑 GOD MODE BYPASS: If the request comes from you, burn down the paywall
   // (We check the actual Clerk ID if auth.userId is populated, or rely on the plan override)
   if (auth.plan === 'founder') return null;
-  
+
   if (auth.plan !== 'free' && auth.userId) return null;
   return new Response(
     JSON.stringify({
@@ -399,4 +399,35 @@ export async function updateSequenceProspects(
     .run();
 }
 
-export async function
+// ── CWV Monitors ─────────────────────────────────────────────────────────────
+
+export async function getCwvMonitor(
+  db: D1Database,
+  monitorId: string,
+): Promise<DbCwvMonitor | null> {
+  const result = await db
+    .prepare('SELECT * FROM cwv_monitors WHERE id = ? LIMIT 1')
+    .bind(monitorId)
+    .first<DbCwvMonitor>();
+  return result ?? null;
+}
+
+export async function appendCwvSnapshot(
+  db: D1Database,
+  monitorId: string,
+  snapshot: unknown,
+): Promise<void> {
+  const monitor = await getCwvMonitor(db, monitorId);
+  if (!monitor) return;
+
+  const snapshots = JSON.parse(monitor.snapshots) as unknown[];
+  snapshots.unshift(snapshot);
+
+  // Keep last 52 snapshots (~1 year of weekly data)
+  const trimmed = snapshots.slice(0, 52);
+
+  await db
+    .prepare('UPDATE cwv_monitors SET snapshots = ? WHERE id = ?')
+    .bind(JSON.stringify(trimmed), monitorId)
+    .run();
+}
