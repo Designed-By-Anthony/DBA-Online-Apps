@@ -22,6 +22,17 @@ test.use({ storageState: 'playwright/.auth/user.json' });
 
 test.describe('Lighthouse Batch Scanner — audit lifecycle', () => {
   test.beforeEach(async ({ page }) => {
+    // Mock window.Clerk so useAuthState resolves to 'paid' immediately.
+    // Works for both local dev servers and the live preview domain —
+    // the mock runs synchronously before page scripts and the hook clears
+    // its polling interval on the first positive check.
+    await page.addInitScript(() => {
+      (window as Record<string, unknown>).Clerk = {
+        loaded: true,
+        user: { id: 'user_3DG3F2Edy2A3fdfbiJFFbEy7cOQ' },
+        session: null,
+      };
+    });
     await page.goto(SCANNER_BASE);
   });
 

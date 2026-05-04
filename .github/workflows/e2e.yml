@@ -1,7 +1,12 @@
 name: E2E Tests
 
+# Fires on feature-branch pushes and PRs to main — gives early feedback while
+# you develop.  Push to main is handled by 1-preview-pipeline.yml which runs
+# the same suite against the deployed preview domain instead of local servers.
 on:
   push:
+    branches-ignore:
+      - main
   pull_request:
     branches: [main]
 

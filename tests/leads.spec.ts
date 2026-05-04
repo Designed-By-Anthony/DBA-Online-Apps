@@ -20,6 +20,18 @@ test.use({ storageState: 'playwright/.auth/user.json' });
 
 test.describe('Lead Form Builder — form lifecycle', () => {
   test.beforeEach(async ({ page }) => {
+    // Mock window.Clerk before any page script runs so useAuthState resolves
+    // to 'paid' immediately without waiting for a real Clerk session.
+    // On the live preview domain, Clerk would eventually overwrite this, but
+    // useAuthState clears its polling interval on the first positive check,
+    // so the mock wins the race every time.
+    await page.addInitScript(() => {
+      (window as Record<string, unknown>).Clerk = {
+        loaded: true,
+        user: { id: 'user_3DG3F2Edy2A3fdfbiJFFbEy7cOQ' },
+        session: null,
+      };
+    });
     await page.goto(LEAD_FORM_BASE);
   });
 

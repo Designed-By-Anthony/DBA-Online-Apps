@@ -57,15 +57,23 @@
       "name": "dba-api-preview",
       "routes": [{ "pattern": "preview.api.designedbyanthony.online", "custom_domain": true }],
       "vars": {
-        "ALLOWED_ORIGINS": "https://preview.designedbyanthony.online,https://designedbyanthony.com,https://preview.designedbyanthony.com",
+        "ALLOWED_ORIGINS": "https://preview.designedbyanthony.online,https://preview.lead-form.designedbyanthony.online,https://preview.lighthouse.designedbyanthony.online,https://preview.calculator.designedbyanthony.online,https://preview.outreach.designedbyanthony.online,https://preview.web-vitals.designedbyanthony.online,https://preview.seo-audit.designedbyanthony.online,https://preview.service-area.designedbyanthony.online,https://designedbyanthony.com,https://preview.designedbyanthony.com",
         "ENVIRONMENT": "preview"
       }
     },
     "development": {
       "vars": {
-        "ALLOWED_ORIGINS": "http://localhost:3200,http://localhost:3201,http://localhost:3202,http://localhost:3203,http://localhost:3204,http://localhost:3205,http://localhost:3206",
+        "ALLOWED_ORIGINS": "http://localhost:3200,http://localhost:3201,http://localhost:3202,http://localhost:3203,http://localhost:3204,http://localhost:3205,http://localhost:3206,http://localhost:3207",
         "ENVIRONMENT": "development"
-      }
+      },
+      // Override KV to local emulation so `wrangler dev --env development`
+      // works without a Cloudflare API token (no "remote: true").
+      "kv_namespaces": [
+        {
+          "binding": "CACHE",
+          "id": "fac6ae84f61746ceb0a07ea17912338f"
+        }
+      ]
     }
   }
 }

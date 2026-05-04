@@ -2,5 +2,11 @@
   "name": "dba-seo-audit",
   "assets": { "directory": "./dist" },
   "compatibility_date": "2025-04-30",
-  "routes": [{ "pattern": "seo-audit.designedbyanthony.online", "custom_domain": true }]
+  "routes": [{ "pattern": "seo-audit.designedbyanthony.online", "custom_domain": true }],
+  "env": {
+    "preview": {
+      "name": "dba-seo-audit-preview",
+      "routes": [{ "pattern": "preview.seo-audit.designedbyanthony.online", "custom_domain": true }]
+    }
+  }
 }

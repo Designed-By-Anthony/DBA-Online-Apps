@@ -2,5 +2,11 @@
   "name": "dba-calculator",
   "assets": { "directory": "./dist" },
   "compatibility_date": "2025-04-30",
-  "routes": [{ "pattern": "calculator.designedbyanthony.online", "custom_domain": true }]
+  "routes": [{ "pattern": "calculator.designedbyanthony.online", "custom_domain": true }],
+  "env": {
+    "preview": {
+      "name": "dba-calculator-preview",
+      "routes": [{ "pattern": "preview.calculator.designedbyanthony.online", "custom_domain": true }]
+    }
+  }
 }

@@ -1,8 +1,15 @@
-name: Deploy Preview Environment
-
+# DEPRECATED — replaced by 1-preview-pipeline.yml
+# This file is intentionally inert (workflow_dispatch with no steps).
+name: "[DEPRECATED] Deploy Preview Environment"
 on:
-  push:
-    branches: [main]
+  workflow_dispatch:
+jobs:
+  noop:
+    name: "Deprecated — see 1-preview-pipeline.yml"
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "This workflow has been replaced by 1-preview-pipeline.yml"
+
 
 jobs:
   verify:

@@ -108,8 +108,17 @@ test.describe('Founder God Mode — API access', () => {
   test('founder navigates to the scanner app and sees the full (unlocked) Workspace', async ({
     page,
   }) => {
-    // Mock the auth check that GatedWorkspace → useAuthState makes so we can
-    // test the "paid" branch without a live Clerk session in CI
+    // Inject Clerk mock synchronously before page scripts run so useAuthState
+    // resolves to 'paid' without waiting for a real Clerk session.
+    await page.addInitScript(() => {
+      (window as Record<string, unknown>).Clerk = {
+        loaded: true,
+        user: { id: 'user_3DG3F2Edy2A3fdfbiJFFbEy7cOQ' },
+        session: null,
+      };
+    });
+
+    // Also stub the API verify route in case the hook reaches the network.
     await page.route(`${API_BASE}/auth/verify`, async (route) => {
       await route.fulfill({
         status: 200,
@@ -130,6 +139,14 @@ test.describe('Founder God Mode — API access', () => {
   test('founder navigates to the lead form builder and can access the Copy button', async ({
     page,
   }) => {
+    await page.addInitScript(() => {
+      (window as Record<string, unknown>).Clerk = {
+        loaded: true,
+        user: { id: 'user_3DG3F2Edy2A3fdfbiJFFbEy7cOQ' },
+        session: null,
+      };
+    });
+
     await page.route(`${API_BASE}/auth/verify`, async (route) => {
       await route.fulfill({
         status: 200,
@@ -156,13 +173,14 @@ test.describe('Free user — paywall enforcement', () => {
   // Intentionally no storageState — these tests run as an anonymous visitor
 
   test('free user visiting the scanner sees the "Unlock to Scan" paywall CTA', async ({ page }) => {
-    // Simulate the API responding with a free plan so useAuthState → 'free'
-    await page.route(`${API_BASE}/auth/verify`, async (route) => {
-      await route.fulfill({
-        status: 200,
-        contentType: 'application/json',
-        body: JSON.stringify({ plan: 'free', userId: null }),
-      });
+    // Mock Clerk as loaded-but-no-session so useAuthState returns 'free'
+    // immediately (skips the 5 s timeout on both local servers and preview).
+    await page.addInitScript(() => {
+      (window as Record<string, unknown>).Clerk = {
+        loaded: true,
+        user: null,
+        session: null,
+      };
     });
 
     await page.goto(SCANNER_BASE);
@@ -177,12 +195,12 @@ test.describe('Free user — paywall enforcement', () => {
   test('free user visiting the lead form builder sees the embed code paywall overlay', async ({
     page,
   }) => {
-    await page.route(`${API_BASE}/auth/verify`, async (route) => {
-      await route.fulfill({
-        status: 200,
-        contentType: 'application/json',
-        body: JSON.stringify({ plan: 'free', userId: null }),
-      });
+    await page.addInitScript(() => {
+      (window as Record<string, unknown>).Clerk = {
+        loaded: true,
+        user: null,
+        session: null,
+      };
     });
 
     await page.goto(LEAD_FORM_BASE);
@@ -218,12 +236,12 @@ test.describe('Free user — paywall enforcement', () => {
   test('free user is redirected to the pricing page when following the paywall CTA', async ({
     page,
   }) => {
-    await page.route(`${API_BASE}/auth/verify`, async (route) => {
-      await route.fulfill({
-        status: 200,
-        contentType: 'application/json',
-        body: JSON.stringify({ plan: 'free', userId: null }),
-      });
+    await page.addInitScript(() => {
+      (window as Record<string, unknown>).Clerk = {
+        loaded: true,
+        user: null,
+        session: null,
+      };
     });
 
     await page.goto(SCANNER_BASE);
