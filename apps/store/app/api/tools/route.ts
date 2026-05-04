@@ -1,11 +1,11 @@
 import { NextResponse } from 'next/server';
 import {
-  TOOL_SLUGS,
+  TOOL_DESCRIPTIONS,
   TOOL_LABELS,
   TOOL_PRICES,
+  TOOL_SLUGS,
   TOOL_TAGLINES,
   TOOL_URLS,
-  TOOL_DESCRIPTIONS,
   type ToolSlug,
 } from '../../../lib/pseo';
 
