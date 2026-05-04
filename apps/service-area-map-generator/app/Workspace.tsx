@@ -9,7 +9,9 @@ function toMapSrc(city: string, state: string): string {
   return `https://www.google.com/maps?q=${encodeURIComponent(query)}&output=embed`;
 }
 
-export function Workspace() {
+const PURCHASE_URL = 'https://designedbyanthony.com/tools';
+
+export function Workspace({ locked = false }: { locked?: boolean }) {
   const [businessName, setBusinessName] = useState('Your Business Name');
   const [city, setCity] = useState('Dallas');
   const [state, setState] = useState('TX');
@@ -150,7 +152,46 @@ export function Workspace() {
           <p>Map Preview</p>
           <span>{primary ? `${primary.city}, ${primary.state}` : 'No city selected'}</span>
         </div>
-        {primary ? (
+
+        {locked ? (
+          <div style={{ position: 'relative', minHeight: 260 }}>
+            <div
+              style={{ filter: 'blur(4px)', opacity: 0.35, pointerEvents: 'none', marginTop: 12 }}
+            >
+              <div className="map-preview" style={{ background: '#d5dde7' }} />
+              <pre className="code-block" style={{ marginTop: 12 }}>
+                {'<iframe src="https://..." />'}
+              </pre>
+            </div>
+            <div
+              style={{
+                position: 'absolute',
+                inset: 0,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: 'rgba(244,245,246,0.7)',
+                backdropFilter: 'blur(8px)',
+              }}
+            >
+              <div style={{ textAlign: 'center', padding: '2rem' }}>
+                <p style={{ fontWeight: 700, fontSize: '1.1rem', margin: '0 0 8px' }}>
+                  Your map embed is ready
+                </p>
+                <p className="muted-note" style={{ marginBottom: 16 }}>
+                  Subscribe to copy your map embed and schema code.
+                </p>
+                <a
+                  href={PURCHASE_URL}
+                  className="primary-button"
+                  style={{ textDecoration: 'none', display: 'inline-block' }}
+                >
+                  Unlock Full Access →
+                </a>
+              </div>
+            </div>
+          </div>
+        ) : primary ? (
           <div className="result-stack">
             <div className="map-preview">
               <iframe

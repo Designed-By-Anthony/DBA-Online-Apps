@@ -27,7 +27,7 @@ body {
 }
 
 .product-shell {
-  width: min(1120px, calc(100% - 32px));
+  width: min(1280px, calc(100% - 48px));
   margin: 0 auto;
   padding: 40px 0;
 }
@@ -113,13 +113,13 @@ h1 {
 .workspace {
   display: grid;
   grid-template-columns: 1.1fr 0.9fr;
-  gap: 16px;
-  margin-top: 16px;
+  gap: 32px;
+  margin-top: 24px;
 }
 
 .panel {
   min-height: 320px;
-  padding: 20px;
+  padding: 28px;
 }
 
 .tool-form {
