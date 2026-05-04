@@ -64,6 +64,7 @@ jobs:
           - local-seo-audit-kit
           - service-area-map-generator
           - calculator
+          - store
     steps:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
@@ -78,6 +79,7 @@ jobs:
         env:
           NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY }}
       - name: Resolve deploy output directory
+        if: matrix.app != 'store'
         id: deploy_output
         working-directory: apps/${{ matrix.app }}
         run: |
@@ -92,6 +94,7 @@ jobs:
             exit 1
           fi
       - name: Deploy to Cloudflare Pages
+        if: matrix.app != 'store'
         run: bunx wrangler pages deploy ${{ steps.deploy_output.outputs.path }} --project-name=${{ matrix.app }}
         working-directory: apps/${{ matrix.app }}
         env:
