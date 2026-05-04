@@ -9,9 +9,7 @@
   "env": {
     "preview": {
       "name": "dba-store-preview",
-      "routes": [
-        { "pattern": "preview.designedbyanthony.online", "custom_domain": true }
-      ]
+      "routes": [{ "pattern": "preview.designedbyanthony.online", "custom_domain": true }]
     }
   }
 }

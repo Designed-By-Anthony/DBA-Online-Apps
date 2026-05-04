@@ -400,9 +400,9 @@ export function DashboardClient() {
                     overflow: 'hidden',
                   }}
                 >
-                  {activity.map((item, i) => (
+                  {activity.map((item, idx) => (
                     <a
-                      key={`${item.tool}-${item.date}-${i}`}
+                      key={`${item.tool}-${item.date}-${item.url}`}
                       href={item.url}
                       style={{
                         display: 'flex',
@@ -410,7 +410,7 @@ export function DashboardClient() {
                         gap: '0.75rem',
                         padding: '0.85rem 1.25rem',
                         borderBottom:
-                          i < activity.length - 1 ? '1px solid rgba(26,42,64,0.06)' : 'none',
+                          idx < activity.length - 1 ? '1px solid rgba(26,42,64,0.06)' : 'none',
                         textDecoration: 'none',
                         color: 'inherit',
                         transition: 'background 0.15s',

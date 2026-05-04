@@ -203,8 +203,8 @@ function Results({ results, locked = false }: { results: CalculationResult[]; lo
         className="result-list"
         style={locked ? { filter: 'blur(4px)', opacity: 0.35, pointerEvents: 'none' } : undefined}
       >
-        {results.map((r, i) => (
-          <div key={i} className={`result-row${r.highlight ? ' result-row--highlight' : ''}`}>
+        {results.map((r) => (
+          <div key={r.label} className={`result-row${r.highlight ? ' result-row--highlight' : ''}`}>
             <div className="result-label">{r.label}</div>
             <div className="result-value">
               <span className="result-num">{r.value}</span>
@@ -826,11 +826,11 @@ export function CalculatorHub({ locked = false }: { locked?: boolean }) {
   const [activeCatId, setActiveCatId] = useState<string>('concrete');
   const [activeCalcId, setActiveCalcId] = useState<CalcId>('concrete-slab');
 
-  const activeCategory = CATEGORIES.find((c) => c.id === activeCatId)!;
+  const activeCategory = CATEGORIES.find((c) => c.id === activeCatId) ?? CATEGORIES[0];
 
   const handleCatSelect = useCallback((catId: string) => {
     setActiveCatId(catId);
-    const cat = CATEGORIES.find((c) => c.id === catId)!;
+    const cat = CATEGORIES.find((c) => c.id === catId) ?? CATEGORIES[0];
     setActiveCalcId(cat.calcs[0].id as CalcId);
   }, []);
 
