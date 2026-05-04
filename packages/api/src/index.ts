@@ -596,6 +596,48 @@ function buildApp(env: Env) {
             return { monitorId: id, snapshot };
           }),
       )
+
+      // ── PageSpeed Proxy (authenticated — .online tools) ───────────
+      .post('/external/pagespeed', async ({ db, request, set }) => {
+        const auth = await resolveAuth(db, request, env);
+        if (!auth.userId) {
+          set.status = 401;
+          return { error: 'Authentication required' };
+        }
+
+        const raw = await request
+          .clone()
+          .json()
+          .catch(() => null);
+        const body = raw as { url?: string; strategy?: string; categories?: string[] } | null;
+        const targetUrl = body?.url?.trim();
+        if (!targetUrl) {
+          set.status = 400;
+          return { error: 'Missing required field: url' };
+        }
+
+        const strategy = body?.strategy ?? 'mobile';
+        const categories = body?.categories ?? [
+          'performance',
+          'accessibility',
+          'best-practices',
+          'seo',
+        ];
+        const categoryParams = categories.map((c) => `category=${encodeURIComponent(c)}`).join('&');
+        let psiUrl = `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encodeURIComponent(targetUrl)}&strategy=${encodeURIComponent(strategy)}&${categoryParams}`;
+
+        if (env.GOOGLE_PAGESPEED_API_KEY) {
+          psiUrl += `&key=${encodeURIComponent(env.GOOGLE_PAGESPEED_API_KEY)}`;
+        }
+
+        const psiRes = await fetch(psiUrl, {
+          headers: { Accept: 'application/json' },
+        });
+
+        set.status = psiRes.status;
+        set.headers['Content-Type'] = 'application/json';
+        return psiRes.json();
+      })
   );
 }
 

@@ -47,9 +47,10 @@
     "ENVIRONMENT": "production"
   },
   // ── Secrets (set via `wrangler secret put <KEY>`) ────────────
-  // STRIPE_WEBHOOK_SECRET  — for verifying Stripe webhook signatures
-  // JWT_SECRET             — for signing/verifying user session tokens
-  // SENTRY_DSN             — Sentry error reporting DSN
+  // STRIPE_WEBHOOK_SECRET      — for verifying Stripe webhook signatures
+  // JWT_SECRET                 — for signing/verifying user session tokens
+  // SENTRY_DSN                 — Sentry error reporting DSN
+  // GOOGLE_PAGESPEED_API_KEY   — Google PageSpeed Insights API key (proxied to /external/pagespeed)
   // ── Local dev overrides ──────────────────────────────────────
   "env": {
     "preview": {
