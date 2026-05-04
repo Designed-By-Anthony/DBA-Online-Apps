@@ -17,6 +17,8 @@ export interface Env {
   JWT_SECRET?: string;
   // Clerk JWKS URL for JWT signature verification (e.g. https://<your-clerk-domain>/.well-known/jwks.json)
   CLERK_JWKS_URL?: string;
+  // Sentry
+  SENTRY_DSN?: string;
 }
 
 // ── Shared Domain Types ─────────────────────────────────────────────────────
