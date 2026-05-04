@@ -24,6 +24,11 @@ const API_BASE = process.env.API_BASE_URL ?? 'http://localhost:8787';
 const STORE_BASE = process.env.STORE_BASE_URL ?? 'http://localhost:3207';
 const SCANNER_BASE = process.env.SCANNER_BASE_URL ?? 'http://localhost:3201';
 const LEAD_FORM_BASE = process.env.LEAD_FORM_BASE_URL ?? 'http://localhost:3203';
+const CWV_BASE = process.env.CWV_BASE_URL ?? 'http://localhost:3206';
+const SEO_BASE = process.env.SEO_BASE_URL ?? 'http://localhost:3202';
+const OUTREACH_BASE = process.env.OUTREACH_BASE_URL ?? 'http://localhost:3205';
+const MAP_BASE = process.env.MAP_BASE_URL ?? 'http://localhost:3204';
+const CALC_BASE = process.env.CALC_BASE_URL ?? 'http://localhost:3208';
 
 // The Clerk user ID that triggers God Mode in packages/api/src/db.ts
 const ADMIN_CLERK_ID =
@@ -105,6 +110,45 @@ test.describe('Founder God Mode — API access', () => {
     expect(response.status()).not.toBe(403);
   });
 
+  test('GET /outreach/sequences returns 200 or 401 — never 403 — for the founder', async ({
+    request,
+  }) => {
+    const response = await request.get(`${API_BASE}/outreach/sequences`, {
+      headers: {
+        Authorization: `Bearer ${stubBearerToken(ADMIN_CLERK_ID)}`,
+        Origin: STORE_BASE,
+      },
+    });
+
+    expect(response.status()).not.toBe(403);
+  });
+
+  test('GET /cwv/monitors returns 200 or 401 — never 403 — for the founder', async ({
+    request,
+  }) => {
+    const response = await request.get(`${API_BASE}/cwv/monitors`, {
+      headers: {
+        Authorization: `Bearer ${stubBearerToken(ADMIN_CLERK_ID)}`,
+        Origin: STORE_BASE,
+      },
+    });
+
+    expect(response.status()).not.toBe(403);
+  });
+
+  test('GET /seo-audit/audits returns 200 or 401 — never 403 — for the founder', async ({
+    request,
+  }) => {
+    const response = await request.get(`${API_BASE}/seo-audit/audits`, {
+      headers: {
+        Authorization: `Bearer ${stubBearerToken(ADMIN_CLERK_ID)}`,
+        Origin: STORE_BASE,
+      },
+    });
+
+    expect(response.status()).not.toBe(403);
+  });
+
   test('founder navigates to the scanner app and sees the full (unlocked) Workspace', async ({
     page,
   }) => {
@@ -162,6 +206,95 @@ test.describe('Founder God Mode — API access', () => {
 
     // The paywall CTA must NOT be present
     await expect(page.locator('a', { hasText: 'Unlock Full Access' })).toHaveCount(0);
+  });
+
+  test('founder navigates to the CWV monitor and sees the "Run Test" button (not paywall)', async ({
+    page,
+  }) => {
+    await page.addInitScript(() => {
+      (window as Record<string, unknown>).Clerk = {
+        loaded: true,
+        user: { id: 'user_3DG3F2Edy2A3fdfbiJFFbEy7cOQ' },
+        session: null,
+      };
+    });
+
+    await page.goto(CWV_BASE);
+
+    await expect(page.locator('button.primary-button', { hasText: 'Run Test' })).toBeVisible();
+    await expect(page.locator('a', { hasText: 'Unlock to Run Test' })).toHaveCount(0);
+  });
+
+  test('founder navigates to the Local SEO Audit Kit and sees the "Run Audit" button (not paywall)', async ({
+    page,
+  }) => {
+    await page.addInitScript(() => {
+      (window as Record<string, unknown>).Clerk = {
+        loaded: true,
+        user: { id: 'user_3DG3F2Edy2A3fdfbiJFFbEy7cOQ' },
+        session: null,
+      };
+    });
+
+    await page.goto(SEO_BASE);
+
+    await expect(page.locator('button.primary-button', { hasText: 'Run Audit' })).toBeVisible();
+    await expect(page.locator('a', { hasText: 'Unlock to Run Audit' })).toHaveCount(0);
+  });
+
+  test('founder navigates to the Cold Outreach Sequencer and sees the Download button (not paywall)', async ({
+    page,
+  }) => {
+    await page.addInitScript(() => {
+      (window as Record<string, unknown>).Clerk = {
+        loaded: true,
+        user: { id: 'user_3DG3F2Edy2A3fdfbiJFFbEy7cOQ' },
+        session: null,
+      };
+    });
+
+    await page.goto(OUTREACH_BASE);
+
+    await expect(
+      page.locator('button.primary-button', { hasText: 'Download all as .txt' }),
+    ).toBeVisible();
+    await expect(page.locator('a', { hasText: '🔒 Unlock to Download' })).toHaveCount(0);
+  });
+
+  test('founder navigates to the Service Area Map Generator and sees the output panel (not paywall)', async ({
+    page,
+  }) => {
+    await page.addInitScript(() => {
+      (window as Record<string, unknown>).Clerk = {
+        loaded: true,
+        user: { id: 'user_3DG3F2Edy2A3fdfbiJFFbEy7cOQ' },
+        session: null,
+      };
+    });
+
+    await page.goto(MAP_BASE);
+
+    // Map iframe is visible (not behind paywall blur)
+    await expect(page.locator('iframe[title="Service area map"]')).toBeVisible();
+    await expect(page.locator('a', { hasText: 'Unlock Full Access →' })).toHaveCount(0);
+  });
+
+  test('founder navigates to the Construction Calculator and sees results (not paywall overlay)', async ({
+    page,
+  }) => {
+    await page.addInitScript(() => {
+      (window as Record<string, unknown>).Clerk = {
+        loaded: true,
+        user: { id: 'user_3DG3F2Edy2A3fdfbiJFFbEy7cOQ' },
+        session: null,
+      };
+    });
+
+    await page.goto(CALC_BASE);
+
+    // Results panel renders without the paywall overlay
+    await expect(page.locator('.result-row').first()).toBeVisible();
+    await expect(page.locator('a', { hasText: 'Unlock Full Access →' })).toHaveCount(0);
   });
 });
 
@@ -231,6 +364,120 @@ test.describe('Free user — paywall enforcement', () => {
     });
 
     expect(response.status()).toBe(403);
+  });
+
+  test('API returns 403 for a free user hitting the outreach sequences endpoint', async ({
+    request,
+  }) => {
+    const response = await request.get(`${API_BASE}/outreach/sequences`, {
+      headers: { Origin: STORE_BASE },
+    });
+
+    expect(response.status()).toBe(403);
+  });
+
+  test('API returns 403 for a free user hitting the CWV monitors endpoint', async ({ request }) => {
+    const response = await request.get(`${API_BASE}/cwv/monitors`, {
+      headers: { Origin: STORE_BASE },
+    });
+
+    expect(response.status()).toBe(403);
+  });
+
+  test('API returns 403 for a free user hitting the SEO audits endpoint', async ({ request }) => {
+    const response = await request.get(`${API_BASE}/seo-audit/audits`, {
+      headers: { Origin: STORE_BASE },
+    });
+
+    expect(response.status()).toBe(403);
+  });
+
+  test('free user visiting the CWV monitor sees "Unlock to Run Test" CTA', async ({ page }) => {
+    await page.addInitScript(() => {
+      (window as Record<string, unknown>).Clerk = {
+        loaded: true,
+        user: null,
+        session: null,
+      };
+    });
+
+    await page.goto(CWV_BASE);
+
+    await expect(page.locator('a', { hasText: 'Unlock to Run Test' })).toBeVisible();
+    await expect(
+      page.locator('button.primary-button', { hasText: 'Run Test' }),
+    ).toHaveCount(0);
+  });
+
+  test('free user visiting the Local SEO Audit Kit sees "Unlock to Run Audit" CTA', async ({
+    page,
+  }) => {
+    await page.addInitScript(() => {
+      (window as Record<string, unknown>).Clerk = {
+        loaded: true,
+        user: null,
+        session: null,
+      };
+    });
+
+    await page.goto(SEO_BASE);
+
+    await expect(page.locator('a', { hasText: 'Unlock to Run Audit' })).toBeVisible();
+    await expect(
+      page.locator('button.primary-button', { hasText: 'Run Audit' }),
+    ).toHaveCount(0);
+  });
+
+  test('free user visiting the Cold Outreach Sequencer sees "🔒 Unlock to Download" CTA', async ({
+    page,
+  }) => {
+    await page.addInitScript(() => {
+      (window as Record<string, unknown>).Clerk = {
+        loaded: true,
+        user: null,
+        session: null,
+      };
+    });
+
+    await page.goto(OUTREACH_BASE);
+
+    await expect(page.locator('a', { hasText: '🔒 Unlock to Download' })).toBeVisible();
+    await expect(
+      page.locator('button.primary-button', { hasText: 'Download all as .txt' }),
+    ).toHaveCount(0);
+  });
+
+  test('free user visiting the Service Area Map Generator sees the paywall overlay', async ({
+    page,
+  }) => {
+    await page.addInitScript(() => {
+      (window as Record<string, unknown>).Clerk = {
+        loaded: true,
+        user: null,
+        session: null,
+      };
+    });
+
+    await page.goto(MAP_BASE);
+
+    await expect(page.locator('a', { hasText: 'Unlock Full Access →' })).toBeVisible();
+    await expect(page.locator('iframe[title="Service area map"]')).toHaveCount(0);
+  });
+
+  test('free user visiting the Construction Calculator sees the paywall overlay on results', async ({
+    page,
+  }) => {
+    await page.addInitScript(() => {
+      (window as Record<string, unknown>).Clerk = {
+        loaded: true,
+        user: null,
+        session: null,
+      };
+    });
+
+    await page.goto(CALC_BASE);
+
+    await expect(page.locator('a', { hasText: 'Unlock Full Access →' })).toBeVisible();
   });
 
   test('free user is redirected to the pricing page when following the paywall CTA', async ({
