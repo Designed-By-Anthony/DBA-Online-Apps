@@ -154,6 +154,55 @@ function buildApp(env: Env) {
         return { plan: auth.plan, userId: auth.userId };
       })
 
+      // ── /me — user profile + purchases from .com API ────────────
+      .get('/me', async ({ db, request }) => {
+        const auth = await resolveAuth(db, request, env);
+        if (!auth.userId) {
+          return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+            status: 401,
+            headers: { 'Content-Type': 'application/json' },
+          });
+        }
+
+        const paymentDomain = env.PAYMENT_DOMAIN || 'https://api.designedbyanthony.com';
+        const bearer = request.headers.get('Authorization') ?? '';
+
+        let purchases: unknown[] = [];
+        let remotePlan: string | null = null;
+        try {
+          const meRes = await fetch(`${paymentDomain}/me`, {
+            headers: { Authorization: bearer },
+          });
+          if (meRes.ok) {
+            const meData = (await meRes.json()) as {
+              ok?: boolean;
+              user?: { plan?: string };
+              purchases?: unknown[];
+            };
+            purchases = meData.purchases ?? [];
+            remotePlan = meData.user?.plan ?? null;
+          }
+        } catch {
+          // .com API unreachable — return local data only
+        }
+
+        // Sync plan from .com if it's higher than local
+        const plan = remotePlan && remotePlan !== 'free' ? remotePlan : auth.plan;
+
+        const user = await db
+          .prepare('SELECT id, email, plan, created_at FROM users WHERE id = ? LIMIT 1')
+          .bind(auth.userId)
+          .first<{ id: string; email: string; plan: string; created_at: string }>();
+
+        return {
+          ok: true,
+          user: user
+            ? { id: user.id, email: user.email, plan, created_at: user.created_at }
+            : { id: auth.userId, plan },
+          purchases,
+        };
+      })
+
       // ── R2 File Serving ────────────────────────────────────────
       .get('/files/:key', async ({ storage, params: { key } }) => {
         const obj = await getObject(storage, decodeURIComponent(key));

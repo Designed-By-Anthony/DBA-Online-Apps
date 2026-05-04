@@ -76,7 +76,29 @@ export async function resolveAuth(
           .bind(sub)
           .first<DbUser>();
         if (user) return { userId: user.id, plan: user.plan, apiKey: user.api_key };
-        // Valid Clerk JWT but no matching user in DB yet
+
+        // Auto-provision: valid Clerk JWT but no local DB row yet.
+        const email = typeof payload.email === 'string' ? payload.email.trim().toLowerCase() : null;
+        if (email) {
+          const newId = crypto.randomUUID();
+          const newApiKey = crypto.randomUUID();
+          try {
+            await db
+              .prepare(
+                'INSERT OR IGNORE INTO users (id, email, plan, api_key, clerk_id, created_at) VALUES (?, ?, ?, ?, ?, ?)',
+              )
+              .bind(newId, email, 'free', newApiKey, sub, new Date().toISOString())
+              .run();
+            // Re-fetch to handle race conditions (OR IGNORE)
+            const created = await db
+              .prepare('SELECT * FROM users WHERE clerk_id = ? LIMIT 1')
+              .bind(sub)
+              .first<DbUser>();
+            if (created) return { userId: created.id, plan: created.plan, apiKey: created.api_key };
+          } catch {
+            // fall through to free
+          }
+        }
         return { userId: null, plan: 'free', apiKey: null };
       }
     } catch {
