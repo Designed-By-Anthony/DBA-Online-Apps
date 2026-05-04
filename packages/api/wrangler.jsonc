@@ -49,6 +49,7 @@
   // ── Secrets (set via `wrangler secret put <KEY>`) ────────────
   // STRIPE_WEBHOOK_SECRET  — for verifying Stripe webhook signatures
   // JWT_SECRET             — for signing/verifying user session tokens
+  // SENTRY_DSN             — Sentry error reporting DSN
   // ── Local dev overrides ──────────────────────────────────────
   "env": {
     "development": {

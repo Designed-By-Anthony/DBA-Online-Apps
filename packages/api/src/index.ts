@@ -1,3 +1,4 @@
+import { withSentry } from '@sentry/cloudflare';
 import { Elysia } from 'elysia';
 import { TOOL_CATALOG } from './catalog';
 import {
@@ -596,12 +597,18 @@ function buildApp(env: Env) {
 
 // ── CF Workers entry point ────────────────────────────────────────────────────
 
-export default {
-  fetch(req: Request, env: Env, _ctx: ExecutionContext): Promise<Response> {
-    return buildApp(env).handle(req) as Promise<Response>;
-  },
+export default withSentry(
+  (env: Env) => ({
+    dsn: env.SENTRY_DSN,
+    tracesSampleRate: 0.2,
+  }),
+  {
+    fetch(req: Request, env: Env, _ctx: ExecutionContext): Promise<Response> {
+      return buildApp(env).handle(req) as Promise<Response>;
+    },
 
-  async queue(_batch: MessageBatch<unknown>, _env: Env, _ctx: ExecutionContext): Promise<void> {
-    return;
-  },
-};
+    async queue(_batch: MessageBatch<unknown>, _env: Env, _ctx: ExecutionContext): Promise<void> {
+      return;
+    },
+  } satisfies ExportedHandler<Env>,
+);

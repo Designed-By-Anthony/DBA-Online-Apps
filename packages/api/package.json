@@ -12,6 +12,7 @@
     "check-types": "tsc --noEmit"
   },
   "dependencies": {
+    "@sentry/cloudflare": "^10.51.0",
     "elysia": "^1.4.28",
     "jose": "^6.2.3"
   },
