@@ -6,7 +6,13 @@ export function Navbar({ children }: { children?: ReactNode }) {
     <nav className="dba-nav">
       <a href="https://designedbyanthony.online" className="dba-nav-brand">
         <span className="dba-nav-prefix">Tools by </span>
-        <span className="dba-nav-name">ANTHONY.</span>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/logo.png"
+          alt="ANTHONY."
+          className="dba-nav-logo"
+          height={24}
+        />
       </a>
       {children}
     </nav>
