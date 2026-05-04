@@ -1,7 +1,7 @@
 'use client';
 
 import { type ReactNode, useCallback, useEffect, useState } from 'react';
-import { ADMIN_USER_IDS } from './constants';
+import { ADMIN_USER_IDS } from './constants.js';
 
 const PURCHASE_URL = 'https://designedbyanthony.online/shop';
 

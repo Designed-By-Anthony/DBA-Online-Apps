@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { ADMIN_USER_IDS } from './constants';
+import { ADMIN_USER_IDS } from './constants.js';
 
 export type AuthState = 'checking' | 'paid' | 'free';
 
