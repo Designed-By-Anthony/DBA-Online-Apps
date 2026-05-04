@@ -49,3 +49,5 @@ jobs:
       - run: bun install
       - name: Verify app package
         run: bunx turbo run build check-types lint --filter=@dba/${{ matrix.app }}
+        env:
+          NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY }}
