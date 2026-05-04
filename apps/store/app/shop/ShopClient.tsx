@@ -59,6 +59,7 @@ export function ShopClient({ products }: { products: Product[] }) {
       window.location.href = `${SIGN_UP_URL}?redirect_url=${encodeURIComponent(window.location.href)}`;
       return;
     }
+    if (auth === 'checking') return;
     if (selected.size === 0) return;
 
     setCheckingOut(true);
@@ -89,8 +90,6 @@ export function ShopClient({ products }: { products: Product[] }) {
       window.location.href = 'https://designedbyanthony.com/tools';
     } catch {
       window.location.href = 'https://designedbyanthony.com/tools';
-    } finally {
-      setCheckingOut(false);
     }
   }, [auth, selected]);
 
