@@ -12,3 +12,4 @@ CREATE TABLE IF NOT EXISTS purchases (
 CREATE INDEX IF NOT EXISTS idx_purchases_user_id ON purchases(user_id);
 CREATE INDEX IF NOT EXISTS idx_purchases_product_slug ON purchases(product_slug);
 CREATE INDEX IF NOT EXISTS idx_purchases_status ON purchases(status);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_purchases_stripe_session_id ON purchases(stripe_session_id);
