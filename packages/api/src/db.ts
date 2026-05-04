@@ -11,6 +11,10 @@ import type {
   Env,
 } from './types';
 
+// 👑 FOUNDER GOD MODE
+// Replace this with your actual Clerk User ID (starts with 'user_')
+const ADMIN_CLERK_ID = 'user_3DG3F2Edy2A3fdfbiJFFbEy7cOQ';
+
 // ── Auth / Users ─────────────────────────────────────────────────────────────
 
 export async function getUserByApiKey(db: D1Database, apiKey: string): Promise<DbUser | null> {
@@ -48,10 +52,6 @@ function getJWKS(jwksUrl: string) {
 
 /**
  * Resolve auth from either a Clerk session JWT or a legacy API key.
- *
- * Clerk JWTs are verified cryptographically against the Clerk JWKS endpoint
- * when CLERK_JWKS_URL is set. The `sub` claim maps to the `clerk_id` column.
- * Falls back to legacy API key auth when the token is not a valid Clerk JWT.
  */
 export async function resolveAuth(
   db: D1Database,
@@ -70,12 +70,18 @@ export async function resolveAuth(
       const jwks = getJWKS(env.CLERK_JWKS_URL);
       const { payload } = await jwtVerify(token, jwks);
       const sub = payload.sub;
+      
       if (sub && typeof sub === 'string' && sub.startsWith('user_')) {
         const user = await db
           .prepare('SELECT * FROM users WHERE clerk_id = ? LIMIT 1')
           .bind(sub)
           .first<DbUser>();
-        if (user) return { userId: user.id, plan: user.plan, apiKey: user.api_key };
+          
+        if (user) {
+          // 👑 GOD MODE OVERRIDE: If the DB says free, but it's you, force Founder in memory
+          const actualPlan = sub === ADMIN_CLERK_ID ? 'founder' : user.plan;
+          return { userId: user.id, plan: actualPlan, apiKey: user.api_key };
+        }
 
         // Auto-provision: valid Clerk JWT but no local DB row yet.
         const email = typeof payload.email === 'string' ? payload.email.trim().toLowerCase() : null;
@@ -90,21 +96,31 @@ export async function resolveAuth(
               .prepare('SELECT * FROM users WHERE clerk_id = ? LIMIT 1')
               .bind(sub)
               .first<DbUser>();
-            if (linked) return { userId: linked.id, plan: linked.plan, apiKey: linked.api_key };
+              
+            if (linked) {
+              const actualPlan = sub === ADMIN_CLERK_ID ? 'founder' : linked.plan;
+              return { userId: linked.id, plan: actualPlan, apiKey: linked.api_key };
+            }
 
             // Truly new user — insert a fresh row
             const newId = crypto.randomUUID();
             const newApiKey = crypto.randomUUID();
+            
+            // 👑 GOD MODE: If it's your Clerk ID, provision you as a Founder immediately
+            const initialPlan = sub === ADMIN_CLERK_ID ? 'founder' : 'free';
+            
             await db
               .prepare(
                 'INSERT OR IGNORE INTO users (id, email, plan, api_key, clerk_id, created_at) VALUES (?, ?, ?, ?, ?, ?)',
               )
-              .bind(newId, email, 'free', newApiKey, sub, new Date().toISOString())
+              .bind(newId, email, initialPlan, newApiKey, sub, new Date().toISOString())
               .run();
+              
             const created = await db
               .prepare('SELECT * FROM users WHERE clerk_id = ? LIMIT 1')
               .bind(sub)
               .first<DbUser>();
+              
             if (created) return { userId: created.id, plan: created.plan, apiKey: created.api_key };
           } catch {
             // fall through to free
@@ -124,6 +140,10 @@ export async function resolveAuth(
 }
 
 export function requirePaidPlan(auth: AuthContext): Response | null {
+  // 👑 GOD MODE BYPASS: If the request comes from you, burn down the paywall
+  // (We check the actual Clerk ID if auth.userId is populated, or rely on the plan override)
+  if (auth.plan === 'founder') return null;
+  
   if (auth.plan !== 'free' && auth.userId) return null;
   return new Response(
     JSON.stringify({
@@ -379,60 +399,4 @@ export async function updateSequenceProspects(
     .run();
 }
 
-export async function updateSequenceStatus(
-  db: D1Database,
-  id: string,
-  status: DbOutreachSequence['status'],
-): Promise<void> {
-  await db.prepare('UPDATE outreach_sequences SET status = ? WHERE id = ?').bind(status, id).run();
-}
-
-// ── CWV Monitors ─────────────────────────────────────────────────────────────
-
-export async function getCwvMonitorsByUser(
-  db: D1Database,
-  userId: string,
-): Promise<DbCwvMonitor[]> {
-  const result = await db
-    .prepare('SELECT * FROM cwv_monitors WHERE user_id = ? ORDER BY created_at DESC')
-    .bind(userId)
-    .all<DbCwvMonitor>();
-  return result.results;
-}
-
-export async function createCwvMonitor(
-  db: D1Database,
-  monitor: Pick<DbCwvMonitor, 'id' | 'user_id' | 'url'>,
-): Promise<void> {
-  await db
-    .prepare(
-      'INSERT INTO cwv_monitors (id, user_id, url, snapshots, created_at) VALUES (?, ?, ?, ?, ?)',
-    )
-    .bind(monitor.id, monitor.user_id, monitor.url, '[]', new Date().toISOString())
-    .run();
-}
-
-export async function getCwvMonitor(db: D1Database, id: string): Promise<DbCwvMonitor | null> {
-  const result = await db
-    .prepare('SELECT * FROM cwv_monitors WHERE id = ? LIMIT 1')
-    .bind(id)
-    .first<DbCwvMonitor>();
-  return result ?? null;
-}
-
-export async function appendCwvSnapshot(
-  db: D1Database,
-  monitorId: string,
-  snapshot: unknown,
-): Promise<void> {
-  const monitor = await getCwvMonitor(db, monitorId);
-  if (!monitor) return;
-  const snapshots = JSON.parse(monitor.snapshots) as unknown[];
-  snapshots.unshift(snapshot);
-  // Keep last 52 snapshots (~1 year of weekly data)
-  const trimmed = snapshots.slice(0, 52);
-  await db
-    .prepare('UPDATE cwv_monitors SET snapshots = ? WHERE id = ?')
-    .bind(JSON.stringify(trimmed), monitorId)
-    .run();
-}
+export async function
