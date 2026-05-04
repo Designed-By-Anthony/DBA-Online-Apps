@@ -32,7 +32,9 @@ function fieldHtml(field: LeadField): string {
   return `  <label>${field.label}</label>\n  <input type="${field.type}" name="${name}"${required} />`;
 }
 
-export function Workspace() {
+const PURCHASE_URL = 'https://designedbyanthony.com/tools';
+
+export function Workspace({ locked = false }: { locked?: boolean }) {
   const [formName, setFormName] = useState('Website Contact Form');
   const [webhookUrl, setWebhookUrl] = useState('https://hooks.zapier.com/hooks/catch/123456/abcde');
   const [fieldLabel, setFieldLabel] = useState('');
@@ -204,17 +206,61 @@ ${fieldsMarkup}
       <article className="panel output-panel">
         <div className="panel-heading">
           <p>Embed Code</p>
-          <button
-            type="button"
-            className={`copy-button${copied ? ' copied' : ''}`}
-            onClick={copyEmbed}
-          >
-            {copied ? 'Copied' : 'Copy'}
-          </button>
+          {!locked && (
+            <button
+              type="button"
+              className={`copy-button${copied ? ' copied' : ''}`}
+              onClick={copyEmbed}
+            >
+              {copied ? 'Copied' : 'Copy'}
+            </button>
+          )}
         </div>
 
-        <p className="muted-note">Paste this anywhere in your website&apos;s HTML.</p>
-        <pre className="code-block">{embedCode}</pre>
+        {locked ? (
+          <div style={{ position: 'relative', minHeight: 260 }}>
+            <div
+              style={{ filter: 'blur(4px)', opacity: 0.35, pointerEvents: 'none', marginTop: 12 }}
+            >
+              <p className="muted-note">Paste this anywhere in your website&apos;s HTML.</p>
+              <pre className="code-block">
+                {'<form class="dba-form">\n  <label>Full Name</label>\n  <input type="text" />\n  ...\n</form>'}
+              </pre>
+            </div>
+            <div
+              style={{
+                position: 'absolute',
+                inset: 0,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: 'rgba(244,245,246,0.7)',
+                backdropFilter: 'blur(8px)',
+              }}
+            >
+              <div style={{ textAlign: 'center', padding: '2rem' }}>
+                <p style={{ fontWeight: 700, fontSize: '1.1rem', margin: '0 0 8px' }}>
+                  Your form embed is ready
+                </p>
+                <p className="muted-note" style={{ marginBottom: 16 }}>
+                  Subscribe to copy your form&apos;s embed code.
+                </p>
+                <a
+                  href={PURCHASE_URL}
+                  className="primary-button"
+                  style={{ textDecoration: 'none', display: 'inline-block' }}
+                >
+                  Unlock Full Access →
+                </a>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <>
+            <p className="muted-note">Paste this anywhere in your website&apos;s HTML.</p>
+            <pre className="code-block">{embedCode}</pre>
+          </>
+        )}
       </article>
     </section>
   );
