@@ -4,8 +4,22 @@ export default function StorePage() {
   const year = new Date().getFullYear();
   return (
     <>
-      <header className="topbar">
-        <a href="https://designedbyanthony.com/contact" className="topbar-link">
+      <header className="topbar" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1rem 2rem' }}>
+        {/* THE LOGO */}
+        <a href="/" style={{ display: 'flex', alignItems: 'center' }}>
+          <img 
+            src="/tools logo.png" 
+            alt="Tools by Anthony" 
+            style={{ height: '24px', width: 'auto', objectFit: 'contain' }} 
+          />
+        </a>
+
+        {/* THE CTA BUTTON */}
+        <a 
+          href="https://designedbyanthony.com/contact" 
+          className="btn-ghost" 
+          style={{ padding: '0.4rem 1.2rem', fontSize: '0.85rem', borderRadius: '99px' }}
+        >
           Get in touch
         </a>
       </header>
