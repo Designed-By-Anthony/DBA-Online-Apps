@@ -5,22 +5,19 @@ import { useCallback, useEffect, useState } from 'react';
 const CHECKOUT_API = 'https://api.designedbyanthony.com';
 const SIGN_UP_URL = 'https://designedbyanthony.com/sign-up';
 
-type Tier = 'starter' | 'pro' | 'agency';
-
 interface Product {
   slug: string;
   name: string;
   tagline: string;
-  starter: string;
-  pro: string;
-  agency: string;
+  price: string;
+  url: string;
 }
 
 type AuthState = 'checking' | 'authenticated' | 'unauthenticated';
 
 export function ShopClient({ products }: { products: Product[] }) {
   const [auth, setAuth] = useState<AuthState>('checking');
-  const [selected, setSelected] = useState<Map<string, Tier>>(new Map());
+  const [selected, setSelected] = useState<Set<string>>(new Set());
   const [checkingOut, setCheckingOut] = useState(false);
 
   useEffect(() => {
@@ -46,23 +43,15 @@ export function ShopClient({ products }: { products: Product[] }) {
 
   const toggle = useCallback((slug: string) => {
     setSelected((prev) => {
-      const next = new Map(prev);
+      const next = new Set(prev);
       if (next.has(slug)) next.delete(slug);
-      else next.set(slug, 'pro');
-      return next;
-    });
-  }, []);
-
-  const setTier = useCallback((slug: string, tier: Tier) => {
-    setSelected((prev) => {
-      const next = new Map(prev);
-      next.set(slug, tier);
+      else next.add(slug);
       return next;
     });
   }, []);
 
   const selectAll = useCallback(() => {
-    setSelected(new Map(products.map((p) => [p.slug, 'pro'])));
+    setSelected(new Set(products.map((p) => p.slug)));
   }, [products]);
 
   const handleCheckout = useCallback(async () => {
@@ -79,7 +68,7 @@ export function ShopClient({ products }: { products: Product[] }) {
         | undefined;
       const token = await c?.session?.getToken?.();
 
-      const tools = Array.from(selected.entries()).map(([slug, tier]) => ({ slug, tier }));
+      const tools = Array.from(selected);
       const res = await fetch(`${CHECKOUT_API}/checkout`, {
         method: 'POST',
         headers: {
@@ -106,24 +95,19 @@ export function ShopClient({ products }: { products: Product[] }) {
   }, [auth, selected]);
 
   const parsePrice = (s: string) => {
-    const num = parseInt(s.replace(/[^0-9]/g, ''), 10);
+    const num = Number.parseInt(s.replace(/[^0-9]/g, ''), 10);
     return Number.isNaN(num) ? 0 : num;
   };
 
   const totalMonthly = products
     .filter((p) => selected.has(p.slug))
-    .reduce((sum, p) => {
-      const tier = selected.get(p.slug) ?? 'pro';
-      return sum + parsePrice(p[tier]);
-    }, 0);
-
-  const TIERS: Tier[] = ['starter', 'pro', 'agency'];
+    .reduce((sum, p) => sum + parsePrice(p.price), 0);
 
   return (
     <>
       <header className="topbar">
         <a href="/" className="topbar-link">
-          ← Back to tools
+          &larr; Back to tools
         </a>
       </header>
 
@@ -134,9 +118,7 @@ export function ShopClient({ products }: { products: Product[] }) {
           <br />
           <em>Pay Only for What You Need.</em>
         </h1>
-        <p className="hero-sub">
-          Select the tools below, pick a tier, and complete checkout. Cancel any time.
-        </p>
+        <p className="hero-sub">Select the tools below and complete checkout. Cancel any time.</p>
       </section>
 
       {auth === 'unauthenticated' ? (
@@ -193,7 +175,6 @@ export function ShopClient({ products }: { products: Product[] }) {
         <div className="tool-grid">
           {products.map((product) => {
             const isSelected = selected.has(product.slug);
-            const currentTier = selected.get(product.slug) ?? 'pro';
             return (
               <div
                 key={product.slug}
@@ -223,7 +204,7 @@ export function ShopClient({ products }: { products: Product[] }) {
                       fontWeight: 700,
                     }}
                   >
-                    ✓
+                    &check;
                   </span>
                 ) : null}
 
@@ -241,42 +222,6 @@ export function ShopClient({ products }: { products: Product[] }) {
                   <p className="card-desc">{product.tagline}</p>
                 </button>
 
-                {/* Tier selector */}
-                {isSelected ? (
-                  <div
-                    style={{
-                      display: 'flex',
-                      gap: '6px',
-                      marginTop: '12px',
-                      marginBottom: '8px',
-                    }}
-                  >
-                    {TIERS.map((tier) => (
-                      <button
-                        key={tier}
-                        type="button"
-                        onClick={() => setTier(product.slug, tier)}
-                        style={{
-                          flex: 1,
-                          padding: '6px 0',
-                          fontSize: '11px',
-                          fontWeight: currentTier === tier ? 700 : 500,
-                          border: `1px solid ${currentTier === tier ? 'var(--accent)' : 'var(--line)'}`,
-                          borderRadius: '6px',
-                          background: currentTier === tier ? 'var(--accent)' : 'transparent',
-                          color: currentTier === tier ? '#fff' : 'var(--muted)',
-                          cursor: 'pointer',
-                          textTransform: 'capitalize',
-                        }}
-                      >
-                        {tier}
-                        <br />
-                        <span style={{ fontSize: '10px', opacity: 0.8 }}>{product[tier]}</span>
-                      </button>
-                    ))}
-                  </div>
-                ) : null}
-
                 <div className="card-footer">
                   <button
                     type="button"
@@ -292,7 +237,7 @@ export function ShopClient({ products }: { products: Product[] }) {
                   >
                     {isSelected ? 'Remove' : 'Select'}
                   </button>
-                  <span className="card-badge">from {product.starter}</span>
+                  <span className="card-badge">{product.price}</span>
                 </div>
               </div>
             );
@@ -319,7 +264,7 @@ export function ShopClient({ products }: { products: Product[] }) {
           }}
         >
           <span style={{ color: '#94a3b8', fontSize: '14px' }}>
-            {selected.size} tool{selected.size > 1 ? 's' : ''} · ${totalMonthly}/mo
+            {selected.size} tool{selected.size > 1 ? 's' : ''} &middot; ${totalMonthly}/mo
           </span>
           <button
             type="button"
@@ -329,10 +274,10 @@ export function ShopClient({ products }: { products: Product[] }) {
             style={{ padding: '10px 28px', border: 'none', cursor: 'pointer' }}
           >
             {checkingOut
-              ? 'Redirecting…'
+              ? 'Redirecting\u2026'
               : auth === 'unauthenticated'
                 ? 'Sign Up & Checkout'
-                : 'Proceed to Checkout →'}
+                : 'Proceed to Checkout \u2192'}
           </button>
         </div>
       ) : null}

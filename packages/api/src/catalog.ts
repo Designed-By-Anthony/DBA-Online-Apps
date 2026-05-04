@@ -1,64 +1,64 @@
 /**
- * Canonical tool catalog — matches Stripe products exactly.
- * Slugs here must match the checkout route on .com and PRODUCT_META in dashboards.
+ * Canonical tool catalog — mirrors pseo.ts from the store app.
+ * .online is the source of truth; slugs match TOOL_SLUGS in apps/store/lib/pseo.ts.
  */
 
 export interface CatalogTool {
   slug: string;
   name: string;
   tagline: string;
-  starter: { month: number; year: number };
-  pro: { month: number; year: number };
-  agency: { month: number; year: number };
+  price: string;
+  url: string;
 }
 
 export const TOOL_CATALOG: CatalogTool[] = [
   {
-    slug: 'sitescan',
-    name: 'SiteScan — Website Health Reports',
-    tagline: 'Grade your website on speed, SEO, and accessibility. Scan up to five pages at once.',
-    starter: { month: 1900, year: 19000 },
-    pro: { month: 3900, year: 39000 },
-    agency: { month: 7900, year: 79000 },
+    slug: 'construction-calculator',
+    name: 'Construction Calculator',
+    tagline: 'Estimate material and labor costs in seconds. Concrete, framing, roofing, and more.',
+    price: '$29/mo',
+    url: 'https://calculator.designedbyanthony.online',
   },
   {
-    slug: 'reviewpilot',
-    name: 'ReviewPilot — AI Review Response',
-    tagline: 'See how your business shows up on Google and get a simple list of what to fix.',
-    starter: { month: 2900, year: 29000 },
-    pro: { month: 4900, year: 49000 },
-    agency: { month: 7900, year: 79000 },
-  },
-  {
-    slug: 'clienthub',
-    name: 'ClientHub — Client Portal',
+    slug: 'lead-form-builder',
+    name: 'Contact Form Builder',
     tagline: 'Build a contact form in minutes and start getting leads from your website.',
-    starter: { month: 2900, year: 29000 },
-    pro: { month: 4900, year: 49000 },
-    agency: { month: 7900, year: 79000 },
+    price: '$49/mo',
+    url: 'https://lead-form.designedbyanthony.online',
   },
   {
-    slug: 'localrank',
-    name: 'LocalRank — Local SEO Dashboard',
-    tagline: 'Simple local SEO tracking for service businesses. Monitor rankings and competitors.',
-    starter: { month: 1900, year: 19000 },
-    pro: { month: 3900, year: 39000 },
-    agency: { month: 5900, year: 59000 },
+    slug: 'site-speed-monitor',
+    name: 'Website Speed Test',
+    tagline: 'Find out the moment your site slows down — before your customers notice.',
+    price: '$29/mo',
+    url: 'https://web-vitals.designedbyanthony.online',
   },
   {
-    slug: 'testiflow',
-    name: 'TestiFlow — Testimonial Collector',
-    tagline: 'Automated testimonial and review collection. Send requests and embed widgets.',
-    starter: { month: 1900, year: 19000 },
-    pro: { month: 2900, year: 29000 },
-    agency: { month: 4900, year: 49000 },
+    slug: 'seo-audit',
+    name: 'Local SEO Checker',
+    tagline: 'See how your business shows up on Google and get a simple list of what to fix.',
+    price: '$49/mo',
+    url: 'https://seo-audit.designedbyanthony.online',
   },
   {
-    slug: 'contentmill',
-    name: 'ContentMill — AI Social Content',
-    tagline: 'Turn one photo or update into posts for every platform. AI-powered templates.',
-    starter: { month: 1900, year: 19000 },
-    pro: { month: 3900, year: 39000 },
-    agency: { month: 6900, year: 69000 },
+    slug: 'cold-outreach',
+    name: 'Follow-Up Email Writer',
+    tagline: 'Write personalized follow-up emails for every prospect. No CRM needed.',
+    price: '$79/mo',
+    url: 'https://outreach.designedbyanthony.online',
+  },
+  {
+    slug: 'service-area-map',
+    name: 'Service Area Map',
+    tagline: 'Show customers and Google exactly which towns you serve.',
+    price: '$29/mo',
+    url: 'https://service-area.designedbyanthony.online',
+  },
+  {
+    slug: 'lighthouse-scanner',
+    name: 'Website Speed Grader',
+    tagline: 'Grade your website on speed, SEO, and accessibility. Scan up to five pages at once.',
+    price: '$49/mo',
+    url: 'https://lighthouse.designedbyanthony.online',
   },
 ];
