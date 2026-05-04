@@ -13,6 +13,10 @@
       "types": "./src/DemoGate.tsx",
       "default": "./src/DemoGate.tsx"
     },
+    "./AuthNav": {
+      "types": "./src/AuthNav.tsx",
+      "default": "./src/AuthNav.tsx"
+    },
     "./ClerkClientProvider": {
       "types": "./src/ClerkClientProvider.tsx",
       "default": "./src/ClerkClientProvider.tsx"
