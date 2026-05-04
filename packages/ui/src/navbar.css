@@ -31,6 +31,17 @@
   letter-spacing: 0.05em;
 }
 
+.dba-nav-logo {
+  height: 24px;
+  width: auto;
+  filter: brightness(0) invert(1);
+  transition: filter 200ms ease-in;
+}
+
+.dba-nav-brand:hover .dba-nav-logo {
+  filter: brightness(0) invert(1) opacity(0.85);
+}
+
 .dba-nav-brand:hover .dba-nav-name {
   color: #e0f2fe;
 }
