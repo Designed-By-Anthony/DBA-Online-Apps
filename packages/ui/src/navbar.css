@@ -17,17 +17,17 @@
 }
 
 .dba-nav-prefix {
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 400;
-  color: #64748b;
+  color: #6b7280;
   letter-spacing: normal;
 }
 
 .dba-nav-name {
-  font-size: 14px;
-  font-weight: 800;
+  font-size: 18px;
+  font-weight: 700;
   color: #ffffff;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.05em;
 }
 
 .dba-nav-brand:hover .dba-nav-name {
