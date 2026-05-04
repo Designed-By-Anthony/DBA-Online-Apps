@@ -1,8 +1,27 @@
 'use client';
 
 import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from '@clerk/clerk-react';
+import { Component, type ErrorInfo, type ReactNode } from 'react';
 
-export function AuthNav() {
+/** Silently swallows Clerk "no provider" errors so AuthNav is safe in any layout. */
+class ClerkGuard extends Component<{ children: ReactNode }, { hasError: boolean }> {
+  state = { hasError: false };
+
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error: Error, _info: ErrorInfo) {
+    if (!error.message.includes('ClerkProvider')) throw error;
+  }
+
+  render() {
+    if (this.state.hasError) return null;
+    return this.props.children;
+  }
+}
+
+function AuthNavInner() {
   return (
     <div className="dba-auth-nav" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
       <SignedOut>
@@ -63,5 +82,13 @@ export function AuthNav() {
         <UserButton afterSignOutUrl="/" />
       </SignedIn>
     </div>
+  );
+}
+
+export function AuthNav() {
+  return (
+    <ClerkGuard>
+      <AuthNavInner />
+    </ClerkGuard>
   );
 }
