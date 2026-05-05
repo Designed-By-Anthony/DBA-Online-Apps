@@ -44,6 +44,22 @@ type AppVariables = {
 
 type AppEnv = { Bindings: Env; Variables: AppVariables };
 
+// ── Timing-safe string comparison ────────────────────────────────────────────
+// Prevents timing attacks when comparing secret values.
+
+function timingSafeStringEqual(a: string, b: string): boolean {
+  const encoder = new TextEncoder();
+  const aBytes = encoder.encode(a);
+  const bBytes = encoder.encode(b);
+  const len = Math.max(aBytes.length, bBytes.length);
+  // XOR length difference into accumulator so length mismatch always returns false
+  let diff = aBytes.length ^ bBytes.length;
+  for (let i = 0; i < len; i++) {
+    diff |= (aBytes[i] ?? 0) ^ (bBytes[i] ?? 0);
+  }
+  return diff === 0;
+}
+
 // ── Embed HTML builder ────────────────────────────────────────────────────────
 
 function buildEmbedHtml(
@@ -497,7 +513,14 @@ const app = new Hono<AppEnv>()
   // test requests and bypass rate-limiting / analytics checks.
   .use('*', async (c, next) => {
     const testSecret = c.req.header('x-test-secret');
-    c.set('isTest', Boolean(c.env.TEST_SECRET && testSecret === c.env.TEST_SECRET));
+    c.set(
+      'isTest',
+      Boolean(
+        c.env.TEST_SECRET &&
+          testSecret !== undefined &&
+          timingSafeStringEqual(testSecret, c.env.TEST_SECRET),
+      ),
+    );
     await next();
   })
 
@@ -579,7 +602,8 @@ const app = new Hono<AppEnv>()
     }
 
     // Sync plan from .com if it's higher than local
-    const planRank: Record<string, number> = { free: 0, pro: 1, agency: 2 };
+    // founder is a local-only plan and is never downgraded by the .com sync
+    const planRank: Record<string, number> = { free: 0, pro: 1, agency: 2, founder: 3 };
     const plan =
       (planRank[remotePlan ?? ''] ?? 0) > (planRank[auth.plan] ?? 0) && remotePlan
         ? remotePlan
