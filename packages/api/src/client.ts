@@ -19,6 +19,11 @@ export type { AppType };
 /**
  * Create a fully type-safe Hono RPC client bound to the given base URL.
  * The returned client mirrors every route defined in packages/api/src/index.ts.
+ *
+ * @param baseUrl - The API base URL. **Required in production** — defaults to
+ *   `http://localhost:8787` for local development only. In Next.js apps pass
+ *   `process.env.NEXT_PUBLIC_API_URL!`.
+ * @param defaultHeaders - Optional headers applied to every request (e.g. auth tokens).
  */
 export function createApiClient(
   baseUrl: string = 'http://localhost:8787',

@@ -601,11 +601,13 @@ const app = new Hono<AppEnv>()
       // .com API unreachable — return local data only
     }
 
-    // Sync plan from .com if it's higher than local
-    // founder is a local-only plan and is never downgraded by the .com sync
+    // Sync plan from .com if it's higher than local.
+    // founder is a local-only plan — never allow the .com API to downgrade it.
     const planRank: Record<string, number> = { free: 0, pro: 1, agency: 2, founder: 3 };
     const plan =
-      (planRank[remotePlan ?? ''] ?? 0) > (planRank[auth.plan] ?? 0) && remotePlan
+      auth.plan !== 'founder' &&
+      (planRank[remotePlan ?? ''] ?? 0) > (planRank[auth.plan] ?? 0) &&
+      remotePlan
         ? remotePlan
         : auth.plan;
 
