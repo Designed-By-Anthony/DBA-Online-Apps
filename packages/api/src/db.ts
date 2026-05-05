@@ -404,10 +404,7 @@ export async function updateSequenceStatus(
   id: string,
   status: DbOutreachSequence['status'],
 ): Promise<void> {
-  await db
-    .prepare('UPDATE outreach_sequences SET status = ? WHERE id = ?')
-    .bind(status, id)
-    .run();
+  await db.prepare('UPDATE outreach_sequences SET status = ? WHERE id = ?').bind(status, id).run();
 }
 
 // ── CWV Monitors ─────────────────────────────────────────────────────────────
