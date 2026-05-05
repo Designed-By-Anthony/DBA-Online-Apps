@@ -17,6 +17,11 @@ export interface Env {
   JWT_SECRET?: string;
   // Clerk JWKS URL for JWT signature verification (e.g. https://<your-clerk-domain>/.well-known/jwks.json)
   CLERK_JWKS_URL?: string;
+  // Clerk secret key — used by Infisical-injected server-side Clerk calls
+  CLERK_SECRET_KEY?: string;
+  // Shared secret for Playwright test runner (injected via Infisical)
+  // Requests carrying X-Test-Secret: <value> matching this secret bypass rate limits
+  TEST_SECRET?: string;
   // Google PageSpeed Insights API key (set via `wrangler secret put`)
   GOOGLE_PAGESPEED_API_KEY?: string;
   // Sentry
@@ -25,7 +30,7 @@ export interface Env {
 
 // ── Shared Domain Types ─────────────────────────────────────────────────────
 
-export type Plan = 'free' | 'pro' | 'agency';
+export type Plan = 'free' | 'pro' | 'agency' | 'founder';
 
 export interface DbUser {
   id: string;

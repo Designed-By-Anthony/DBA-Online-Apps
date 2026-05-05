@@ -51,6 +51,9 @@
   // JWT_SECRET                 — for signing/verifying user session tokens
   // SENTRY_DSN                 — Sentry error reporting DSN
   // GOOGLE_PAGESPEED_API_KEY   — Google PageSpeed Insights API key (proxied to /external/pagespeed)
+  // CLERK_SECRET_KEY           — Clerk server-side secret (injected via Infisical)
+  // TEST_SECRET                — Shared secret for Playwright test runner (injected via Infisical)
+  //                              Set X-Test-Secret: <value> header to bypass rate limits in tests
   // ── Local dev overrides ──────────────────────────────────────
   "env": {
     "preview": {
